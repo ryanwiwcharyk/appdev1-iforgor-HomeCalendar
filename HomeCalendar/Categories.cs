@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -33,6 +34,10 @@ namespace Calendar
         // ====================================================================
         // Constructor
         // ====================================================================
+        public Categories(SQLiteConnection dbConnection, bool newDB)
+        {
+            SetCategoriesToDefaults();
+        }
         public Categories()
         {
             SetCategoriesToDefaults();
@@ -190,7 +195,14 @@ namespace Calendar
             }
             return newList;
         }
-
+        public void UpdateProperties(int id, string newDescr, Category.CategoryType type)
+        {
+            int i = _Categories.FindIndex(x => x.Id == id);
+            if (i == -1)
+                return;
+            _Categories[i].Description = newDescr;
+            _Categories[i].Type=type;
+        }
         // ====================================================================
         // read from an XML file and add categories to our categories list
         // ====================================================================
