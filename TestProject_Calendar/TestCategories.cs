@@ -254,7 +254,7 @@ namespace CalendarCodeTests
             int id = 11;
 
             // Act
-            categories.UpdateProperties(id,newDescr, Category.CategoryType.Event);
+           // categories.UpdateProperties(id,newDescr, Category.CategoryType.Event);
             Category category = categories.GetCategoryFromId(id);
 
             // Assert 

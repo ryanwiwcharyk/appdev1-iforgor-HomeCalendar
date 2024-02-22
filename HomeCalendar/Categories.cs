@@ -195,14 +195,7 @@ namespace Calendar
             }
             return newList;
         }
-        public void UpdateProperties(int id, string newDescr, Category.CategoryType type)
-        {
-            int i = _Categories.FindIndex(x => x.Id == id);
-            if (i == -1)
-                return;
-            _Categories[i].Description = newDescr;
-            _Categories[i].Type=type;
-        }
+      
         // ====================================================================
         // read from an XML file and add categories to our categories list
         // ====================================================================
