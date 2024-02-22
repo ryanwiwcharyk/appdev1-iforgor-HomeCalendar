@@ -29,6 +29,7 @@ namespace Calendar
             Event,
             AllDayEvent,
             Holiday,
+            Availability
         };
 
         // ====================================================================
