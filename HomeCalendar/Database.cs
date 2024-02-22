@@ -55,23 +55,23 @@ namespace Calendar
             using var cmd = new SQLiteCommand(_connection);
             cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
             cmd.ExecuteNonQuery();
-            cmd.Dispose();
+           
 
             cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY, Description TEXT)";
             cmd.ExecuteNonQuery();
-            cmd.Dispose();
+           
 
             cmd.CommandText = "DROP TABLE IF EXISTS events";
             cmd.ExecuteNonQuery();
-            cmd.Dispose();
+           
 
             cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, Description TEXT)";
             cmd.ExecuteNonQuery();
-            cmd.Dispose();
+          
 
             cmd.CommandText = "DROP TABLE IF EXISTS categories";
             cmd.ExecuteNonQuery();
-            cmd.Dispose();
+          
 
             cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY, Description TEXT)";
             cmd.ExecuteNonQuery();
