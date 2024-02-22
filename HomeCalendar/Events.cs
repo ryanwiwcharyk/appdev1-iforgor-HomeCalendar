@@ -244,7 +244,7 @@ namespace Calendar
 
                     // child attributes (date, description, DurationInMinutes, category)
                     XmlElement d = doc.CreateElement("StartDateTime");
-                    XmlText dText = doc.CreateTextNode(exp.StartDateTime.ToString());
+                    XmlText dText = doc.CreateTextNode(exp.StartDateTime.ToString("M\\/d\\/yyyy h:mm:ss tt"));
                     ele.AppendChild(d);
                     d.AppendChild(dText);
 
