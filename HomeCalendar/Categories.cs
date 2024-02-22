@@ -171,6 +171,8 @@ namespace Calendar
         public void Delete(int Id)
         {
             int i = _Categories.FindIndex(x => x.Id == Id);
+            if (i == -1)
+                return;
             _Categories.RemoveAt(i);
         }
 
