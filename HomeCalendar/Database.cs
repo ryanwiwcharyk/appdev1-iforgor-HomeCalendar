@@ -47,37 +47,33 @@ namespace Calendar
             CloseDatabaseAndReleaseFile();
 
             //attempt to connect to the db
-            string connectionString = $@"URI=file:{filename}";
+            string connectionString = $@"Data Source={filename}; Foreign Keys=1";
             _connection = new SQLiteConnection(connectionString);
             _connection.Open();
 
-
-            using var cmd = new SQLiteCommand(_connection);
+            var cmd = new SQLiteCommand(dbConnection);
             cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
             cmd.ExecuteNonQuery();
-           
 
             cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY, Description TEXT)";
             cmd.ExecuteNonQuery();
-           
+
+            cmd.CommandText = "DROP TABLE IF EXISTS categories";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY, Description TEXT, TypeId INTEGER NOT NULL, 
+            FOREIGN KEY (TypeId) REFERENCES categoryTypes(Id))";
+            cmd.ExecuteNonQuery();
 
             cmd.CommandText = "DROP TABLE IF EXISTS events";
             cmd.ExecuteNonQuery();
            
-
-            cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, Description TEXT)";
+            cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, DurationInMinutes DOUBLE, StartDateTime TEXT, Details TEXT, CategoryId INTEGER NOT NULL,
+            FOREIGN KEY (CategoryId) REFERENCES categories(Id))";
             cmd.ExecuteNonQuery();
-          
-
-            cmd.CommandText = "DROP TABLE IF EXISTS categories";
-            cmd.ExecuteNonQuery();
-          
-
-            cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY, Description TEXT)";
-            cmd.ExecuteNonQuery();
+            
             cmd.Dispose();
 
-            // your code
         }
 
        // ===================================================================
@@ -88,7 +84,11 @@ namespace Calendar
 
             CloseDatabaseAndReleaseFile();
 
-            // your code
+            string connectionString = $@"Data Source={filename}; Foreign Keys=1";
+            _connection = new SQLiteConnection(connectionString);
+            dbConnection.Open();
+
+
         }
 
        // ===================================================================
