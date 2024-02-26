@@ -49,7 +49,7 @@ namespace Calendar
             //attempt to connect to the db
             string connectionString = $@"Data Source={filename}; Foreign Keys=1";
             _connection = new SQLiteConnection(connectionString);
-            _connection.Open();
+            dbConnection.Open();
 
             var cmd = new SQLiteCommand(dbConnection);
             cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
