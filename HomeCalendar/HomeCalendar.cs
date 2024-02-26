@@ -223,7 +223,13 @@ namespace Calendar
                 }
 
                 // keep track of running totals
-                totalBusyTime = totalBusyTime + e.DurationInMinutes;
+
+                // If the event is an availability we don't count it as a busy time
+                Category eventCategory = _categories.GetCategoryFromId(e.CatId);
+                if (eventCategory.Type != Category.CategoryType.Availability)
+                {
+                    totalBusyTime = totalBusyTime + e.DurationInMinutes;
+                }
                 items.Add(new CalendarItem
                 {
                     CategoryID = e.CatId,
