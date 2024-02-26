@@ -3,6 +3,7 @@ using Xunit;
 using System.IO;
 using System.Collections.Generic;
 using Calendar;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace CalendarCodeTests
 {
@@ -103,11 +104,21 @@ namespace CalendarCodeTests
             Events.ReadFromFile(dir + "\\" + testInputFile);
             List<Event> list = Events.List();
 
+            DateTime now = DateTime.Now;
+            double DurationInMinutes = 28.55;
+            string descr = "New Sweater";
+            int category = 34;
+            int id = 2;
+
             // Act
-            list[0].DurationInMinutes = list[0].DurationInMinutes + 21.03; 
+            //list[0].DurationInMinutes = list[0].DurationInMinutes + 21.03;
+            //Instead of changing properties of an existing event(Because its properties are read-only), I can add a new event and compare the new index.
+            Event newEvent = new Event(id, now, category, DurationInMinutes, descr);
+            list.Add(newEvent);
+            
 
             // Assert
-            Assert.NotEqual(list[0].DurationInMinutes, Events.List()[0].DurationInMinutes);
+            Assert.NotEqual(list.Count, Events.List().Count); //comparing the lengths of both lists after adding an event to list
 
         }
 
