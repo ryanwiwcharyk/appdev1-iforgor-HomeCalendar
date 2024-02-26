@@ -83,10 +83,25 @@ namespace Calendar
         {
 
             CloseDatabaseAndReleaseFile();
-
-            string connectionString = $@"Data Source={filename}; Foreign Keys=1";
-            _connection = new SQLiteConnection(connectionString);
-            dbConnection.Open();
+            try
+            {
+                if (File.Exists(filename))
+                {
+                    string connectionString = $@"Data Source={filename}; Foreign Keys=1";
+                    _connection = new SQLiteConnection(connectionString);
+                    dbConnection.Open();
+                }
+                else
+                {
+                    throw new FileNotFoundException($"The specified file {filename} does not exist");
+                }
+            }
+            catch (FileNotFoundException e )
+            {
+                Console.WriteLine(e.Message);
+            }
+            
+            
 
 
         }
