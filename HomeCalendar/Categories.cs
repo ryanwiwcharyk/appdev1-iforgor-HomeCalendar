@@ -200,11 +200,15 @@ namespace Calendar
             //Insert category instance into the categories table
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId)
-                                 VALUES(@name, @type)";
-            cmd.Parameters.AddWithValue("@desc", desc);
-            cmd.Parameters.AddWithValue("@type", type);
+            cmd.CommandText = @$"INSERT INTO categoryTypes VALUES('{(int)type}', '{desc}')";
             cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId)
+                                 VALUES('{desc}', '{(int)type}')";
+          
+            cmd.ExecuteNonQuery();
+
+            
             cmd.Dispose();
         }
 
@@ -230,7 +234,7 @@ namespace Calendar
             var cmd = new SQLiteCommand(_connection);
             cmd.CommandText = "SELECT * FROM categories";
             var dr = cmd.ExecuteReader();
-            if (dr.Read()) 
+            while (dr.Read()) 
             {
                 int categoryID = Convert.ToInt32(dr["Id"]);
                 string categoryDescription = (string)dr["Description"];
