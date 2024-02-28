@@ -60,6 +60,35 @@ namespace Calendar
         // ====================================================================
         public Category GetCategoryFromId(int i)
         {
+            try
+            {
+                var cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = $"SELECT * FROM categories WHERE Id = '{i}'";
+                var dataReader = cmd.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    int categoryID = Convert.ToInt32(dataReader["Id"]);
+                    string categoryDescription = (string)dataReader["Description"];
+                    int typeId = Convert.ToInt32(dataReader["TypeId"]);
+                    
+                    if (categoryID != 0)//Convert to int returns 0 if the given id read from db is null
+                    {
+                        Category newCategory = new Category(categoryID, categoryDescription, (Category.CategoryType)typeId);
+                        return newCategory;
+                    }
+                    else
+                    {
+                        throw new ArgumentNullException($"{i}", "The given id was not found in the database.");
+                    }
+
+                }
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             Category? c = _Categories.Find(x => x.Id == i);
             if (c == null)
             {
