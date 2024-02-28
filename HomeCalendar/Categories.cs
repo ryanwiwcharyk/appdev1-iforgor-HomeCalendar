@@ -173,8 +173,8 @@ namespace Calendar
 
             cmd.CommandText = $@"INSERT INTO categories(Description, TypeId)
                                  VALUES(@name, @type)";
-            cmd.Parameters.AddWithValue("@desc", category.Description);
-            cmd.Parameters.AddWithValue("@type", category.Type);
+            cmd.Parameters.AddWithValue("@desc", category.Description.ToString());
+            cmd.Parameters.AddWithValue("@type", (int)category.Type);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
@@ -200,10 +200,9 @@ namespace Calendar
             //Insert category instance into the categories table
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId)
-                                 VALUES(@name, @type)";
-            cmd.Parameters.AddWithValue("@desc", desc);
-            cmd.Parameters.AddWithValue("@type", type);
+            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId)VALUES('{desc}', {(int)type});";
+            //cmd.Parameters.AddWithValue("@desc", desc);
+            //cmd.Parameters.AddWithValue("@type", (int)type);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
@@ -213,10 +212,22 @@ namespace Calendar
         // ====================================================================
         public void Delete(int Id)
         {
-            int i = _Categories.FindIndex(x => x.Id == Id);
-            if (i == -1)
-                return;
-            _Categories.RemoveAt(i);
+            //int i = _Categories.FindIndex(x => x.Id == Id);
+            //if (i == -1)
+            //    return;
+            //_Categories.RemoveAt(i);
+
+            //Connect to the database
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            Database.dbConnection.Open(); //opening database
+
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = $@"DELETE FROM categories WHERE (Id = {Id})";
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+
+
         }
 
         // ====================================================================
