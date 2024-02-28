@@ -263,7 +263,7 @@ namespace Calendar
         {
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = $@"UPDATE categories SET (Description = {newDesc}, TypeID = {(int)categoryType}) WHERE Id = {id}";
+            cmd.CommandText = $@"UPDATE categories SET Description = '{newDesc}', TypeID = '{(int)categoryType}' WHERE Id = '{id}'";
             cmd.ExecuteNonQuery();
         }
 
