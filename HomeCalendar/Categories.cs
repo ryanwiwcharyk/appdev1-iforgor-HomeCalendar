@@ -200,7 +200,7 @@ namespace Calendar
             //Insert category instance into the categories table
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId
+            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId)
                                  VALUES(@name, @type)";
             cmd.Parameters.AddWithValue("@desc", desc);
             cmd.Parameters.AddWithValue("@type", type);
