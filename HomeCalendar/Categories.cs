@@ -200,6 +200,8 @@ namespace Calendar
             //Insert category instance into the categories table
             var cmd = new SQLiteCommand(Database.dbConnection);
 
+
+            //add select if id 
             cmd.CommandText = @$"INSERT INTO categoryTypes VALUES('{(int)type}', '{desc}')";
             cmd.ExecuteNonQuery();
 
@@ -227,6 +229,9 @@ namespace Calendar
             Database.dbConnection.Open(); //opening database
 
             var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = $@"DELETE FROM categoryTypes WHERE (Id = {Id})";
+            cmd.ExecuteNonQuery();
 
             cmd.CommandText = $@"DELETE FROM categories WHERE (Id = {Id})";
             cmd.ExecuteNonQuery();
