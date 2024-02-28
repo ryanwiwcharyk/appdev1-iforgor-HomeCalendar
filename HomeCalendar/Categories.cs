@@ -4,6 +4,10 @@ using System.Linq;
 using System.IO;
 using System.Xml;
 using System.Data.SQLite;
+using Microsoft.SqlServer.Server;
+using System.Data.SqlClient;
+using System.Xml.Linq;
+using System.Data.Common;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -24,6 +28,7 @@ namespace Calendar
         private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
+        private static SQLiteConnection _connection;
 
         // ====================================================================
         // Properties
@@ -36,7 +41,8 @@ namespace Calendar
         // ====================================================================
         public Categories(SQLiteConnection dbConnection, bool newDB)
         {
-            SetCategoriesToDefaults();
+            _connection = dbConnection; 
+        
         }
         public Categories()
         {
@@ -156,6 +162,7 @@ namespace Calendar
         // ====================================================================
         private void Add(Category category)
         {
+
             _Categories.Add(category);
         }
 
@@ -189,9 +196,17 @@ namespace Calendar
         public List<Category> List()
         {
             List<Category> newList = new List<Category>();
-            foreach (Category category in _Categories)
+            var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "SELECT * FROM categories";
+            var dr = cmd.ExecuteReader();
+            if (dr.Read()) 
             {
-                newList.Add(new Category(category));
+                int categoryID = (int)dr["Id"];
+                string categoryDescription = (string)dr["Description"];
+                int typeId  = (int)dr["TypeId"];
+                Category newCategory = new Category(categoryID, categoryDescription, (Category.CategoryType)typeId);
+                newList.Add(newCategory);
+
             }
             return newList;
         }
