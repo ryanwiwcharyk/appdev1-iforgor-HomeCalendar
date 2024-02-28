@@ -162,13 +162,17 @@ namespace Calendar
         // ====================================================================
         private void Add(Category category)
         {
+            //Connect to the database
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            Database.dbConnection.Open(); //opening database
 
             //Insert category instance into the categories table
             var cmd = new SQLiteCommand(Database.dbConnection);
 
             cmd.CommandText = $@"INSERT INTO categories(Description, TypeId)
-                                 VALUES({category.Description}, {category.Type})
-                                 WHERE Id = {category.Id}";
+                                 VALUES(@name, @type)";
+            cmd.Parameters.AddWithValue("@desc", category.Description);
+            cmd.Parameters.AddWithValue("@type", category.Type);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
@@ -195,7 +199,9 @@ namespace Calendar
             var cmd = new SQLiteCommand(Database.dbConnection);
 
             cmd.CommandText = @$"INSERT INTO categories(Description, TypeId
-                                 VALUES({desc}, {type})"; //inserting desc, and type 
+                                 VALUES(@name, @type)";
+            cmd.Parameters.AddWithValue("@desc", desc);
+            cmd.Parameters.AddWithValue("@type", type);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
