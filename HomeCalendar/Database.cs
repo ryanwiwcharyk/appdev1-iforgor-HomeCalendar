@@ -52,20 +52,25 @@ namespace Calendar
             dbConnection.Open();
 
             var cmd = new SQLiteCommand(dbConnection);
-            cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
-            cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT)";
+            cmd.CommandText = "DROP TABLE IF EXISTS events";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = "DROP TABLE IF EXISTS categories";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT, TypeId INTEGER NOT NULL,
-            FOREIGN KEY (TypeId) REFERENCES categoryTypes(Id))";
+            cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = "DROP TABLE IF EXISTS events";
+            
+
+            
+
+            cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT)";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT, TypeId INTEGER NOT NULL,
+            FOREIGN KEY (TypeId) REFERENCES categoryTypes(Id))";
             cmd.ExecuteNonQuery();
            
             cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY AUTOINCREMENT, DurationInMinutes DOUBLE, StartDateTime TEXT, Details TEXT, CategoryId INTEGER NOT NULL,

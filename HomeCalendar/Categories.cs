@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using System.Xml.Linq;
 using System.Data.Common;
 using System.Data;
+using System.Net.Http.Headers;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -47,6 +48,7 @@ namespace Calendar
             {
                 SetCategoriesToDefaults();
             }
+
         
         }
         public Categories()
@@ -180,12 +182,35 @@ namespace Calendar
             // Add Defaults
             // ---------------------------------------------------------------
             var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "INSERT INTO categories (Id, Description, TypeId) VALUES (NULL, 'School', 2)";
+
+
+            cmd.CommandText = "DELETE FROM categories";
+
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "DELETE FROM categoryTypes";
+
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Event')";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes(Description) VALUES ('AllDayEvent')";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Holiday')";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Availability')";
             cmd.ExecuteNonQuery();
 
 
-
-            cmd.Dispose();
+            Add("School", Category.CategoryType.Event);
+            Add("Personal", Category.CategoryType.Event);
+            Add("VideoGames", Category.CategoryType.Event);
+            Add("Medical", Category.CategoryType.Event);
+            Add("Sleep", Category.CategoryType.Event);
+            Add("Vacation", Category.CategoryType.AllDayEvent);
+            Add("Travel days", Category.CategoryType.AllDayEvent);
+            Add("Canadian Holidays", Category.CategoryType.Holiday);
+            Add("US Holidays", Category.CategoryType.Holiday);
         }
 
         // ====================================================================
@@ -220,22 +245,17 @@ namespace Calendar
 
             //^^Old Logic for adding to a list (IN MEMORY)
 
-
-
-            //Connect to the database
-            Database.CloseDatabaseAndReleaseFile();//close the database if already open
-            Database.dbConnection.Open(); //opening database
-
-          
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = $"SELECT COUNT(*) FROM categoryTypes WHERE Id = '{(int)type}'";
-            int count = Convert.ToInt32(cmd.ExecuteScalar());
-            if (count == 0)
-            {
-                cmd.CommandText = @$"INSERT INTO categoryTypes (Id, Type) VALUES ({(int)type},'{type}')";
-                cmd.ExecuteNonQuery();
-            }
+            //cmd.CommandText = $"SELECT COUNT(*) FROM categoryTypes WHERE Id = '{(int)type}'";
+            //int count = Convert.ToInt32(cmd.ExecuteScalar());
+            //if (count == 0)
+            //{
+            //    cmd.CommandText = @$"INSERT INTO categoryTypes (Id, Description) VALUES ({(int)type},'{type}')";
+            //    cmd.ExecuteNonQuery();
+            //}
+
+
             cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES ('{desc}', {(int)type})";
             cmd.ExecuteNonQuery();
 
@@ -258,8 +278,8 @@ namespace Calendar
 
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = $@"DELETE FROM categoryTypes WHERE (Id = {Id})";
-            cmd.ExecuteNonQuery();
+            //cmd.CommandText = $@"DELETE FROM events WHERE (Id = {Id})";
+            //cmd.ExecuteNonQuery();
 
             cmd.CommandText = $@"DELETE FROM categories WHERE (Id = {Id})";
             cmd.ExecuteNonQuery();

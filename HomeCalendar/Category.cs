@@ -26,7 +26,7 @@ namespace Calendar
         public CategoryType Type { get; }
         public enum CategoryType
         {
-            Event,
+            Event = 1,
             AllDayEvent,
             Holiday,
             Availability
