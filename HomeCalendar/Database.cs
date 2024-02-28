@@ -100,11 +100,7 @@ namespace Calendar
             {
                 Console.WriteLine(e.Message);
             }
-            
-            
-
-
-        }
+       }
 
        // ===================================================================
        // close existing database, wait for garbage collector to
