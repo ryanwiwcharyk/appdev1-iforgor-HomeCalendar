@@ -226,20 +226,19 @@ namespace Calendar
             Database.CloseDatabaseAndReleaseFile();//close the database if already open
             Database.dbConnection.Open(); //opening database
 
-            //Insert category instance into the categories table
+          
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-
-            //add select if id 
-            cmd.CommandText = @$"INSERT INTO categoryTypes VALUES('{(int)type}', '{desc}')";
+            cmd.CommandText = $"SELECT COUNT(*) FROM categoryTypes WHERE Id = '{(int)type}'";
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if (count == 0)
+            {
+                cmd.CommandText = @$"INSERT INTO categoryTypes (Id, Type) VALUES ({(int)type},'{type}')";
+                cmd.ExecuteNonQuery();
+            }
+            cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES ('{desc}', {(int)type})";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId)
-                                 VALUES('{desc}', '{(int)type}')";
-          
-            cmd.ExecuteNonQuery();
-
-            
             cmd.Dispose();
         }
 
