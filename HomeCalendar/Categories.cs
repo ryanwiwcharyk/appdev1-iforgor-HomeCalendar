@@ -263,6 +263,18 @@ namespace Calendar
         }
 
         // ====================================================================
+        // Add category to database table
+        // ====================================================================
+
+        public void UpdateProperties(int id, string newDesc, Category.CategoryType categoryType)
+        {
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = $@"UPDATE categories SET (Description = {newDesc}, TypeID = {(int)categoryType}) WHERE Id = {id}";
+            cmd.ExecuteNonQuery();
+        }
+
+        // ====================================================================
         // Delete category
         // ====================================================================
         public void Delete(int Id)
