@@ -158,7 +158,7 @@ namespace Calendar
         }
 
         // ====================================================================
-        // Add category
+        // Add category to database table
         // ====================================================================
         private void Add(Category category)
         {
@@ -168,13 +168,29 @@ namespace Calendar
 
         public void Add(String desc, Category.CategoryType type)
         {
-            int new_num = 1;
-            if (_Categories.Count > 0)
-            {
-                new_num = (from c in _Categories select c.Id).Max();
-                new_num++;
-            }
-            _Categories.Add(new Category(new_num, desc, type));
+            //int new_num = 1;
+            //if (_Categories.Count > 0)
+            //{
+            //    new_num = (from c in _Categories select c.Id).Max();
+            //    new_num++;
+            //}
+            //_Categories.Add(new Category(new_num, desc, type));
+
+            //^^Old Logic for adding to a list (IN MEMORY)
+
+
+
+            //Connect to the database
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            Database.dbConnection.Open(); //opening database
+
+            //Insert category instance into the categories table
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = @$"INSERT INTO categories(Description, TypeId
+                                 VALUES({desc}, {type})"; //inserting desc, and type 
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
 
         // ====================================================================
