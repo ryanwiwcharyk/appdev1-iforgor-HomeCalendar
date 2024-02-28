@@ -62,11 +62,7 @@ namespace Calendar
             cmd.CommandText = "DROP TABLE IF EXISTS categoryTypes";
             cmd.ExecuteNonQuery();
 
-            
-
-            
-
-            cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT)";
+            cmd.CommandText = @"CREATE TABLE categoryTypes(Id INTEGER PRIMARY KEY, Description TEXT)";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT, TypeId INTEGER NOT NULL,

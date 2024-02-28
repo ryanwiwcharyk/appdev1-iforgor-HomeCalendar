@@ -183,15 +183,10 @@ namespace Calendar
             // ---------------------------------------------------------------
             var cmd = new SQLiteCommand(_connection);
 
-
             cmd.CommandText = "DELETE FROM categories";
-
             cmd.ExecuteNonQuery();
-
             cmd.CommandText = "DELETE FROM categoryTypes";
-
             cmd.ExecuteNonQuery();
-
             cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Event')";
             cmd.ExecuteNonQuery();
             cmd.CommandText = @$"INSERT INTO categoryTypes(Description) VALUES ('AllDayEvent')";
@@ -200,7 +195,6 @@ namespace Calendar
             cmd.ExecuteNonQuery();
             cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Availability')";
             cmd.ExecuteNonQuery();
-
 
             Add("School", Category.CategoryType.Event);
             Add("Personal", Category.CategoryType.Event);
@@ -255,8 +249,7 @@ namespace Calendar
             //    cmd.ExecuteNonQuery();
             //}
 
-
-            cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES ('{desc}', {(int)type})";
+            cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES ('{desc}', '{(int)type}')";
             cmd.ExecuteNonQuery();
 
             cmd.Dispose();
@@ -278,15 +271,12 @@ namespace Calendar
 
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = $@"SELECT TypeID FROM categories WHERE Id = {Id}";
-            int typeId = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.CommandText = $@"DELETE FROM events WHERE CategoryId = '{Id}'";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = $@"DELETE FROM categoryTypes WHERE (Type = {typeId})";
+            cmd.CommandText = $@"DELETE FROM categories WHERE Id = '{Id}'";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = $@"DELETE FROM categories WHERE (Id = {Id})";
-            cmd.ExecuteNonQuery();
             cmd.Dispose();
 
 
