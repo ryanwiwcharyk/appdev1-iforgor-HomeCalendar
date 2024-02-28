@@ -61,15 +61,13 @@ namespace Calendar
             cmd.CommandText = "DROP TABLE IF EXISTS categories";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY, Description TEXT, TypeId INTEGER NOT NULL, 
-            FOREIGN KEY (TypeId) REFERENCES categoryTypes(Id))";
+            cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY AUTOINCREMENT, Description TEXT, TypeId INTEGER NOT NULL)";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = "DROP TABLE IF EXISTS events";
             cmd.ExecuteNonQuery();
            
-            cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, DurationInMinutes DOUBLE, StartDateTime TEXT, Details TEXT, CategoryId INTEGER NOT NULL,
-            FOREIGN KEY (CategoryId) REFERENCES categories(Id))";
+            cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, DurationInMinutes DOUBLE, StartDateTime TEXT, Details TEXT, CategoryId INTEGER NOT NULL)";
             cmd.ExecuteNonQuery();
             
             cmd.Dispose();

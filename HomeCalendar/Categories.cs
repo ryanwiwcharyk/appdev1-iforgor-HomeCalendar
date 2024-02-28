@@ -8,6 +8,7 @@ using Microsoft.SqlServer.Server;
 using System.Data.SqlClient;
 using System.Xml.Linq;
 using System.Data.Common;
+using System.Data;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -42,12 +43,17 @@ namespace Calendar
         public Categories(SQLiteConnection dbConnection, bool newDB)
         {
             _connection = dbConnection; 
+            if (newDB)
+            {
+                SetCategoriesToDefaults();
+            }
         
         }
         public Categories()
         {
-            SetCategoriesToDefaults();
+
         }
+     
 
         // ====================================================================
         // get a specific category from the list where the id is the one specified
@@ -139,22 +145,18 @@ namespace Calendar
         public void SetCategoriesToDefaults()
         {
             // ---------------------------------------------------------------
-            // reset any current categories,
-            // ---------------------------------------------------------------
-            _Categories.Clear();
+            // reset any current categorie
 
             // ---------------------------------------------------------------
             // Add Defaults
             // ---------------------------------------------------------------
-            Add("School", Category.CategoryType.Event);
-            Add("Personal", Category.CategoryType.Event);
-            Add("VideoGames", Category.CategoryType.Event);
-            Add("Medical", Category.CategoryType.Event);
-            Add("Sleep", Category.CategoryType.Event);
-            Add("Vacation", Category.CategoryType.AllDayEvent);
-            Add("Travel days", Category.CategoryType.AllDayEvent);
-            Add("Canadian Holidays", Category.CategoryType.Holiday);
-            Add("US Holidays", Category.CategoryType.Holiday);
+            var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "INSERT INTO categories (Id, Description, TypeId) VALUES (NULL, 'School', 2)";
+            cmd.ExecuteNonQuery();
+
+
+
+            cmd.Dispose();
         }
 
         // ====================================================================
@@ -217,9 +219,9 @@ namespace Calendar
             var dr = cmd.ExecuteReader();
             if (dr.Read()) 
             {
-                int categoryID = (int)dr["Id"];
+                int categoryID = Convert.ToInt32(dr["Id"]);
                 string categoryDescription = (string)dr["Description"];
-                int typeId  = (int)dr["TypeId"];
+                int typeId  = Convert.ToInt32(dr["TypeId"]);
                 Category newCategory = new Category(categoryID, categoryDescription, (Category.CategoryType)typeId);
                 newList.Add(newCategory);
 
