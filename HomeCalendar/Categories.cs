@@ -258,7 +258,11 @@ namespace Calendar
 
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = $@"DELETE FROM categoryTypes WHERE (Id = {Id})";
+            cmd.CommandText = $@"SELECT TypeID FROM categories WHERE Id = {Id}";
+            int typeId = Convert.ToInt32(cmd.ExecuteScalar());
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = $@"DELETE FROM categoryTypes WHERE (Type = {typeId})";
             cmd.ExecuteNonQuery();
 
             cmd.CommandText = $@"DELETE FROM categories WHERE (Id = {Id})";
