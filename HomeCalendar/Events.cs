@@ -19,6 +19,9 @@ namespace Calendar
     //        - Read / write to file
     //        - etc
     // ====================================================================
+    /// <summary>
+    /// Manages multiple events within a calender item, with methods allowing to read and write data, save, add and deleting these events.
+    /// </summary>
     public class Events
     {
         private static String DefaultFileName = "calendar.txt";
@@ -29,7 +32,19 @@ namespace Calendar
         // ====================================================================
         // Properties
         // ====================================================================
+        /// <summary>
+        /// Gets the fileName of a file you'd like to access.
+        /// </summary>
+        /// <value>
+        /// The name of the filename. This is a string value.
+        /// </value>
         public String FileName { get { return _FileName; } }
+        /// <summary>
+        /// Gets the Directory name containing the file you want to access.
+        /// </summary>
+        /// <value>
+        /// The directory name. This is a string value.
+        /// </value>
         public String DirName { get { return _DirName; } }
 
         // ====================================================================
@@ -38,6 +53,10 @@ namespace Calendar
         // Throws System.IO.FileNotFoundException if file does not exist
         // Throws System.Exception if cannot read the file correctly (parsing XML)
         // ====================================================================
+        /// <summary>
+        /// Reads the events data from a given filepath, allowing us to access th events within, and validates the filepath name exists and is valid.
+        /// </summary>
+        /// <param name="filepath">Represents the filepath of the file being opened for reading.</param>
         public void ReadFromFile(String filepath = null)
         {
 
@@ -77,6 +96,10 @@ namespace Calendar
         // save to a file
         // if filepath is not specified, read/save in AppData file
         // ====================================================================
+        /// <summary>
+        /// Saves the events data to a given filepath, and verifies the chosen path exists and is valid for saving.
+        /// </summary>
+        /// <param name="filepath">Represents the file path to where you'd like to save the data.</param>
         public void SaveToFile(String filepath = null)
         {
             // ---------------------------------------------------------------
@@ -115,11 +138,22 @@ namespace Calendar
         // ====================================================================
         // Add Event
         // ====================================================================
+        /// <summary>
+        /// Adds a specific event to the list of current events.
+        /// </summary>
+        /// <param name="exp">Represents the event object being added to the list.</param>
         private void Add(Event exp)
         {
             _Events.Add(exp);
         }
 
+        /// <summary>
+        /// Adds a event to the list of current events containing all details of the new event.
+        /// </summary>
+        /// <param name="date">Represents the date time of the event.</param>
+        /// <param name="category">Represents the category of the event.</param>
+        /// <param name="duration">Represents the duration in minutes of the event.</param>
+        /// <param name="details">Represents the details of the event.</param>
         public void Add(DateTime date, int category, Double duration, String details)
         {
             int new_id = 1;
@@ -138,6 +172,10 @@ namespace Calendar
         // ====================================================================
         // Delete Event
         // ====================================================================
+        /// <summary>
+        /// Deletes an event based on its Id from the list of current events.
+        /// </summary>
+        /// <param name="Id">Represents the Id of the specific event.</param>
         public void Delete(int Id)
         {
             int i = _Events.FindIndex(x => x.Id == Id);
@@ -151,6 +189,10 @@ namespace Calendar
         // Note:  make new copy of list, so user cannot modify what is part of
         //        this instance
         // ====================================================================
+        /// <summary>
+        /// Returns a list of all the events added.
+        /// </summary>
+        /// <returns>A list containing all events.</returns>
         public List<Event> List()
         {
             List<Event> newList = new List<Event>();
