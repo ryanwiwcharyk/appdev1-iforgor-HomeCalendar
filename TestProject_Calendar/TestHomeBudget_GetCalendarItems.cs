@@ -45,6 +45,7 @@ namespace CalendarCodeTests
             }
         }
 
+        // CHANGED THIS TEST. 
         [Fact]
         public void HomeCalendarMethod_GetCalendarItems_NoStartEnd_NoFilter_VerifyBusyTimeProperty()
         {
@@ -63,7 +64,16 @@ namespace CalendarCodeTests
             double busyTime = 0;
             foreach (CalendarItem CalendarItem in CalendarItems)
             {
-                busyTime = busyTime + CalendarItem.DurationInMinutes;
+                // One of the user stories was that availability events should NOT count towards busy time.
+                // This test was not implementing this feature so I impleted this extra check.
+
+                // Getting the Category of the calendar item
+                Category itemCategory = homeCalendar.categories.GetCategoryFromId(CalendarItem.CategoryID);
+                // Only adding the duration to the busy time if the category type is not availibilty.
+                if (itemCategory.Type != Category.CategoryType.Availability)
+                {
+                    busyTime = busyTime + CalendarItem.DurationInMinutes;
+                }
                 Assert.Equal(busyTime, CalendarItem.BusyTime);
             }
 
