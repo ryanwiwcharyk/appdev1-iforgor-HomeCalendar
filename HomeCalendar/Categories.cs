@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
+using Microsoft.SqlServer.Server;
+using System.Data.SqlClient;
+using System.Xml.Linq;
+using System.Data.Common;
+using System.Data;
+using System.Net.Http.Headers;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -26,6 +33,7 @@ namespace Calendar
         private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
+        private static SQLiteConnection _connection;
 
         // ====================================================================
         // Properties
@@ -238,13 +246,26 @@ namespace Calendar
         public void SetCategoriesToDefaults()
         {
             // ---------------------------------------------------------------
-            // reset any current categories,
-            // ---------------------------------------------------------------
-            _Categories.Clear();
+            // reset any current categorie
 
             // ---------------------------------------------------------------
             // Add Defaults
             // ---------------------------------------------------------------
+            var cmd = new SQLiteCommand(_connection);
+
+            cmd.CommandText = "DELETE FROM categories";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = "DELETE FROM categoryTypes";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Event')";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes(Description) VALUES ('AllDayEvent')";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Holiday')";
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Availability')";
+            cmd.ExecuteNonQuery();
+
             Add("School", Category.CategoryType.Event);
             Add("Personal", Category.CategoryType.Event);
             Add("VideoGames", Category.CategoryType.Event);
@@ -257,7 +278,7 @@ namespace Calendar
         }
 
         // ====================================================================
-        // Add category
+        // Add category to database table
         // ====================================================================
         /// <summary>
         /// Adds a category to the 
@@ -265,18 +286,59 @@ namespace Calendar
         /// <param name="category"> The category to add to the database. </param>
         private void Add(Category category)
         {
-            _Categories.Add(category);
+            //Connect to the database
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            Database.dbConnection.Open(); //opening database
+
+            //Insert category instance into the categories table
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = $@"INSERT INTO categories(Description, TypeId)
+                                 VALUES(@name, @type)";
+            cmd.Parameters.AddWithValue("@desc", category.Description.ToString());
+            cmd.Parameters.AddWithValue("@type", (int)category.Type);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
 
         public void Add(String desc, Category.CategoryType type)
         {
-            int new_num = 1;
-            if (_Categories.Count > 0)
-            {
-                new_num = (from c in _Categories select c.Id).Max();
-                new_num++;
-            }
-            _Categories.Add(new Category(new_num, desc, type));
+            //int new_num = 1;
+            //if (_Categories.Count > 0)
+            //{
+            //    new_num = (from c in _Categories select c.Id).Max();
+            //    new_num++;
+            //}
+            //_Categories.Add(new Category(new_num, desc, type));
+
+            //^^Old Logic for adding to a list (IN MEMORY)
+
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            //cmd.CommandText = $"SELECT COUNT(*) FROM categoryTypes WHERE Id = '{(int)type}'";
+            //int count = Convert.ToInt32(cmd.ExecuteScalar());
+            //if (count == 0)
+            //{
+            //    cmd.CommandText = @$"INSERT INTO categoryTypes (Id, Description) VALUES ({(int)type},'{type}')";
+            //    cmd.ExecuteNonQuery();
+            //}
+
+            cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES ('{desc}', '{(int)type}')";
+            cmd.ExecuteNonQuery();
+
+            cmd.Dispose();
+        }
+
+        // ====================================================================
+        // Add category to database table
+        // ====================================================================
+
+        public void UpdateProperties(int id, string newDesc, Category.CategoryType categoryType)
+        {
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = $@"UPDATE categories SET Description = '{newDesc}', TypeID = '{(int)categoryType}' WHERE Id = '{id}'";
+            cmd.ExecuteNonQuery();
         }
 
         // ====================================================================
@@ -284,10 +346,26 @@ namespace Calendar
         // ====================================================================
         public void Delete(int Id)
         {
-            int i = _Categories.FindIndex(x => x.Id == Id);
-            if (i == -1)
-                return;
-            _Categories.RemoveAt(i);
+            //int i = _Categories.FindIndex(x => x.Id == Id);
+            //if (i == -1)
+            //    return;
+            //_Categories.RemoveAt(i);
+
+            //Connect to the database
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            Database.dbConnection.Open(); //opening database
+
+            var cmd = new SQLiteCommand(Database.dbConnection);
+
+            cmd.CommandText = $@"DELETE FROM events WHERE CategoryId = '{Id}'";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = $@"DELETE FROM categories WHERE Id = '{Id}'";
+            cmd.ExecuteNonQuery();
+
+            cmd.Dispose();
+
+
         }
 
         // ====================================================================
@@ -298,13 +376,21 @@ namespace Calendar
         public List<Category> List()
         {
             List<Category> newList = new List<Category>();
-            foreach (Category category in _Categories)
+            var cmd = new SQLiteCommand(_connection);
+            cmd.CommandText = "SELECT * FROM categories";
+            var dr = cmd.ExecuteReader();
+            while (dr.Read()) 
             {
-                newList.Add(new Category(category));
+                int categoryID = Convert.ToInt32(dr["Id"]);
+                string categoryDescription = (string)dr["Description"];
+                int typeId  = Convert.ToInt32(dr["TypeId"]);
+                Category newCategory = new Category(categoryID, categoryDescription, (Category.CategoryType)typeId);
+                newList.Add(newCategory);
+
             }
             return newList;
         }
-
+      
         // ====================================================================
         // read from an XML file and add categories to our categories list
         // ====================================================================
