@@ -5,8 +5,8 @@
         {
           "files": [
             "**.csproj"
-          ],
-          "src": "C:\\Users\\brayden\\source\\repos\\HomeCalendar\\HomeCalendar"
+          ]
+
         }
       ],
       "dest": "api",

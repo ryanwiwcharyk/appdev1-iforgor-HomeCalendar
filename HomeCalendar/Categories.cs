@@ -38,7 +38,20 @@ namespace Calendar
         // ====================================================================
         // Properties
         // ====================================================================
+
+        /// <summary>
+        /// Gets the file name.
+        /// </summary>
+        /// <value>
+        /// Represents the file name used to read and write to files.
+        /// </value>
         public String? FileName { get { return _FileName; } }
+        /// <summary>
+        /// Gets the directory name.
+        /// </summary>
+        /// <value>
+        /// Represents the directory name of the file to read/write from.
+        /// </value>
         public String? DirName { get { return _DirName; } }
 
         // ====================================================================
