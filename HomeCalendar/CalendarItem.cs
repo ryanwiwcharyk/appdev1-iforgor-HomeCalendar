@@ -72,18 +72,59 @@ namespace Calendar
 
     }
 
+    /// <summary>
+    /// Represents a collection of calendar items by month including total busy time.
+    /// </summary>
     public class CalendarItemsByMonth
     {
+        /// <summary>
+        /// Gets or sets the month.
+        /// </summary>
+        /// <value>
+        /// A string representing the month to group calendar items by.
+        /// </value>
         public String? Month { get; set; }
+        /// <summary>
+        /// Gets or sets a collection of calendar items.
+        /// </summary>
+        /// <value>
+        /// A collection of calendar items grouped by month.
+        /// </value>
         public List<CalendarItem>? Items { get; set; }
+        /// <summary>
+        /// Gets or sets the total busy time.
+        /// </summary>
+        /// <value>
+        /// Represents the total busy time of all calendar items grouped by month.
+        /// </value>
         public Double TotalBusyTime { get; set; }
     }
 
-
+    /// <summary>
+    /// Represents a collection of calendar items including total busy time.
+    /// </summary>
     public class CalendarItemsByCategory
     {
+        /// <summary>
+        /// Gets or sets the category.
+        /// </summary>
+        /// <value>
+        /// Represents the category to filter calendar items by.
+        /// </value>
         public String? Category { get; set; }
+        /// <summary>
+        /// Gets or sets a collection of calendar items.
+        /// </summary>
+        /// <value>
+        /// Represents the collection of calendar items grouped by category.
+        /// </value>
         public List<CalendarItem>? Items { get; set; }
+        /// <summary>
+        /// Gets or sets the total busy time..
+        /// </summary>
+        /// <value>
+        /// Represesnts the total busy time of all calendar items grouped by category.
+        /// </value>
         public Double TotalBusyTime { get; set; }
 
     }
