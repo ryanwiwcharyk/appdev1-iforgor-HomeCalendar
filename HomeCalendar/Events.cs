@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -195,12 +196,16 @@ namespace Calendar
         /// <returns>A list containing all events.</returns>
         public List<Event> List()
         {
-            List<Event> newList = new List<Event>();
-            foreach (Event Event in _Events)
-            {
-                newList.Add(new Event(Event));
-            }
-            return newList;
+            //List<Event> newList = new List<Event>();
+            //foreach (Event Event in _Events)
+            //{
+            //    newList.Add(new Event(Event));
+            //}
+            //return newList;
+
+            List<Event> list = new List<Event>();
+            var cmd = new SQLiteCommand(Database.dbConnection);
+            cmd.CommandText = $@"SELECT Id, StartDateTime, DurationInMinites, Details, Category";
         }
 
 
