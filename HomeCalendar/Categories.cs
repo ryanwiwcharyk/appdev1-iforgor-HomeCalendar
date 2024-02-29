@@ -281,7 +281,7 @@ namespace Calendar
         // Add category to database table
         // ====================================================================
         /// <summary>
-        /// Adds a category to the 
+        /// Inserts a new category into the database given a category object.
         /// </summary>
         /// <param name="category"> The category to add to the database. </param>
         private void Add(Category category)
@@ -300,6 +300,11 @@ namespace Calendar
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
+        /// <summary>
+        /// Inserts a new category into the database given a category description and type.
+        /// </summary>
+        /// <param name="desc"> The description of the category as a string. </param>
+        /// <param name="type"> The type of the category as a Category.CategoryType </param>
 
         public void Add(String desc, Category.CategoryType type)
         {
@@ -332,6 +337,13 @@ namespace Calendar
         // ====================================================================
         // Add category to database table
         // ====================================================================
+        
+        /// <summary>
+        /// Updates a category's properties given the category's id, a new description and a new category type.
+        /// </summary>
+        /// <param name="id"> The id of the category to update as an integer. </param>
+        /// <param name="newDesc"> The new description of the category as a string. </param>
+        /// <param name="categoryType"> The new type of the category as a Category.CategoryType </param>
 
         public void UpdateProperties(int id, string newDesc, Category.CategoryType categoryType)
         {
@@ -344,6 +356,10 @@ namespace Calendar
         // ====================================================================
         // Delete category
         // ====================================================================
+        /// <summary>
+        /// Deletes a category from the database given a category's id.
+        /// </summary>
+        /// <param name="Id"> The ID of the category to delete. </param>
         public void Delete(int Id)
         {
             //int i = _Categories.FindIndex(x => x.Id == Id);
@@ -373,6 +389,10 @@ namespace Calendar
         // Note:  make new copy of list, so user cannot modify what is part of
         //        this instance
         // ====================================================================
+        /// <summary>
+        /// Creates a list of category objects that contains the categories in the categories table.
+        /// </summary>
+        /// <returns> The list of categories as a List<Category> </Category></returns>
         public List<Category> List()
         {
             List<Category> newList = new List<Category>();
