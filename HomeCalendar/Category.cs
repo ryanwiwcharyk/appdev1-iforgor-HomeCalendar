@@ -21,12 +21,12 @@ namespace Calendar
         // ====================================================================
         // Properties
         // ====================================================================
-        public int Id { get; set; }
-        public String Description { get; set; }
-        public CategoryType Type { get; set; }
+        public int Id { get; }
+        public String Description { get; }
+        public CategoryType Type { get; }
         public enum CategoryType
         {
-            Event,
+            Event = 1,
             AllDayEvent,
             Holiday,
             Availability

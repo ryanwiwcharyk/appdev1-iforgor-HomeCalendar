@@ -54,10 +54,32 @@ namespace Calendar
         // -------------------------------------------------------------------
         // Constructor (new... default categories, no events)
         // -------------------------------------------------------------------
+        public HomeCalendar(String databaseFile, String eventsXMLFile, bool newDB = false)
+        {
+            // if database exists, and user doesn't want a new database, open existing DB
+            if (!newDB && File.Exists(databaseFile))
+            {
+                Database.existingDatabase(databaseFile);
+            }
+
+            // file did not exist, or user wants a new database, so open NEW DB
+            else
+            {
+                Database.newDatabase(databaseFile);
+                newDB = true;
+            }
+
+            // create the category object
+            _categories = new Categories(Database.dbConnection, newDB);
+
+            // create the _events course
+            _events = new Events();
+            _events.ReadFromFile(eventsXMLFile);
+        }
         public HomeCalendar()
         {
             _categories = new Categories();
-            _events = new Events();
+            _events = new Events(); 
         }
 
         // -------------------------------------------------------------------
@@ -201,7 +223,13 @@ namespace Calendar
                 }
 
                 // keep track of running totals
-                totalBusyTime = totalBusyTime + e.DurationInMinutes;
+
+                // If the event is an availability we don't count it as a busy time
+                Category eventCategory = _categories.GetCategoryFromId(e.CatId);
+                if (eventCategory.Type != Category.CategoryType.Availability)
+                {
+                    totalBusyTime = totalBusyTime + e.DurationInMinutes;
+                }
                 items.Add(new CalendarItem
                 {
                     CategoryID = e.CatId,
