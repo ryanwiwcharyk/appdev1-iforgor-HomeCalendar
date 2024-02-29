@@ -17,6 +17,9 @@ namespace Calendar
     //        - Read / write to file
     //        - etc
     // ====================================================================
+    /// <summary>
+    /// The Categories class manages and gives access to the available categories in the database.
+    /// </summary>
     public class Categories
     {
         private static String DefaultFileName = "calendarCategories.txt";
@@ -33,30 +36,106 @@ namespace Calendar
         // ====================================================================
         // Constructor
         // ====================================================================
+        /// <summary>
+        /// Creates a Categories object given a SQL connection and a bool representing wether or not we're creating a new database.  
+        /// </summary>
+        /// <param name="dbConnection"> The SQL connection to use to access the database. </param>
+        /// <param name="newDB"> Bool representing wether or not we are creating a brand new database. </param>
+        public Categories(SQLiteConnection dbConnection, bool newDB)
+        {
+            // Assigning the connection to the categories' connection field.
+            _connection = dbConnection; 
+            // If this is a new database, we fill the categories table with default categories.
+            if (newDB)
+            {
+                SetCategoriesToDefaults();
+            }
+
+        
+        }
+        /// <summary>
+        /// Default constructor. Will be removed in the future since it's not necessary when using a database.
+        /// </summary>
         public Categories()
         {
-            SetCategoriesToDefaults();
+
         }
+
 
         // ====================================================================
         // get a specific category from the list where the id is the one specified
         // ====================================================================
-        public Category GetCategoryFromId(int i)
+        /// <summary>
+        /// Gets a category from the database given its id.
+        /// </summary>
+        /// <param name="id"> The category id to look for in the database. </param>
+        /// <returns> The category object who's id matches the provided id. </returns>
+        /// <exception cref="Exception"> Thrown if there was an error reading the database. </exception>
+        ///  <exception cref="ArgumentNullException"> Thrown if there was no category with the provided id. </exception>
+
+        public Category GetCategoryFromId(int id)
         {
-            Category? c = _Categories.Find(x => x.Id == i);
-            if (c == null)
+            try
             {
-                throw new Exception("Cannot find category with id " + i.ToString());
+                var cmd = new SQLiteCommand(_connection);
+                cmd.CommandText = $"SELECT * FROM categories WHERE Id = '{id}'";
+                var dataReader = cmd.ExecuteReader();
+                if (dataReader.Read())
+                {
+                    int categoryID = Convert.ToInt32(dataReader["Id"]);
+                    string categoryDescription = (string)dataReader["Description"];
+                    int typeId = Convert.ToInt32(dataReader["TypeId"]);
+                    
+                    if (categoryID != 0) // Convert to int returns 0 if the given id read from db is null
+                    {
+                        Category newCategory = new Category(categoryID, categoryDescription, (Category.CategoryType)typeId);
+                        return newCategory;
+                    }
+                    else
+                    {
+                        throw new ArgumentNullException($"{id}", "The given id was not found in the database.");
+                    }
+
+                }
+                else { throw new Exception(); }
+                
             }
-            return c;
+            catch (ArgumentNullException e)
+            {
+
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+          
         }
 
-        // ====================================================================
-        // populate categories from a file
-        // if filepath is not specified, read/save in AppData file
-        // Throws System.IO.FileNotFoundException if file does not exist
-        // Throws System.Exception if cannot read the file correctly (parsing XML)
-        // ====================================================================
+        /// <summary>
+        /// Populates the Categories list from a provided XML file. Will be removed in the future since it's not necessary when using a database.
+        /// </summary>
+        /// <param name="filepath">
+        /// The string that represents the file path to read the info from. If no path provided, defaults to AppData. 
+        /// </param>
+        /// <exception cref="FileNotFoundException">
+        /// Thrown if the file doesn't exist.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Thrown if the file cannot be parsed into XML.
+        /// </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories myCategories = new Categories() 
+        /// myCategories.List() // Returns a list containing the default categories.
+        /// myCategories.ReadFromFile("path") // Replace "path" with your file path to read the categories from.
+        /// myCategories.List() // Returns a list containing the categories from the file - default ones got cleared.
+        /// ]]>
+        /// </code>
+        /// </example>
         public void ReadFromFile(String? filepath = null)
         {
 
@@ -89,6 +168,24 @@ namespace Calendar
         // save to a file
         // if filepath is not specified, read/save in AppData file
         // ====================================================================
+        /// <summary>
+        /// Saves the categories and their information to a provided file path. If no path provided, defaults to AppData.  Will be removed in the future since it's not necessary when using a database.
+        /// </summary>
+        /// <param name="filepath">
+        /// Th file path to write the info to as a string. Defaults to AppData if none provided.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Thrown if file doesn't exist.
+        /// </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories myCategories = new Categories() 
+        /// myCategories.SaveToFile("path") // Replace "path" with the file path to write the categories information to. 
+        /// // The file at "path" will now contain information about myCategories. 
+        /// ]]>
+        /// </code>
+        /// </example>
         public void SaveToFile(String? filepath = null)
         {
             // ---------------------------------------------------------------
@@ -125,6 +222,19 @@ namespace Calendar
         // ====================================================================
         // set categories to default
         // ====================================================================
+        /// <summary>
+        /// Clears the Categories list and populates it with default values.
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories myCategories = new Categories(connection,true); // Creating a categories object from an existing database 
+        /// myCategories.List(); // Returns a list containing the categories from the database
+        /// myCategories.SetCategoriesToDefaults(); // Resetting the database categories to default
+        /// myCategories.List() // Returns a list containing just the default categories
+        /// ]]>
+        /// </code>
+        /// </example>
         public void SetCategoriesToDefaults()
         {
             // ---------------------------------------------------------------
@@ -149,6 +259,10 @@ namespace Calendar
         // ====================================================================
         // Add category
         // ====================================================================
+        /// <summary>
+        /// Adds a category to the 
+        /// </summary>
+        /// <param name="category"> The category to add to the database. </param>
         private void Add(Category category)
         {
             _Categories.Add(category);
