@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
+using System.Data.Common;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -28,7 +30,17 @@ namespace Calendar
         private List<Event> _Events = new List<Event>();
         private string _FileName;
         private string _DirName;
+        private static SQLiteConnection _connection;
 
+        public Events(SQLiteConnection dbConnection, bool newDB)
+        {
+            // Assigning the connection to the categories' connection field.
+            _connection = dbConnection;
+        }
+        public Events()
+        {
+
+        }
         // ====================================================================
         // Properties
         // ====================================================================
@@ -156,16 +168,22 @@ namespace Calendar
         /// <param name="details">Represents the details of the event.</param>
         public void Add(DateTime date, int category, Double duration, String details)
         {
-            int new_id = 1;
+            //Connect to the database
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            Database.dbConnection.Open(); //opening database
 
-            // if we already have Events, set ID to max
-            if (_Events.Count > 0)
-            {
-                new_id = (from e in _Events select e.Id).Max();
-                new_id++;
-            }
+            var cmd = new SQLiteCommand(Database.dbConnection);
+   
 
-            _Events.Add(new Event(new_id, date, category, duration, details));
+            cmd.CommandText = $@"INSERT INTO events (DurationInMinutes, StartDateTime, Details, CategoryId)
+                                 VALUES( @duration, @date, @details , @category)";
+            cmd.Parameters.AddWithValue("@duration", duration);
+            cmd.Parameters.AddWithValue("@date", date);
+            cmd.Parameters.AddWithValue("@details", details);
+            cmd.Parameters.AddWithValue("@category", category);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+
 
         }
 
@@ -177,10 +195,18 @@ namespace Calendar
         /// </summary>
         /// <param name="Id">Represents the Id of the specific event.</param>
         public void Delete(int Id)
+
         {
-            int i = _Events.FindIndex(x => x.Id == Id);
-            if (i == -1) return;
-            _Events.RemoveAt(i);
+            Database.CloseDatabaseAndReleaseFile();//close the database if already open
+            _connection.Open(); //opening database
+
+            var cmd = new SQLiteCommand(_connection);
+
+
+            cmd.CommandText = $@"DELETE FROM events WHERE Id = '{Id}'";
+            cmd.ExecuteNonQuery();
+
+            cmd.Dispose();
 
         }
 
@@ -196,9 +222,21 @@ namespace Calendar
         public List<Event> List()
         {
             List<Event> newList = new List<Event>();
-            foreach (Event Event in _Events)
+            var cmd = new SQLiteCommand(Database.dbConnection);
+            cmd.CommandText = "SELECT * FROM events";
+            var dr = cmd.ExecuteReader();
+            while (dr.Read())
             {
-                newList.Add(new Event(Event));
+                int eventId = Convert.ToInt32(dr["Id"]);
+                int eventCategory = Convert.ToInt32(dr["CategoryId"]);    
+                string date = (string)dr["StartDateTime"];
+                DateTime datetime = Convert.ToDateTime(date);
+                double duration = (double)dr["DurationInMinutes"];
+                string details = (string)dr["Details"];
+                
+                Event newEvent = new Event(eventId, datetime, eventCategory, duration, details);
+                newList.Add(newEvent);
+
             }
             return newList;
         }

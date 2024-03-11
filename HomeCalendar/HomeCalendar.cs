@@ -105,19 +105,9 @@ namespace Calendar
             // create the category object
             _categories = new Categories(Database.dbConnection, newDB);
 
-            // create the _events course
-            _events = new Events();
-            _events.ReadFromFile(eventsXMLFile);
         }
-        /// <summary>
-        /// Initializes the default values for all properties(categories, events) inside of the calendar instance.
-        /// </summary>
-        public HomeCalendar()
-        {
-            _categories = new Categories();
-            _events = new Events(); 
-        }
-
+        public HomeCalendar() { }
+      
         // -------------------------------------------------------------------
         // Constructor (existing calendar ... must specify file)
         // -------------------------------------------------------------------
