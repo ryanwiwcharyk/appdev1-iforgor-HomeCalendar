@@ -11,10 +11,6 @@
 
             //Loading test file from exec level
 
-            HomeCalendar calendar = new HomeCalendar(); //creating an instance of HomeCalendar
-            string filename = "./test.calendar"; //getting data from relative path
-            calendar.ReadFromFile(filename); //initializing the Calendar by reading test calendar dat   a
-            PrintAndReadMenu(calendar); //The menu which will reach and display the methods based on user input
         }
 
         private static void PrintAndReadMenu(HomeCalendar calendar)

@@ -362,14 +362,7 @@ namespace Calendar
         /// <param name="Id"> The ID of the category to delete. </param>
         public void Delete(int Id)
         {
-            //int i = _Categories.FindIndex(x => x.Id == Id);
-            //if (i == -1)
-            //    return;
-            //_Categories.RemoveAt(i);
 
-            //Connect to the database
-            Database.CloseDatabaseAndReleaseFile();//close the database if already open
-            Database.dbConnection.Open(); //opening database
 
             var cmd = new SQLiteCommand(Database.dbConnection);
 

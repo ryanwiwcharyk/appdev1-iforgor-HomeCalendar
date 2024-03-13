@@ -43,8 +43,6 @@ namespace Calendar
         public static void newDatabase(string filename)
         {
 
-            // If there was a database open before, close it and release the lock
-            CloseDatabaseAndReleaseFile();
 
             //attempt to connect to the db
             string connectionString = $@"Data Source={filename}; Foreign Keys=1";
@@ -83,7 +81,6 @@ namespace Calendar
        public static void existingDatabase(string filename)
         {
 
-            CloseDatabaseAndReleaseFile();
             try
             {
                 if (File.Exists(filename))

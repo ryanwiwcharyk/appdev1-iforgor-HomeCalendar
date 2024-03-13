@@ -69,81 +69,6 @@ namespace Calendar
         /// Reads the events data from a given filepath, allowing us to access th events within, and validates the filepath name exists and is valid.
         /// </summary>
         /// <param name="filepath">Represents the filepath of the file being opened for reading.</param>
-        public void ReadFromFile(String filepath = null)
-        {
-
-            // ---------------------------------------------------------------
-            // reading from file resets all the current Events,
-            // so clear out any old definitions
-            // ---------------------------------------------------------------
-            _Events.Clear();
-
-            // ---------------------------------------------------------------
-            // reset default dir/filename to null 
-            // ... filepath may not be valid, 
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyReadFromFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // read the Events from the xml file
-            // ---------------------------------------------------------------
-            _ReadXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use?
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-
-
-        }
-
-        // ====================================================================
-        // save to a file
-        // if filepath is not specified, read/save in AppData file
-        // ====================================================================
-        /// <summary>
-        /// Saves the events data to a given filepath, and verifies the chosen path exists and is valid for saving.
-        /// </summary>
-        /// <param name="filepath">Represents the file path to where you'd like to save the data.</param>
-        public void SaveToFile(String filepath = null)
-        {
-            // ---------------------------------------------------------------
-            // if file path not specified, set to last read file
-            // ---------------------------------------------------------------
-            if (filepath == null && DirName != null && FileName != null)
-            {
-                filepath = DirName + "\\" + FileName;
-            }
-
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // save as XML
-            // ---------------------------------------------------------------
-            _WriteXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
 
 
 
@@ -168,12 +93,8 @@ namespace Calendar
         /// <param name="details">Represents the details of the event.</param>
         public void Add(DateTime date, int category, Double duration, String details)
         {
-            //Connect to the database
-            Database.CloseDatabaseAndReleaseFile();//close the database if already open
-            Database.dbConnection.Open(); //opening database
 
-            var cmd = new SQLiteCommand(Database.dbConnection);
-   
+            var cmd = new SQLiteCommand(_connection);
 
             cmd.CommandText = $@"INSERT INTO events (DurationInMinutes, StartDateTime, Details, CategoryId)
                                  VALUES( @duration, @date, @details , @category)";
@@ -197,8 +118,7 @@ namespace Calendar
         public void Delete(int Id)
 
         {
-            Database.CloseDatabaseAndReleaseFile();//close the database if already open
-            _connection.Open(); //opening database
+
 
             var cmd = new SQLiteCommand(_connection);
 
