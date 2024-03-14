@@ -121,111 +121,7 @@ namespace Calendar
             }
           
         }
-
-        /// <summary>
-        /// Populates the Categories list from a provided XML file. Will be removed in the future since it's not necessary when using a database.
-        /// </summary>
-        /// <param name="filepath">
-        /// The string that represents the file path to read the info from. If no path provided, defaults to AppData. 
-        /// </param>
-        /// <exception cref="FileNotFoundException">
-        /// Thrown if the file doesn't exist.
-        /// </exception>
-        /// <exception cref="Exception">
-        /// Thrown if the file cannot be parsed into XML.
-        /// </exception>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        /// Categories myCategories = new Categories() 
-        /// myCategories.List() // Returns a list containing the default categories.
-        /// myCategories.ReadFromFile("path") // Replace "path" with your file path to read the categories from.
-        /// myCategories.List() // Returns a list containing the categories from the file - default ones got cleared.
-        /// ]]>
-        /// </code>
-        /// </example>
-        public void ReadFromFile(String? filepath = null)
-        {
-
-            // ---------------------------------------------------------------
-            // reading from file resets all the current categories,
-            // ---------------------------------------------------------------
-            _Categories.Clear();
-
-            // ---------------------------------------------------------------
-            // reset default dir/filename to null 
-            // ... filepath may not be valid, 
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyReadFromFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // If file exists, read it
-            // ---------------------------------------------------------------
-            _ReadXMLFile(filepath);
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
-
-        // ====================================================================
-        // save to a file
-        // if filepath is not specified, read/save in AppData file
-        // ====================================================================
-        /// <summary>
-        /// Saves the categories and their information to a provided file path. If no path provided, defaults to AppData.  Will be removed in the future since it's not necessary when using a database.
-        /// </summary>
-        /// <param name="filepath">
-        /// Th file path to write the info to as a string. Defaults to AppData if none provided.
-        /// </param>
-        /// <exception cref="Exception">
-        /// Thrown if file doesn't exist.
-        /// </exception>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        /// Categories myCategories = new Categories() 
-        /// myCategories.SaveToFile("path") // Replace "path" with the file path to write the categories information to. 
-        /// // The file at "path" will now contain information about myCategories. 
-        /// ]]>
-        /// </code>
-        /// </example>
-        public void SaveToFile(String? filepath = null)
-        {
-            // ---------------------------------------------------------------
-            // if file path not specified, set to last read file
-            // ---------------------------------------------------------------
-            if (filepath == null && DirName != null && FileName != null)
-            {
-                filepath = DirName + "\\" + FileName;
-            }
-
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // save as XML
-            // ---------------------------------------------------------------
-            _WriteXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
+   
 
         // ====================================================================
         // set categories to default
@@ -327,29 +223,13 @@ namespace Calendar
 
         public void Add(String desc, Category.CategoryType type)
         {
-            //int new_num = 1;
-            //if (_Categories.Count > 0)
-            //{
-            //    new_num = (from c in _Categories select c.Id).Max();
-            //    new_num++;
-            //}
-            //_Categories.Add(new Category(new_num, desc, type));
-
-            //^^Old Logic for adding to a list (IN MEMORY)
 
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            //cmd.CommandText = $"SELECT COUNT(*) FROM categoryTypes WHERE Id = '{(int)type}'";
-            //int count = Convert.ToInt32(cmd.ExecuteScalar());
-            //if (count == 0)
-            //{
-            //    cmd.CommandText = @$"INSERT INTO categoryTypes (Id, Description) VALUES ({(int)type},'{type}')";
-            //    cmd.ExecuteNonQuery();
-            //}
-
-            cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES ('{desc}', '{(int)type}')";
+            cmd.CommandText = @$"INSERT INTO categories (Description, TypeID) VALUES (@desc, @catType)";
+            cmd.Parameters.AddWithValue("@desc", desc);
+            cmd.Parameters.AddWithValue("@catType", type);
             cmd.ExecuteNonQuery();
-
             cmd.Dispose();
         }
 
@@ -367,8 +247,10 @@ namespace Calendar
         public void UpdateProperties(int id, string newDesc, Category.CategoryType categoryType)
         {
             var cmd = new SQLiteCommand(Database.dbConnection);
-
-            cmd.CommandText = $@"UPDATE categories SET Description = '{newDesc}', TypeID = '{(int)categoryType}' WHERE Id = '{id}'";
+            cmd.CommandText = $@"UPDATE categories SET Description = @newDesc, TypeID = @catType WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@newDesc", newDesc);
+            cmd.Parameters.AddWithValue("@catType", (int)categoryType);
+            cmd.Parameters.AddWithValue("@id", id);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
@@ -382,16 +264,15 @@ namespace Calendar
         /// <param name="Id"> The ID of the category to delete. </param>
         public void Delete(int Id)
         {
-
-
             var cmd = new SQLiteCommand(Database.dbConnection);
 
-            cmd.CommandText = $@"DELETE FROM events WHERE CategoryId = '{Id}'";
+            cmd.CommandText = $@"DELETE FROM events WHERE CategoryId = @id";
+            cmd.Parameters.AddWithValue("@id",Id);
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = $@"DELETE FROM categories WHERE Id = '{Id}'";
+            cmd.CommandText = $@"DELETE FROM categories WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@id",Id);
             cmd.ExecuteNonQuery();
-
             cmd.Dispose();
 
 
