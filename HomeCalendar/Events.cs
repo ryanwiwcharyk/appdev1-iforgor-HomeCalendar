@@ -177,6 +177,33 @@ namespace Calendar
         }
 
 
+                    if (eventId != 0) // Convert to int returns 0 if the given id read from db is null
+                    {
+                        Event newEvent = new Event(eventId, startDateTime, categoryId,eventDuration,eventDetails);
+                        return newEvent;
+                    }
+                    else
+                    {
+                        throw new ArgumentNullException($"{id}", "The given id was not found in the database.");
+                    }
+
+                }
+                else { throw new Exception(); }
+
+            }
+            catch (ArgumentNullException e)
+            {
+
+                Console.WriteLine(e.Message);
+                return null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return null;
+            }
+
+        }
         // ====================================================================
         // read from an XML file and add categories to our categories list
         // ====================================================================
