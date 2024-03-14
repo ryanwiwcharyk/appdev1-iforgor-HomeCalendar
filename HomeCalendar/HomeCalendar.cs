@@ -183,53 +183,46 @@ namespace Calendar
             var cmd = new SQLiteCommand(_connection);
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
-
-            if (FilterFlag)
-            {
-                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= {Start} AND StartDateTime <= {End} AND CategoryId = {CategoryID} ORDER BY StartDateTime";
-            }
-            else
-            {
-                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= {Start} AND StartDateTime <= {End} ORDER BY StartDateTime";
-            }
-            cmd.CommandText = "DELETE FROM categories";
-            cmd.ExecuteNonQuery();
-
-            var query =  from c in _categories.List()
-                        join e in _events.List() on c.Id equals e.Category
-                        where e.StartDateTime >= Start && e.StartDateTime <= End
-                        select new { CatId = c.Id, EventId = e.Id, e.StartDateTime, Category = c.Description, e.Details, e.DurationInMinutes };
-
             List<CalendarItem> items = new List<CalendarItem>();
             Double totalBusyTime = 0;
 
-            foreach (var e in query.OrderBy(q => q.StartDateTime))
+            if (FilterFlag)
             {
-                // filter out unwanted categories if filter flag is on
-                if (FilterFlag && CategoryID != e.CatId)
-                {
-                    continue;
-                }
-
-                // keep track of running totals
-
-                // If the event is an availability we don't count it as a busy time
-                Category eventCategory = _categories.GetCategoryFromId(e.CatId);
-                if (eventCategory.Type != Category.CategoryType.Availability)
-                {
-                    totalBusyTime = totalBusyTime + e.DurationInMinutes;
-                }
-                items.Add(new CalendarItem
-                {
-                    CategoryID = e.CatId,
-                    EventID = e.EventId,
-                    ShortDescription = e.Details,
-                    StartDateTime = e.StartDateTime,
-                    DurationInMinutes = e.DurationInMinutes,
-                    Category = e.Category,
-                    BusyTime = totalBusyTime
-                });
+                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= '{Start}' AND StartDateTime <= '{End}' AND CategoryId = '{CategoryID}' ORDER BY StartDateTime";
             }
+            else
+            {
+                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= '{Start}' AND StartDateTime <= '{End}' ORDER BY StartDateTime";
+            }
+            var dataReader = cmd.ExecuteReader();
+            if (dataReader.Read())
+            {
+                int eventId = Convert.ToInt32(dataReader["Id"]);
+                if (eventId != 0) // Convert to int returns 0 if the given id read from db is null
+                {
+                    Event e = _events.GetEventFromId(eventId);
+                    Category eventCategory = _categories.GetCategoryFromId(e.Category);
+                    if (eventCategory.Type != Category.CategoryType.Availability)
+                    {
+                        totalBusyTime = totalBusyTime + e.DurationInMinutes;
+                    }
+                    items.Add(new CalendarItem
+                    {
+                        CategoryID = e.Category,
+                        EventID = e.Id,
+                        ShortDescription = e.Details,
+                        StartDateTime = e.StartDateTime,
+                        DurationInMinutes = e.DurationInMinutes,
+                        Category = Convert.ToString(eventCategory),
+                        BusyTime = totalBusyTime
+                    });
+                }
+
+
+            }
+            else { throw new Exception(); }
+
+
 
             return items;
         }
