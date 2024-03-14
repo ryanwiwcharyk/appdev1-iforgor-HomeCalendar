@@ -43,7 +43,7 @@ namespace Calendar
         public static void newDatabase(string filename)
         {
 
-
+            CloseDatabaseAndReleaseFile();
             //attempt to connect to the db
             string connectionString = $@"Data Source={filename}; Foreign Keys=1";
             _connection = new SQLiteConnection(connectionString);
@@ -80,7 +80,7 @@ namespace Calendar
        // ===================================================================
        public static void existingDatabase(string filename)
         {
-
+            CloseDatabaseAndReleaseFile();
             try
             {
                 if (File.Exists(filename))
