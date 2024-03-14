@@ -161,21 +161,6 @@ namespace Calendar
             return newList;
         }
 
-        public void UpdateProperties(int id, DateTime startDateTime, double durationInMinutes, string details, int categoryId)
-        {
-            var cmd = new SQLiteCommand(Database.dbConnection);
-
-            cmd.CommandText = $@"UPDATE events SET DurationInMinutes = @duration, StartDateTime = @startTime, Details = @details,
-            CategoryId = @catId WHERE Id = @id";
-            cmd.Parameters.AddWithValue("@duration", durationInMinutes);
-            cmd.Parameters.AddWithValue("@startTime", startDateTime.ToString());
-            cmd.Parameters.AddWithValue("@details", details);
-            cmd.Parameters.AddWithValue("@catId", categoryId);
-            cmd.Parameters.AddWithValue("@id", id);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
-        }
-
 
         // ====================================================================
         // read from an XML file and add categories to our categories list
