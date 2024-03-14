@@ -351,6 +351,7 @@ namespace Calendar
 
             cmd.CommandText = $@"UPDATE categories SET Description = '{newDesc}', TypeID = '{(int)categoryType}' WHERE Id = '{id}'";
             cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
 
         // ====================================================================
