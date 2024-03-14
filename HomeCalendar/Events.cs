@@ -123,7 +123,8 @@ namespace Calendar
             var cmd = new SQLiteCommand(_connection);
 
 
-            cmd.CommandText = $@"DELETE FROM events WHERE Id = '{Id}'";
+            cmd.CommandText = $@"DELETE FROM events WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@id", Id);
             cmd.ExecuteNonQuery();
 
             cmd.Dispose();
