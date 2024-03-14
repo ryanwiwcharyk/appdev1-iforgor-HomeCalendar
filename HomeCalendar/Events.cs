@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Data.SQLite;
 using System.Data.Common;
+using System.Collections.Specialized;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -160,6 +161,19 @@ namespace Calendar
 
             }
             return newList;
+        }
+
+        public void UpdateProperties(int id, DateTime startDateTime, double durationInMinutes, string details, int catId)
+        {
+            var cmd = new SQLiteCommand(Database.dbConnection);
+            cmd.CommandText = $@"UPDATE events SET StartDateTime = @startTime, DurationInMinutes = @duration, Details = @details, CategoryId = @catId WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@startTime", startDateTime.ToString());
+            cmd.Parameters.AddWithValue("@duration", durationInMinutes);
+            cmd.Parameters.AddWithValue("@details", details);
+            cmd.Parameters.AddWithValue("catId", catId);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
 
 
