@@ -255,16 +255,35 @@ namespace Calendar
 
             cmd.CommandText = "DELETE FROM categories";
             cmd.ExecuteNonQuery();
+
             cmd.CommandText = "DELETE FROM categoryTypes";
             cmd.ExecuteNonQuery();
-            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Event')";
+            Category.CategoryType[] catTypes = (Category.CategoryType[])Enum.GetValues(typeof(Category.CategoryType));
+            foreach (Category.CategoryType catType in catTypes)
+            {
+                cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('{catType}')";
+                cmd.ExecuteNonQuery();
+            }
+            cmd.Dispose();
+
+            Add("School", Category.CategoryType.Event);
+            Add("Personal", Category.CategoryType.Event);
+            Add("VideoGames", Category.CategoryType.Event);
+            Add("Medical", Category.CategoryType.Event);
+            Add("Sleep", Category.CategoryType.Event);
+            Add("Vacation", Category.CategoryType.AllDayEvent);
+            Add("Travel days", Category.CategoryType.AllDayEvent);
+            Add("Canadian Holidays", Category.CategoryType.Holiday);
+            Add("US Holidays", Category.CategoryType.Holiday);
+        }
+
+        public void ResetCategories()
+        {
+            var cmd = new SQLiteCommand(_connection);
+
+            cmd.CommandText = "DELETE FROM categories";
             cmd.ExecuteNonQuery();
-            cmd.CommandText = @$"INSERT INTO categoryTypes(Description) VALUES ('AllDayEvent')";
-            cmd.ExecuteNonQuery();
-            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Holiday')";
-            cmd.ExecuteNonQuery();
-            cmd.CommandText = @$"INSERT INTO categoryTypes (Description) VALUES ('Availability')";
-            cmd.ExecuteNonQuery();
+            cmd.Dispose();
 
             Add("School", Category.CategoryType.Event);
             Add("Personal", Category.CategoryType.Event);
