@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 
@@ -27,6 +29,7 @@ namespace Calendar
         private string? _DirName;
         private Categories _categories;
         private Events _events;
+        private static SQLiteConnection _connection;
 
         // ====================================================================
         // Properties
@@ -93,6 +96,8 @@ namespace Calendar
             if (!newDB && File.Exists(databaseFile))
             {
                 Database.existingDatabase(databaseFile);
+                _connection = Database.dbConnection;
+                  
             }
 
             // file did not exist, or user wants a new database, so open NEW DB
@@ -100,6 +105,7 @@ namespace Calendar
             {
                 Database.newDatabase(databaseFile);
                 newDB = true;
+                _connection = Database.dbConnection;
             }
 
             // create the category object
@@ -152,6 +158,7 @@ namespace Calendar
         ///    Console.WriteLine($"Total busy time: {totalBusyTime}");
         ///    ]]>
         ///    <b>Sample Output</b>
+        ///    
         ///       Cat_ID   | Event_ID | StartDateTime             | Details              | DurationInMinutes
         ///         3           1         2018-01-10 10:00:00 AM     App Dev Homework              40
         ///         2           8         2018-01-11 10:15:00 AM     Sprint retrospective          60
@@ -173,17 +180,26 @@ namespace Calendar
             // ------------------------------------------------------------------------
             // return joined list within time frame
             // ------------------------------------------------------------------------
+            var cmd = new SQLiteCommand(_connection);
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
+
+            if (FilterFlag)
+            {
+                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= {Start} AND StartDateTime <= {End} AND CategoryId = {CategoryID} ORDER BY StartDateTime";
+            }
+            else
+            {
+                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= {Start} AND StartDateTime <= {End} ORDER BY StartDateTime";
+            }
+            cmd.CommandText = "DELETE FROM categories";
+            cmd.ExecuteNonQuery();
 
             var query =  from c in _categories.List()
                         join e in _events.List() on c.Id equals e.Category
                         where e.StartDateTime >= Start && e.StartDateTime <= End
                         select new { CatId = c.Id, EventId = e.Id, e.StartDateTime, Category = c.Description, e.Details, e.DurationInMinutes };
 
-            // ------------------------------------------------------------------------
-            // create a CalendarItem list with totals,
-            // ------------------------------------------------------------------------
             List<CalendarItem> items = new List<CalendarItem>();
             Double totalBusyTime = 0;
 
