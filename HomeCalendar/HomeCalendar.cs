@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using static Calendar.Category;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -391,52 +393,29 @@ namespace Calendar
             // -----------------------------------------------------------------------
             // get all items first
             // -----------------------------------------------------------------------
-            SQLiteCommand cmd = new SQLiteCommand(_connection);
-            List<CalendarItem> filteredItems = GetCalendarItems(Start, End, FilterFlag, CategoryID);
+            var cmd = new SQLiteCommand(_connection);
+            Start = Start ?? new DateTime(1900, 1, 1);
+            End = End ?? new DateTime(2500, 1, 1);
+            List<CalendarItemsByCategory> itemsByCategory = new List<CalendarItemsByCategory>();
+            Double totalBusyTime = 0;
 
-            if (FilterFlag)
+            
+            cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
+                $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY c.Id";
+
+
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                cmd.CommandText = "SELECT Id FROM events WHERE StartDateTime BETWEEN @start AND @end AND CategoryId = @catId GROUP BY CategoryId";
-                cmd.Parameters.AddWithValue("@start", Start);
-                cmd.Parameters.AddWithValue("@end", End);
-                cmd.Parameters.AddWithValue("@catId", CategoryID);
-            }
-            else
-            {
-                cmd.CommandText = "SELECT Id FROM events WHERE StartDateTime BETWEEN @start AND @end GROUP BY CategoryId";
-                cmd.Parameters.AddWithValue("@start", Start);
-                cmd.Parameters.AddWithValue("@end", End);
-            }
-            // -----------------------------------------------------------------------
-            // Group by Category
-            // -----------------------------------------------------------------------
-            var GroupedByCategory = filteredItems.GroupBy(c => c.Category);
+                int categoryId = Convert.ToInt32(reader["CategoryId"]);
+                string desc = (string)reader["Description"];
+                List<CalendarItem> items = GetCalendarItems(Start, End, FilterFlag, categoryId);
+                itemsByCategory.Add(new CalendarItemsByCategory { Category = desc, Items = items, TotalBusyTime = items[items.Count - 1].BusyTime });
 
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<CalendarItemsByCategory>();
-            foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
-            {
-                // calculate totalBusyTime for this category, and create list of items
-                double total = 0;
-                var items = new List<CalendarItem>();
-                foreach (var item in CategoryGroup)
-                {
-                    total = total + item.DurationInMinutes;
-                    items.Add(item);
-                }
 
-                // Add new CalendarItemsByCategory to our list
-                summary.Add(new CalendarItemsByCategory
-                {
-                    Category = CategoryGroup.Key,
-                    Items = items,
-                    TotalBusyTime = total
-                });
+
             }
-
-            return summary;
+            return itemsByCategory;
         }
 
 
