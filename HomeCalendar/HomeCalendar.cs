@@ -393,8 +393,22 @@ namespace Calendar
             // -----------------------------------------------------------------------
             // get all items first
             // -----------------------------------------------------------------------
+            SQLiteCommand cmd = new SQLiteCommand(_connection);
             List<CalendarItem> filteredItems = GetCalendarItems(Start, End, FilterFlag, CategoryID);
 
+            if (FilterFlag)
+            {
+                cmd.CommandText = "SELECT Id FROM events WHERE StartDateTime BETWEEN @start AND @end AND CategoryId = @catId GROUP BY CategoryId";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
+                cmd.Parameters.AddWithValue("@catId", CategoryID);
+            }
+            else
+            {
+                cmd.CommandText = "SELECT Id FROM events WHERE StartDateTime BETWEEN @start AND @end GROUP BY CategoryId";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
+            }
             // -----------------------------------------------------------------------
             // Group by Category
             // -----------------------------------------------------------------------
