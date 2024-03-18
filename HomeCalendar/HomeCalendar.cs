@@ -290,41 +290,35 @@ namespace Calendar
         /// </example>
         public List<CalendarItemsByMonth> GetCalendarItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            // -----------------------------------------------------------------------
-            // get all items first
-            // -----------------------------------------------------------------------
-            List<CalendarItem> items = GetCalendarItems(Start, End, FilterFlag, CategoryID);
+            var cmd = new SQLiteCommand(_connection);
+            Start = Start ?? new DateTime(1900, 1, 1);
+            End = End ?? new DateTime(2500, 1, 1);
+            List<CalendarItemsByMonth> itemsByMonth = new List<CalendarItemsByMonth>();
+            Double totalBusyTime = 0;
 
-            // -----------------------------------------------------------------------
-            // Group by year/month
-            // -----------------------------------------------------------------------
-            var GroupedByMonth = items.GroupBy(c => c.StartDateTime.Year.ToString("D4") + "/" + c.StartDateTime.Month.ToString("D2"));
-
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<CalendarItemsByMonth>();
-            foreach (var MonthGroup in GroupedByMonth)
+            if (FilterFlag)
             {
-                // calculate totalBusyTime for this month, and create list of items
-                double total = 0;
-                var itemsList = new List<CalendarItem>();
-                foreach (var item in MonthGroup)
-                {
-                    total = total + item.DurationInMinutes;
-                    itemsList.Add(item);
-                }
-
-                // Add new CalendarItemsByMonth to our list
-                summary.Add(new CalendarItemsByMonth
-                {
-                    Month = MonthGroup.Key,
-                    Items = itemsList,
-                    TotalBusyTime = total
-                });
+                cmd.CommandText = $"SELECT STRFTIME('%Y-%m', e.StartDateTime) AS eventMonth FROM events e " +
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY eventMonth";
             }
+            else
+            {
+                cmd.CommandText = $"SELECT STRFTIME('%Y-%m', e.StartDateTime) AS eventMonth FROM events e " +
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' GROUP BY eventMonth";
+            }
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                string monthAndYear = (string)(reader["eventMonth"]);
+                DateTime newStartTime = Convert.ToDateTime(monthAndYear + "-01"); // first day of the month
+                DateTime newEndTime = Convert.ToDateTime(monthAndYear + "-31"); // last day of the month
+                double busyTime = 0;
+                List<CalendarItem> items = GetCalendarItems(newStartTime, newEndTime, FilterFlag, CategoryID);
+                string formatted = monthAndYear.Replace('-', '/');
+                itemsByMonth.Add(new CalendarItemsByMonth{ Items = items, Month = formatted, TotalBusyTime = items[items.Count -1].BusyTime });
+            }
+            return itemsByMonth;
 
-            return summary;
         }
 
         // ============================================================================
@@ -417,8 +411,6 @@ namespace Calendar
                 int categoryId = Convert.ToInt32(reader["CategoryId"]);
                 string desc = (string)reader["Description"];
                 List<CalendarItem> items = GetCalendarItems(Start, End, true, categoryId);
-                double busyTime = 0;
-              
                 itemsByCategory.Add(new CalendarItemsByCategory { Category = desc, Items = items, TotalBusyTime = items[items.Count-1].BusyTime });
             }
             return itemsByCategory;
