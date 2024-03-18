@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Data.SQLite;
 using System.Data.Common;
+using System.Collections.Specialized;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -162,48 +163,19 @@ namespace Calendar
             return newList;
         }
 
-        public Event GetEventFromId(int id)
+        public void UpdateProperties(int id, DateTime startDateTime, double durationInMinutes, string details, int catId)
         {
-            try
-            {
-                var cmd = new SQLiteCommand(_connection);
-                cmd.CommandText = $"SELECT * FROM events WHERE Id = '{id}'";
-                var dataReader = cmd.ExecuteReader();
-                if (dataReader.Read())
-                {
-                    int eventId = Convert.ToInt32(dataReader["Id"]);
-                    double eventDuration = Convert.ToDouble(dataReader["DurationInMinutes"]);
-                    DateTime startDateTime = Convert.ToDateTime(dataReader["StartDateTime"]);
-                    string eventDetails = (string)dataReader["Details"];
-                    int categoryId = Convert.ToInt32(dataReader["CategoryId"]);
-
-                    if (eventId != 0) // Convert to int returns 0 if the given id read from db is null
-                    {
-                        Event newEvent = new Event(eventId, startDateTime, categoryId,eventDuration,eventDetails);
-                        return newEvent;
-                    }
-                    else
-                    {
-                        throw new ArgumentNullException($"{id}", "The given id was not found in the database.");
-                    }
-
-                }
-                else { throw new Exception(); }
-
-            }
-            catch (ArgumentNullException e)
-            {
-
-                Console.WriteLine(e.Message);
-                return null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return null;
-            }
-
+            var cmd = new SQLiteCommand(Database.dbConnection);
+            cmd.CommandText = $@"UPDATE events SET StartDateTime = @startTime, DurationInMinutes = @duration, Details = @details, CategoryId = @catId WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@startTime", startDateTime.ToString());
+            cmd.Parameters.AddWithValue("@duration", durationInMinutes);
+            cmd.Parameters.AddWithValue("@details", details);
+            cmd.Parameters.AddWithValue("catId", catId);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
+
         // ====================================================================
         // read from an XML file and add categories to our categories list
         // ====================================================================

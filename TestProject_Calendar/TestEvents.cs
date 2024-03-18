@@ -1,11 +1,5 @@
-﻿using System;
-using Xunit;
-using System.IO;
-using System.Collections.Generic;
-using Calendar;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+﻿using Calendar;
 using System.Data.SQLite;
-using System.Diagnostics.CodeAnalysis;
 
 namespace CalendarCodeTests
 {
@@ -219,8 +213,43 @@ namespace CalendarCodeTests
 
         // ========================================================================
 
-       
-        
+        [Fact]
+        public void EventsMethod_UpdateEvent()
+        {
+            // Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+            Database.existingDatabase(messyDB);
+            SQLiteConnection conn = Database.dbConnection;
+            Events evnt = new Events(conn, true);
+            DateTime dateNew = DateTime.MinValue;
+            int categoryNew = 2;
+            double durationNew = 30;
+            string detailsNew = "Newer event";
+
+            DateTime date = DateTime.Now;
+            int category = 2;
+            double duration = 50;
+            string details = "New event";
+
+            // Act
+            evnt.Add(date, category, duration, details);
+
+            // Act
+            List<Event> events = evnt.List();
+            evnt.UpdateProperties(events[0].Id,dateNew,durationNew, detailsNew, categoryNew);
+            events = evnt.List();
+
+            // Assert 
+            Assert.Equal(DateTime.MinValue, events[0].StartDateTime);
+            Assert.Equal(durationNew, events[0].DurationInMinutes);
+            Assert.Equal(detailsNew, events[0].Details);
+            Assert.Equal(categoryNew, events[0].Category);
+
+        }
+
     }
 }
 
