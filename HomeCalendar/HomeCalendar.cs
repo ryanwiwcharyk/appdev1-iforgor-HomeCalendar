@@ -188,39 +188,42 @@ namespace Calendar
 
             if (FilterFlag)
             {
-                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= '{Start}' AND StartDateTime <= '{End}' AND CategoryId = '{CategoryID}' ORDER BY StartDateTime";
+                cmd.CommandText = $"SELECT * FROM events WHERE StartDateTime >= '{Start}' AND StartDateTime <= '{End}' AND CategoryId = '{CategoryID}' ORDER BY StartDateTime";
             }
             else
             {
-                cmd.CommandText = $"SELECT Id FROM events WHERE StartDateTime >= '{Start}' AND StartDateTime <= '{End}' ORDER BY StartDateTime";
+                cmd.CommandText = $"SELECT * FROM events WHERE StartDateTime >= '{Start}' AND StartDateTime <= '{End}' ORDER BY StartDateTime";
             }
             var dataReader = cmd.ExecuteReader();
-            if (dataReader.Read())
+            while (dataReader.Read())
             {
+                // Id INTEGER PRIMARY KEY AUTOINCREMENT, DurationInMinutes DOUBLE, StartDateTime TEXT, Details TEXT, CategoryId INTEGER NOT NULL, FOREIGN KEY(CategoryId) REFERENCES categories(Id))";
                 int eventId = Convert.ToInt32(dataReader["Id"]);
-                if (eventId != 0) // Convert to int returns 0 if the given id read from db is null
-                {
-                    Event e = _events.GetEventFromId(eventId);
-                    Category eventCategory = _categories.GetCategoryFromId(e.Category);
+                double durationInMinutes = Convert.ToDouble(dataReader["DurationInMinutes"]);
+                string startDateTime = (string)dataReader["StartDateTime"];
+                string details = (string)dataReader["Details"];
+                int categoryId = Convert.ToInt32(dataReader["CategoryId"]);
+
+                    Category eventCategory = _categories.GetCategoryFromId(categoryId);
                     if (eventCategory.Type != Category.CategoryType.Availability)
                     {
-                        totalBusyTime = totalBusyTime + e.DurationInMinutes;
+                        totalBusyTime = totalBusyTime + durationInMinutes;
                     }
                     items.Add(new CalendarItem
                     {
-                        CategoryID = e.Category,
-                        EventID = e.Id,
-                        ShortDescription = e.Details,
-                        StartDateTime = e.StartDateTime,
-                        DurationInMinutes = e.DurationInMinutes,
-                        Category = Convert.ToString(eventCategory),
+                        CategoryID = categoryId,
+                        EventID = eventId,
+                        ShortDescription = details,
+                        StartDateTime = Convert.ToDateTime(startDateTime),
+                        DurationInMinutes = durationInMinutes,
+                        Category = eventCategory.Description,
                         BusyTime = totalBusyTime
                     });
-                }
+                
 
 
             }
-            else { throw new Exception(); }
+
 
 
 
