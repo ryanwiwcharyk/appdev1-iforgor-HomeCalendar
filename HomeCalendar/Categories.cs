@@ -38,7 +38,19 @@ namespace Calendar
         // ====================================================================
         // Properties
         // ====================================================================
+        /// <summary>
+        /// Gets the fileName, of the file you wish to read.
+        /// </summary>
+        /// <value>
+        /// The name of the file. This is a string or null value.
+        /// </value>
         public String? FileName { get { return _FileName; } }
+        /// <summary>
+        /// Gets the name of the directory, from which the file is from.
+        /// </summary>
+        /// <value>
+        /// The name of the directory. This is a string or null value.
+        /// </value>
         public String? DirName { get { return _DirName; } }
 
         // ====================================================================
@@ -60,13 +72,6 @@ namespace Calendar
             }
 
         
-        }
-        /// <summary>
-        /// Default constructor. Will be removed in the future since it's not necessary when using a database.
-        /// </summary>
-        public Categories()
-        {
-
         }
 
 
@@ -173,6 +178,9 @@ namespace Calendar
             Add("US Holidays", Category.CategoryType.Holiday);
         }
 
+        /// <summary>
+        /// Deletes all existing entries in the categories table, then re-populates the table with various categories.
+        /// </summary>
         public void ResetCategories()
         {
             var cmd = new SQLiteCommand(_connection);
@@ -215,6 +223,10 @@ namespace Calendar
             cmd.ExecuteNonQuery();
             cmd.Dispose();
         }
+
+        // ====================================================================
+        // Add category to database table
+        // ====================================================================
         /// <summary>
         /// Inserts a new category into the database given a category description and type.
         /// </summary>
@@ -233,17 +245,13 @@ namespace Calendar
             cmd.Dispose();
         }
 
-        // ====================================================================
-        // Add category to database table
-        // ====================================================================
-        
+
         /// <summary>
         /// Updates a category's properties given the category's id, a new description and a new category type.
         /// </summary>
         /// <param name="id"> The id of the category to update as an integer. </param>
         /// <param name="newDesc"> The new description of the category as a string. </param>
         /// <param name="categoryType"> The new type of the category as a Category.CategoryType </param>
-
         public void UpdateProperties(int id, string newDesc, Category.CategoryType categoryType)
         {
             var cmd = new SQLiteCommand(Database.dbConnection);
@@ -274,8 +282,6 @@ namespace Calendar
             cmd.Parameters.AddWithValue("@id",Id);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-
-
         }
 
         // ====================================================================
@@ -284,7 +290,7 @@ namespace Calendar
         //        this instance
         // ====================================================================
         /// <summary>
-        /// Creates a list of category objects that contains the categories in the categories table.
+        /// Creates a list of category objects that contains the categories in the categories table from the database.
         /// </summary>
         /// <returns> The list of categories as a List<Category> </Category></returns>
         public List<Category> List()
