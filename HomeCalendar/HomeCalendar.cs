@@ -399,21 +399,27 @@ namespace Calendar
             List<CalendarItemsByCategory> itemsByCategory = new List<CalendarItemsByCategory>();
             Double totalBusyTime = 0;
 
-            
-            cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
-                $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY c.Id";
+            if (FilterFlag)
+            {
+                cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
+                $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY c.Id ORDER BY c.Description";
 
+            }
+            else
+            {
+                cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
+               $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' GROUP BY c.Id ORDER BY c.Description";
+            }
 
             SQLiteDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 int categoryId = Convert.ToInt32(reader["CategoryId"]);
                 string desc = (string)reader["Description"];
-                List<CalendarItem> items = GetCalendarItems(Start, End, FilterFlag, categoryId);
-                itemsByCategory.Add(new CalendarItemsByCategory { Category = desc, Items = items, TotalBusyTime = items[items.Count - 1].BusyTime });
-
-
-
+                List<CalendarItem> items = GetCalendarItems(Start, End, true, categoryId);
+                double busyTime = 0;
+              
+                itemsByCategory.Add(new CalendarItemsByCategory { Category = desc, Items = items, TotalBusyTime = items[items.Count-1].BusyTime });
             }
             return itemsByCategory;
         }
