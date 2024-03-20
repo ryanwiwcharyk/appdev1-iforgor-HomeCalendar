@@ -23,7 +23,7 @@ namespace Calendar
     //        - etc
     // ====================================================================
     /// <summary>
-    /// Manages multiple events within a calender item, with methods allowing to read and write data, save, add and deleting these events.
+    /// Manages multiple events within a calender item, with methods allowing to read and write data from a database, save, add and deleting these events.
     /// </summary>
     public class Events
     {
@@ -33,6 +33,11 @@ namespace Calendar
         private string _DirName;
         private static SQLiteConnection _connection;
 
+        /// <summary>
+        /// A parameterized constructor, allowing the database connection to establish itself with the necessary db params.
+        /// </summary>
+        /// <param name="dbConnection"></param>
+        /// <param name="newDB"></param>
         public Events(SQLiteConnection dbConnection, bool newDB)
         {
             // Assigning the connection to the categories' connection field.
@@ -105,8 +110,6 @@ namespace Calendar
             cmd.Parameters.AddWithValue("@category", category);
             cmd.ExecuteNonQuery();
             cmd.Dispose();
-
-
         }
 
         // ====================================================================
@@ -117,9 +120,7 @@ namespace Calendar
         /// </summary>
         /// <param name="Id">Represents the Id of the specific event.</param>
         public void Delete(int Id)
-
         {
-
 
             var cmd = new SQLiteCommand(_connection);
 
@@ -129,7 +130,6 @@ namespace Calendar
             cmd.ExecuteNonQuery();
 
             cmd.Dispose();
-
         }
 
         // ====================================================================
