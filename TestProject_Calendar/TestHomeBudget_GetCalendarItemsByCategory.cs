@@ -24,7 +24,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             int maxRecords = TestConstants.CalendarItemsByCategory_MaxRecords;
             CalendarItemsByCategory firstRecord = TestConstants.CalendarItemsByCategory_FirstRecord;
 
@@ -61,7 +61,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             int maxRecords14 = TestConstants.CalendarItemsByCategory11;
             int maxRecords20 = TestConstants.CalendarItemsByCategory20;
 
@@ -90,7 +90,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
         List<CalendarItemsByCategory> validCalendarItemsByCategory = TestConstants.getCalendarItemsByCategory2018_Cat2();
         CalendarItemsByCategory firstRecord = validCalendarItemsByCategory[0];
 
@@ -128,7 +128,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             List<CalendarItemsByCategory> validCalendarItemsByCategory = TestConstants.getCalendarItemsByCategory2018();
             CalendarItemsByCategory firstRecord = validCalendarItemsByCategory[0];
 

@@ -24,7 +24,7 @@ namespace Calendar
         // Properties
         // ====================================================================
         /// <summary>
-        /// Gets the Id of the given event.
+        /// Gets the Id of a given event.
         /// </summary>
         /// <value>
         /// The number representing the Id. This is a int value.
@@ -38,21 +38,21 @@ namespace Calendar
         /// </value>
         public DateTime StartDateTime { get; }
         /// <summary>
-        /// Gets and sets the duration of the specific event.
+        /// Gets the duration of the specific event.
         /// </summary>
         /// <value>
         /// The duration in minutes. This is a Double value.
         /// </value>
         public Double DurationInMinutes { get; }
         /// <summary>
-        /// Gets and sets the details of an event.
+        /// Gets the details of an event.
         /// </summary>
         /// <value>
         /// The event details. This is a string value.
         /// </value>
         public String Details { get; }
         /// <summary>
-        /// Gets and sets the category of a specific event.
+        /// Gets the category of a specific event.
         /// </summary>
         /// <value>
         /// The name of the category id. This is a int value.
@@ -67,11 +67,11 @@ namespace Calendar
         /// <summary>
         /// Initializes an event instance with a given Id, Date, category, duration and event details.
         /// </summary>
-        /// <param name="id">Represents the Id of an event.</param>
-        /// <param name="date">Represents the date of an event.</param>
-        /// <param name="category">Represents the category of an event.</param>
-        /// <param name="duration">Represents the duration of an event.</param>
-        /// <param name="details">Represents the details of an event.</param>
+        /// <param name="id">Represents the Id of an event as an int.</param>
+        /// <param name="date">Represents the date of an event as a DateTime.</param>
+        /// <param name="category">Represents the category of an event as an int.</param>
+        /// <param name="duration">Represents the duration of an event as a double.</param>
+        /// <param name="details">Represents the details of an event as a string.</param>
         public Event(int id, DateTime date, int category, Double duration, String details)
         {
             this.Id = id;

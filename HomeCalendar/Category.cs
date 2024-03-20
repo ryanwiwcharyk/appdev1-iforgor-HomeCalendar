@@ -25,21 +25,21 @@ namespace Calendar
         // Properties
         // ====================================================================
         /// <summary>
-        /// Gets and sets the Id of a specific category item.
+        /// Gets the Id of a specific category item.
         /// </summary>
         /// <value>
         /// The name of the Id. This is a int value.
         /// </value>
         public int Id { get; }
         /// <summary>
-        /// Gets and sets the description of a specific category item.
+        /// Gets the description of a specific category item.
         /// </summary>
         /// <value>
         /// The name of the description. This is a string value.
         /// </value>
         public String Description { get; }
         /// <summary>
-        /// Gets and sets the type of a specific category item.
+        /// Gets the type of a specific category item.
         /// </summary>
         /// <value>
         /// The name of the categoryType. This is a CategoryType value.

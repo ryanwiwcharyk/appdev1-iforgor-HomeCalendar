@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
+using System.Data.Common;
+using System.Collections.Specialized;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -20,7 +23,7 @@ namespace Calendar
     //        - etc
     // ====================================================================
     /// <summary>
-    /// Manages multiple events within a calender item, with methods allowing to read and write data, save, add and deleting these events.
+    /// Manages multiple events within a calender item, with methods allowing to read and write data from a database, save, add and deleting these events.
     /// </summary>
     public class Events
     {
@@ -28,7 +31,22 @@ namespace Calendar
         private List<Event> _Events = new List<Event>();
         private string _FileName;
         private string _DirName;
+        private static SQLiteConnection _connection;
 
+        /// <summary>
+        /// A parameterized constructor, allowing the database connection to establish itself with the necessary db params.
+        /// </summary>
+        /// <param name="dbConnection"></param>
+        /// <param name="newDB"></param>
+        public Events(SQLiteConnection dbConnection, bool newDB)
+        {
+            // Assigning the connection to the categories' connection field.
+            _connection = dbConnection;
+        }
+        public Events()
+        {
+
+        }
         // ====================================================================
         // Properties
         // ====================================================================
@@ -57,81 +75,6 @@ namespace Calendar
         /// Reads the events data from a given filepath, allowing us to access th events within, and validates the filepath name exists and is valid.
         /// </summary>
         /// <param name="filepath">Represents the filepath of the file being opened for reading.</param>
-        public void ReadFromFile(String filepath = null)
-        {
-
-            // ---------------------------------------------------------------
-            // reading from file resets all the current Events,
-            // so clear out any old definitions
-            // ---------------------------------------------------------------
-            _Events.Clear();
-
-            // ---------------------------------------------------------------
-            // reset default dir/filename to null 
-            // ... filepath may not be valid, 
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyReadFromFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // read the Events from the xml file
-            // ---------------------------------------------------------------
-            _ReadXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use?
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-
-
-        }
-
-        // ====================================================================
-        // save to a file
-        // if filepath is not specified, read/save in AppData file
-        // ====================================================================
-        /// <summary>
-        /// Saves the events data to a given filepath, and verifies the chosen path exists and is valid for saving.
-        /// </summary>
-        /// <param name="filepath">Represents the file path to where you'd like to save the data.</param>
-        public void SaveToFile(String filepath = null)
-        {
-            // ---------------------------------------------------------------
-            // if file path not specified, set to last read file
-            // ---------------------------------------------------------------
-            if (filepath == null && DirName != null && FileName != null)
-            {
-                filepath = DirName + "\\" + FileName;
-            }
-
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // save as XML
-            // ---------------------------------------------------------------
-            _WriteXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-        }
 
 
 
@@ -156,17 +99,17 @@ namespace Calendar
         /// <param name="details">Represents the details of the event.</param>
         public void Add(DateTime date, int category, Double duration, String details)
         {
-            int new_id = 1;
 
-            // if we already have Events, set ID to max
-            if (_Events.Count > 0)
-            {
-                new_id = (from e in _Events select e.Id).Max();
-                new_id++;
-            }
+            var cmd = new SQLiteCommand(_connection);
 
-            _Events.Add(new Event(new_id, date, category, duration, details));
-
+            cmd.CommandText = $@"INSERT INTO events (DurationInMinutes, StartDateTime, Details, CategoryId)
+                                 VALUES( @duration, @date, @details , @category)";
+            cmd.Parameters.AddWithValue("@duration", duration);
+            cmd.Parameters.AddWithValue("@date", date);
+            cmd.Parameters.AddWithValue("@details", details);
+            cmd.Parameters.AddWithValue("@category", category);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
         }
 
         // ====================================================================
@@ -178,10 +121,15 @@ namespace Calendar
         /// <param name="Id">Represents the Id of the specific event.</param>
         public void Delete(int Id)
         {
-            int i = _Events.FindIndex(x => x.Id == Id);
-            if (i == -1) return;
-            _Events.RemoveAt(i);
 
+            var cmd = new SQLiteCommand(_connection);
+
+
+            cmd.CommandText = $@"DELETE FROM events WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@id", Id);
+            cmd.ExecuteNonQuery();
+
+            cmd.Dispose();
         }
 
         // ====================================================================
@@ -196,13 +144,37 @@ namespace Calendar
         public List<Event> List()
         {
             List<Event> newList = new List<Event>();
-            foreach (Event Event in _Events)
+            var cmd = new SQLiteCommand(Database.dbConnection);
+            cmd.CommandText = "SELECT * FROM events";
+            var dr = cmd.ExecuteReader();
+            while (dr.Read())
             {
-                newList.Add(new Event(Event));
+                int eventId = Convert.ToInt32(dr["Id"]);
+                int eventCategory = Convert.ToInt32(dr["CategoryId"]);    
+                string date = (string)dr["StartDateTime"];
+                DateTime datetime = Convert.ToDateTime(date);
+                double duration = (double)dr["DurationInMinutes"];
+                string details = (string)dr["Details"];
+                
+                Event newEvent = new Event(eventId, datetime, eventCategory, duration, details);
+                newList.Add(newEvent);
+
             }
             return newList;
         }
 
+        public void UpdateProperties(int id, DateTime startDateTime, double durationInMinutes, string details, int catId)
+        {
+            var cmd = new SQLiteCommand(Database.dbConnection);
+            cmd.CommandText = $@"UPDATE events SET StartDateTime = @startTime, DurationInMinutes = @duration, Details = @details, CategoryId = @catId WHERE Id = @id";
+            cmd.Parameters.AddWithValue("@startTime", startDateTime.ToString());
+            cmd.Parameters.AddWithValue("@duration", durationInMinutes);
+            cmd.Parameters.AddWithValue("@details", details);
+            cmd.Parameters.AddWithValue("catId", catId);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.ExecuteNonQuery();
+            cmd.Dispose();
+        }
 
         // ====================================================================
         // read from an XML file and add categories to our categories list

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using static Calendar.Category;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -23,50 +27,9 @@ namespace Calendar
     /// </summary>
     public class HomeCalendar
     {
-        private string? _FileName;
-        private string? _DirName;
         private Categories _categories;
         private Events _events;
-
-        // ====================================================================
-        // Properties
-        // ===================================================================
-
-        // Properties (location of files etc)
-        /// <summary>
-        /// Gets the fileName of the file being accesseed.
-        /// </summary>
-        /// <value>
-        /// The name of the file. This is a string value.
-        /// </value>
-        public String? FileName { get { return _FileName; } }
-        /// <summary>
-        /// Gets the directory name containing the file to be accessed.
-        /// </summary>
-        /// <value>
-        /// The directory name. This is a string value.
-        /// </value>
-        public String? DirName { get { return _DirName; } }
-        /// <summary>
-        /// Gets the pathName of the file, with validation ensuring both the Filename and DirName are not null.
-        /// </summary>
-        /// <value>
-        /// The name of the file path. This is a string value.
-        /// </value>
-        public String? PathName
-        {
-            get
-            {
-                if (_FileName != null && _DirName != null)
-                {
-                    return Path.GetFullPath(_DirName + "\\" + _FileName);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        private static SQLiteConnection _connection;
 
         // Properties (categories and events object)
         /// <summary>
@@ -87,12 +50,14 @@ namespace Calendar
         // -------------------------------------------------------------------
         // Constructor (new... default categories, no events)
         // -------------------------------------------------------------------
-        public HomeCalendar(String databaseFile, String eventsXMLFile, bool newDB = false)
+        public HomeCalendar(String databaseFile, bool newDB = false)
         {
             // if database exists, and user doesn't want a new database, open existing DB
             if (!newDB && File.Exists(databaseFile))
             {
                 Database.existingDatabase(databaseFile);
+                _connection = Database.dbConnection;
+                  
             }
 
             // file did not exist, or user wants a new database, so open NEW DB
@@ -100,146 +65,15 @@ namespace Calendar
             {
                 Database.newDatabase(databaseFile);
                 newDB = true;
+                _connection = Database.dbConnection;
             }
 
-            // create the category object
-            _categories = new Categories(Database.dbConnection, newDB);
-
-            // create the _events course
-            _events = new Events();
-            _events.ReadFromFile(eventsXMLFile);
-        }
-        /// <summary>
-        /// Initializes the default values for all properties(categories, events) inside of the calendar instance.
-        /// </summary>
-        public HomeCalendar()
-        {
-            _categories = new Categories();
-            _events = new Events(); 
-        }
-
-        // -------------------------------------------------------------------
-        // Constructor (existing calendar ... must specify file)
-        // -------------------------------------------------------------------
-        /// <summary>
-        /// Initializes the calendar properties to vales being read from the calendar file.
-        /// </summary>
-        /// <param name="calendarFileName">Represents the filename of the calendar data to be accessed aka read.</param>
-        public HomeCalendar(String calendarFileName)
-        {
-            _categories = new Categories();
-            _events = new Events();
-            ReadFromFile(calendarFileName);
-        }
-
-        #region OpenNewAndSave
-        // ---------------------------------------------------------------
-        // Read
-        // Throws Exception if any problem reading this file
-        // ---------------------------------------------------------------
-        /// <summary>
-        /// Reads data from a calendar file, validating the file path and name exist and are valid.
-        /// </summary>
-        /// <param name="calendarFileName">The fileName containing the calendar data.</param>
-        /// <exception cref="Exception">Represents the exceptions to be thrown if read fails.</exception>
-        public void ReadFromFile(String? calendarFileName)
-        {
-            // ---------------------------------------------------------------
-            // read the calendar file and process
-            // ---------------------------------------------------------------
-            try
-            {
-                // get filepath name (throws exception if it doesn't exist)
-                calendarFileName = CalendarFiles.VerifyReadFromFileName(calendarFileName, "");
-
-                // If file exists, read it
-                string[] filenames = System.IO.File.ReadAllLines(calendarFileName);
-
-                // ----------------------------------------------------------------
-                // Save information about the calendar file
-                // ----------------------------------------------------------------
-                string? folder = Path.GetDirectoryName(calendarFileName);
-                _FileName = Path.GetFileName(calendarFileName);
-
-                // read the events and categories from their respective files
-                _categories.ReadFromFile(folder + "\\" + filenames[0]);
-                _events.ReadFromFile(folder + "\\" + filenames[1]);
-
-                // Save information about calendar file
-                _DirName = Path.GetDirectoryName(calendarFileName);
-                _FileName = Path.GetFileName(calendarFileName);
-
-            }
-
-            // ----------------------------------------------------------------
-            // throw new exception if we cannot get the info that we need
-            // ----------------------------------------------------------------
-            catch (Exception e)
-            {
-                throw new Exception("Could not read calendar info: \n" + e.Message);
-            }
+            // create the categories and events objects
+            _categories = new Categories(_connection, newDB);
+            _events = new Events(_connection, newDB);
 
         }
-
-        // ====================================================================
-        // save to a file
-        // saves the following files:
-        //  filepath_events.evts  # events file
-        //  filepath_categories.cats # categories files
-        //  filepath # a file containing the names of the events and categories files.
-        //  Throws exception if we cannot write to that file (ex: invalid dir, wrong permissions)
-        // ====================================================================
-        /// <summary>
-        /// Saves the calendar data to a given filepath, aswell as validates the path and file name exists and are valid.
-        /// </summary>
-        /// <param name="filepath">Represents the given file path to where the calendar instance data is being saved.</param>
-        public void SaveToFile(String filepath)
-        {
-
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if we can't write to the file)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, "");
-
-            String? path = Path.GetDirectoryName(Path.GetFullPath(filepath));
-            String file = Path.GetFileNameWithoutExtension(filepath);
-            String ext = Path.GetExtension(filepath);
-
-            // ---------------------------------------------------------------
-            // construct file names for events and categories
-            // ---------------------------------------------------------------
-            String eventpath = path + "\\" + file + "_events" + ".evts";
-            String categorypath = path + "\\" + file + "_categories" + ".cats";
-
-            // ---------------------------------------------------------------
-            // save the events and categories into their own files
-            // ---------------------------------------------------------------
-            _events.SaveToFile(eventpath);
-            _categories.SaveToFile(categorypath);
-
-            // ---------------------------------------------------------------
-            // save filenames of events and categories to calendar file
-            // ---------------------------------------------------------------
-            string[] files = { Path.GetFileName(categorypath), Path.GetFileName(eventpath) };
-            System.IO.File.WriteAllLines(filepath, files);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = path;
-            _FileName = Path.GetFileName(filepath);
-        }
-        #endregion OpenNewAndSave
-
-        #region GetList
-
-
+      
 
         // ============================================================================
         // Get all events list
@@ -281,6 +115,7 @@ namespace Calendar
         ///    Console.WriteLine($"Total busy time: {totalBusyTime}");
         ///    ]]>
         ///    <b>Sample Output</b>
+        ///    
         ///       Cat_ID   | Event_ID | StartDateTime             | Details              | DurationInMinutes
         ///         3           1         2018-01-10 10:00:00 AM     App Dev Homework              40
         ///         2           8         2018-01-11 10:15:00 AM     Sprint retrospective          60
@@ -299,51 +134,60 @@ namespace Calendar
         /// </example>
         public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            // ------------------------------------------------------------------------
-            // return joined list within time frame
-            // ------------------------------------------------------------------------
+         
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
 
-            var query =  from c in _categories.List()
-                        join e in _events.List() on c.Id equals e.Category
-                        where e.StartDateTime >= Start && e.StartDateTime <= End
-                        select new { CatId = c.Id, EventId = e.Id, e.StartDateTime, Category = c.Description, e.Details, e.DurationInMinutes };
-
-            // ------------------------------------------------------------------------
-            // create a CalendarItem list with totals,
-            // ------------------------------------------------------------------------
+            // Initializing an empty list of calendar items
             List<CalendarItem> items = new List<CalendarItem>();
+            // Initializing a busy time of 0
             Double totalBusyTime = 0;
 
-            foreach (var e in query.OrderBy(q => q.StartDateTime))
+            var cmd = new SQLiteCommand(_connection);
+
+            // If the filter flag is true, we only select events within the time frame and with the specified category id
+            if (FilterFlag)
             {
-                // filter out unwanted categories if filter flag is on
-                if (FilterFlag && CategoryID != e.CatId)
-                {
-                    continue;
-                }
+                cmd.CommandText = $"SELECT e.Id, e.DurationInMinutes, e.StartDateTime, e.Details, e.CategoryId, c.Description, c.TypeId FROM events e " +
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' ORDER BY StartDateTime";
+            }
+            // If the filter flag is false, we only select events within the time frame and with any category
+            else
+            {
+                cmd.CommandText = $"SELECT e.Id, e.DurationInMinutes, e.StartDateTime, e.Details, e.CategoryId, c.Description, c.TypeId FROM events e " +
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' ORDER BY StartDateTime";
+            }
+            // Reading the result(s) of the query
+            var dataReader = cmd.ExecuteReader();
+            while (dataReader.Read())
+            {
+                // Retrieving all the fields needed to make the calendar item 
+                int eventId = Convert.ToInt32(dataReader["Id"]);
+                double durationInMinutes = Convert.ToDouble(dataReader["DurationInMinutes"]);
+                string startDateTime = (string)dataReader["StartDateTime"];
+                string details = (string)dataReader["Details"];
+                int categoryId = Convert.ToInt32(dataReader["CategoryId"]);
+                string categoryDescription = (string)dataReader["Description"];
+                int categoryTypeId = Convert.ToInt32(dataReader["TypeId"]);
 
-                // keep track of running totals
-
-                // If the event is an availability we don't count it as a busy time
-                Category eventCategory = _categories.GetCategoryFromId(e.CatId);
-                if (eventCategory.Type != Category.CategoryType.Availability)
+                // If the event's category is not of type availability, we add its duration to the total busy time
+                if (categoryTypeId != (int)Category.CategoryType.Availability)
                 {
-                    totalBusyTime = totalBusyTime + e.DurationInMinutes;
+                    totalBusyTime += durationInMinutes;
                 }
+                // Creating the calendar item and adding it to the list
                 items.Add(new CalendarItem
                 {
-                    CategoryID = e.CatId,
-                    EventID = e.EventId,
-                    ShortDescription = e.Details,
-                    StartDateTime = e.StartDateTime,
-                    DurationInMinutes = e.DurationInMinutes,
-                    Category = e.Category,
+                    CategoryID = categoryId,
+                    EventID = eventId,
+                    ShortDescription = details,
+                    StartDateTime = Convert.ToDateTime(startDateTime),
+                    DurationInMinutes = durationInMinutes,
+                    Category = categoryDescription,
                     BusyTime = totalBusyTime
                 });
             }
-
+            // Returning the list of calendar items
             return items;
         }
 
@@ -410,41 +254,54 @@ namespace Calendar
         /// </example>
         public List<CalendarItemsByMonth> GetCalendarItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
-            // -----------------------------------------------------------------------
-            // get all items first
-            // -----------------------------------------------------------------------
-            List<CalendarItem> items = GetCalendarItems(Start, End, FilterFlag, CategoryID);
 
-            // -----------------------------------------------------------------------
-            // Group by year/month
-            // -----------------------------------------------------------------------
-            var GroupedByMonth = items.GroupBy(c => c.StartDateTime.Year.ToString("D4") + "/" + c.StartDateTime.Month.ToString("D2"));
+            Start = Start ?? new DateTime(1900, 1, 1);
+            End = End ?? new DateTime(2500, 1, 1);
 
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<CalendarItemsByMonth>();
-            foreach (var MonthGroup in GroupedByMonth)
+            // Initializing an empty list of calendar items by month
+            List<CalendarItemsByMonth> itemsByMonth = new List<CalendarItemsByMonth>();
+            // Initializing a busy time of 0
+
+            Double totalBusyTime = 0;
+
+            var cmd = new SQLiteCommand(_connection);
+
+            // If the filter flag is true, we only select events within the time frame and with the specified category id
+            if (FilterFlag)
             {
-                // calculate totalBusyTime for this month, and create list of items
-                double total = 0;
-                var itemsList = new List<CalendarItem>();
-                foreach (var item in MonthGroup)
-                {
-                    total = total + item.DurationInMinutes;
-                    itemsList.Add(item);
-                }
-
-                // Add new CalendarItemsByMonth to our list
-                summary.Add(new CalendarItemsByMonth
-                {
-                    Month = MonthGroup.Key,
-                    Items = itemsList,
-                    TotalBusyTime = total
-                });
+                cmd.CommandText = $"SELECT STRFTIME('%Y-%m', e.StartDateTime) AS eventMonth FROM events e " +
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY eventMonth";
+            }
+            // If the filter flag is false, we only select events within the time frame and with any category
+            else
+            {
+                cmd.CommandText = $"SELECT STRFTIME('%Y-%m', e.StartDateTime) AS eventMonth FROM events e " +
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' GROUP BY eventMonth";
             }
 
-            return summary;
+            // NOTE: By using SELECT STRFTIME('%Y-%m', e.StartDateTime), I get the month and year of the grouped events in a YYYY-MM format.
+
+            // Reading the result(s) of the query
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                // Retrieving the common month and year of the events
+                string monthAndYear = (string)(reader["eventMonth"]);
+
+                DateTime newStartTime = Convert.ToDateTime(monthAndYear + "-01"); // First day of the month
+                DateTime newEndTime = Convert.ToDateTime(monthAndYear + "-31"); // Last day of the month
+
+                // Retrieving all events that are within this month and year using our new start and end times
+                List<CalendarItem> items = GetCalendarItems(newStartTime, newEndTime, FilterFlag, CategoryID);
+
+                // For the purpose of the CalendarItemByMonth tests, the - needs to be replaced by a /
+                string formatted = monthAndYear.Replace('-', '/');
+                // Adding a the CalendarItemsByMonth to our list
+                itemsByMonth.Add(new CalendarItemsByMonth{ Items = items, Month = formatted, TotalBusyTime = items[items.Count -1].BusyTime });
+            }
+            // Returning the list of CalendarItemsByMonth once we have looped trough all the months returned by the query
+            return itemsByMonth;
+
         }
 
         // ============================================================================
@@ -513,38 +370,39 @@ namespace Calendar
             // -----------------------------------------------------------------------
             // get all items first
             // -----------------------------------------------------------------------
-            List<CalendarItem> filteredItems = GetCalendarItems(Start, End, FilterFlag, CategoryID);
+            Start = Start ?? new DateTime(1900, 1, 1);
+            End = End ?? new DateTime(2500, 1, 1);
 
-            // -----------------------------------------------------------------------
-            // Group by Category
-            // -----------------------------------------------------------------------
-            var GroupedByCategory = filteredItems.GroupBy(c => c.Category);
+            // Initializng an empty list of calendar items by category
+            List<CalendarItemsByCategory> itemsByCategory = new List<CalendarItemsByCategory>();
 
-            // -----------------------------------------------------------------------
-            // create new list
-            // -----------------------------------------------------------------------
-            var summary = new List<CalendarItemsByCategory>();
-            foreach (var CategoryGroup in GroupedByCategory.OrderBy(g => g.Key))
+            var cmd = new SQLiteCommand(_connection);
+            // If the filter flag is true, we only select events within the time frame and with the specified category id. Grouping by category.
+            if (FilterFlag)
             {
-                // calculate totalBusyTime for this category, and create list of items
-                double total = 0;
-                var items = new List<CalendarItem>();
-                foreach (var item in CategoryGroup)
-                {
-                    total = total + item.DurationInMinutes;
-                    items.Add(item);
-                }
+                cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
+                $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY c.Id ORDER BY c.Description";
 
-                // Add new CalendarItemsByCategory to our list
-                summary.Add(new CalendarItemsByCategory
-                {
-                    Category = CategoryGroup.Key,
-                    Items = items,
-                    TotalBusyTime = total
-                });
             }
-
-            return summary;
+            // If the filter flag is true, we only select events within the time frame. Grouping by category.
+            else
+            {
+                cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
+               $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' GROUP BY c.Id ORDER BY c.Description";
+            }
+            // Reading the query results
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                // Retrieving all the fields needed to make the calendar items by category
+                int categoryId = Convert.ToInt32(reader["CategoryId"]);
+                string desc = (string)reader["Description"];
+                // Retrieving the calendar items with this specific category
+                List<CalendarItem> items = GetCalendarItems(Start, End, true, categoryId);
+                // Creating the calendar item by category and adding it to the list
+                itemsByCategory.Add(new CalendarItemsByCategory { Category = desc, Items = items, TotalBusyTime = items[items.Count-1].BusyTime });
+            }
+            return itemsByCategory;
         }
 
 
@@ -730,8 +588,6 @@ namespace Calendar
 
 
 
-
-        #endregion GetList
 
     }
 }
