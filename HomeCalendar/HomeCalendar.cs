@@ -149,13 +149,18 @@ namespace Calendar
             if (FilterFlag)
             {
                 cmd.CommandText = $"SELECT e.Id, e.DurationInMinutes, e.StartDateTime, e.Details, e.CategoryId, c.Description, c.TypeId FROM events e " +
-                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' ORDER BY StartDateTime";
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= @start AND e.StartDateTime <= @end AND e.CategoryId = @catId ORDER BY StartDateTime";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
+                cmd.Parameters.AddWithValue("@catId", CategoryID);
             }
             // If the filter flag is false, we only select events within the time frame and with any category
             else
             {
                 cmd.CommandText = $"SELECT e.Id, e.DurationInMinutes, e.StartDateTime, e.Details, e.CategoryId, c.Description, c.TypeId FROM events e " +
-                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' ORDER BY StartDateTime";
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= @start AND e.StartDateTime <= @end ORDER BY StartDateTime";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
             }
             // Reading the result(s) of the query
             var dataReader = cmd.ExecuteReader();
@@ -270,13 +275,18 @@ namespace Calendar
             if (FilterFlag)
             {
                 cmd.CommandText = $"SELECT STRFTIME('%Y-%m', e.StartDateTime) AS eventMonth FROM events e " +
-                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY eventMonth";
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= @start AND e.StartDateTime <= @end AND e.CategoryId = @catId GROUP BY eventMonth";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
+                cmd.Parameters.AddWithValue("@catId", CategoryID);
             }
             // If the filter flag is false, we only select events within the time frame and with any category
             else
             {
                 cmd.CommandText = $"SELECT STRFTIME('%Y-%m', e.StartDateTime) AS eventMonth FROM events e " +
-                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' GROUP BY eventMonth";
+                    $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= @start AND e.StartDateTime <= @end GROUP BY eventMonth";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
             }
 
             // NOTE: By using SELECT STRFTIME('%Y-%m', e.StartDateTime), I get the month and year of the grouped events in a YYYY-MM format.
@@ -381,14 +391,18 @@ namespace Calendar
             if (FilterFlag)
             {
                 cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
-                $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' AND e.CategoryId = '{CategoryID}' GROUP BY c.Id ORDER BY c.Description";
-
+                $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= @start AND e.StartDateTime <= @end AND e.CategoryId = @catId GROUP BY c.Id ORDER BY c.Description";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
+                cmd.Parameters.AddWithValue("@catId", CategoryID);
             }
             // If the filter flag is true, we only select events within the time frame. Grouping by category.
             else
             {
                 cmd.CommandText = $"SELECT e.CategoryId, c.Description FROM events e " +
-               $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= '{Start}' AND e.StartDateTime <= '{End}' GROUP BY c.Id ORDER BY c.Description";
+               $"INNER JOIN categories c ON e.CategoryId = c.Id WHERE e.StartDateTime >= @start AND e.StartDateTime <= @end GROUP BY c.Id ORDER BY c.Description";
+                cmd.Parameters.AddWithValue("@start", Start);
+                cmd.Parameters.AddWithValue("@end", End);
             }
             // Reading the query results
             SQLiteDataReader reader = cmd.ExecuteReader();
