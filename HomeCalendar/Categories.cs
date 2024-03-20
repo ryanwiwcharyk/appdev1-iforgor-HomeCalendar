@@ -38,18 +38,6 @@ namespace Calendar
         // ====================================================================
         // Properties
         // ====================================================================
-        /// <summary>
-        /// Gets the fileName, of the file you wish to read.
-        /// </summary>
-        /// <value>
-        /// The name of the file. This is a string or null value.
-        /// </value>
-        public String? FileName { get { return _FileName; } }
-        /// <summary>
-        /// Gets the name of the directory, from which the file is from.
-        /// </summary>
-        /// <value>
-        /// The name of the directory. This is a string or null value.
         /// </value>
         public String? DirName { get { return _DirName; } }
 
