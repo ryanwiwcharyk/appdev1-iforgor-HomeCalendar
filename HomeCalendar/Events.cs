@@ -65,33 +65,8 @@ namespace Calendar
         /// </value>
         public String DirName { get { return _DirName; } }
 
-        // ====================================================================
-        // populate categories from a file
-        // if filepath is not specified, read/save in AppData file
-        // Throws System.IO.FileNotFoundException if file does not exist
-        // Throws System.Exception if cannot read the file correctly (parsing XML)
-        // ====================================================================
         /// <summary>
-        /// Reads the events data from a given filepath, allowing us to access th events within, and validates the filepath name exists and is valid.
-        /// </summary>
-        /// <param name="filepath">Represents the filepath of the file being opened for reading.</param>
-
-
-
-        // ====================================================================
-        // Add Event
-        // ====================================================================
-        /// <summary>
-        /// Adds a specific event to the list of current events.
-        /// </summary>
-        /// <param name="exp">Represents the event object being added to the list.</param>
-        private void Add(Event exp)
-        {
-            _Events.Add(exp);
-        }
-
-        /// <summary>
-        /// Adds a event to the list of current events containing all details of the new event.
+        /// Adds an event with the specified properties to the database..
         /// </summary>
         /// <param name="date">Represents the date time of the event.</param>
         /// <param name="category">Represents the category of the event.</param>
@@ -116,7 +91,7 @@ namespace Calendar
         // Delete Event
         // ====================================================================
         /// <summary>
-        /// Deletes an event based on its Id from the list of current events.
+        /// Deletes an event based on its Id.
         /// </summary>
         /// <param name="Id">Represents the Id of the specific event.</param>
         public void Delete(int Id)
@@ -138,7 +113,7 @@ namespace Calendar
         //        this instance
         // ====================================================================
         /// <summary>
-        /// Returns a list of all the events added.
+        /// Returns a list of all the events in the database.
         /// </summary>
         /// <returns>A list containing all events.</returns>
         public List<Event> List()
@@ -163,6 +138,14 @@ namespace Calendar
             return newList;
         }
 
+        /// <summary>
+        /// Updates an event in the database with the given arguments.
+        /// </summary>
+        /// <param name="id">The id of the event to update.</param>
+        /// <param name="startDateTime">The start date to update the event with.</param>
+        /// <param name="durationInMinutes">The duration to update the event with.</param>
+        /// <param name="details">The details to update the event with.</param>
+        /// <param name="catId">The category id of the event.</param>
         public void UpdateProperties(int id, DateTime startDateTime, double durationInMinutes, string details, int catId)
         {
             var cmd = new SQLiteCommand(Database.dbConnection);

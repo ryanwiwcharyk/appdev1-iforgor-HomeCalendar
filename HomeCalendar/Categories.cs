@@ -188,29 +188,6 @@ namespace Calendar
             Add("US Holidays", Category.CategoryType.Holiday);
         }
 
-        // ====================================================================
-        // Add category to database table
-        // ====================================================================
-        /// <summary>
-        /// Inserts a new category into the database given a category object.
-        /// </summary>
-        /// <param name="category"> The category to add to the database. </param>
-        private void Add(Category category)
-        {
-            //Connect to the database
-            Database.CloseDatabaseAndReleaseFile();//close the database if already open
-            Database.dbConnection.Open(); //opening database
-
-            //Insert category instance into the categories table
-            var cmd = new SQLiteCommand(Database.dbConnection);
-
-            cmd.CommandText = $@"INSERT INTO categories(Description, TypeId)
-                                 VALUES(@name, @type)";
-            cmd.Parameters.AddWithValue("@desc", category.Description.ToString());
-            cmd.Parameters.AddWithValue("@type", (int)category.Type);
-            cmd.ExecuteNonQuery();
-            cmd.Dispose();
-        }
 
         // ====================================================================
         // Add category to database table
@@ -280,7 +257,7 @@ namespace Calendar
         /// <summary>
         /// Creates a list of category objects that contains the categories in the categories table from the database.
         /// </summary>
-        /// <returns> The list of categories as a List<Category> </Category></returns>
+        /// <returns> The list of categories as a List<Category></returns>
         public List<Category> List()
         {
             List<Category> newList = new List<Category>();

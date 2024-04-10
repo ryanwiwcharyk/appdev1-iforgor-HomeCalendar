@@ -50,6 +50,11 @@ namespace Calendar
         // -------------------------------------------------------------------
         // Constructor (new... default categories, no events)
         // -------------------------------------------------------------------
+        /// <summary>
+        /// Initializes an instance of a HomeCalendar with the given database file. Creates a new file if <paramref name="newDB"/> is true.
+        /// </summary>
+        /// <param name="databaseFile">The database file to initialize a home calendar with.</param>
+        /// <param name="newDB">Creates a new database if true.</param>
         public HomeCalendar(String databaseFile, bool newDB = false)
         {
             // if database exists, and user doesn't want a new database, open existing DB
@@ -79,7 +84,7 @@ namespace Calendar
         // Get all events list
         // ============================================================================
         /// <summary>
-        /// Searches for a calendar list in respect to given parametes such as start time, end time, category filters and specific category Ids.
+        /// Searches for a calendar list in respect to given parameters such as start time, end time, category filters and specific category Ids.
         /// </summary>
         /// <param name="Start">The start time for all calendar items.</param>
         /// <param name="End">The end time for all calendar items.</param>

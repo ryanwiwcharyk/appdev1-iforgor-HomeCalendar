@@ -40,6 +40,10 @@ namespace Calendar
         // ===================================================================
         // create and open a new database
         // ===================================================================
+        /// <summary>
+        /// Creates a new database at the given <paramref name="filename"/>. Overwrites it if the file already exisits.
+        /// </summary>
+        /// <param name="filename">The filename to create the new database file.</param>
         public static void newDatabase(string filename)
         {
 
@@ -78,6 +82,11 @@ namespace Calendar
        // ===================================================================
        // open an existing database
        // ===================================================================
+       /// <summary>
+       /// Opens an existing database from the given <paramref name="filename"/>. 
+       /// </summary>
+       /// <param name="filename">The filename specifying the existing database file.</param>
+       /// <exception cref="FileNotFoundException">Thrown when the given <paramref name="filename"/> cannot be found or does not exist.</exception>
        public static void existingDatabase(string filename)
         {
             CloseDatabaseAndReleaseFile();
@@ -104,6 +113,9 @@ namespace Calendar
        // close existing database, wait for garbage collector to
        // release the lock before continuing
        // ===================================================================
+       /// <summary>
+       /// Closes the connection to the current database.
+       /// </summary>
         static public void CloseDatabaseAndReleaseFile()
         {
             if (Database.dbConnection != null)
