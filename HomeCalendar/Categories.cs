@@ -79,7 +79,7 @@ namespace Calendar
             try
             {
                 var cmd = new SQLiteCommand(_connection);
-                cmd.CommandText = $"SELECT * FROM categories WHERE Id = '{id}'";
+                cmd.CommandText = $"SELECT Id, Description, TypeId FROM categories WHERE Id = '{id}'";
                 var dataReader = cmd.ExecuteReader();
                 if (dataReader.Read())
                 {
@@ -262,7 +262,7 @@ namespace Calendar
         {
             List<Category> newList = new List<Category>();
             var cmd = new SQLiteCommand(_connection);
-            cmd.CommandText = "SELECT * FROM categories";
+            cmd.CommandText = "SELECT Id, Description, TypeId FROM categories";
             var dr = cmd.ExecuteReader();
             while (dr.Read()) 
             {

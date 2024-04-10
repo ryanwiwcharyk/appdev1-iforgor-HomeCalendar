@@ -120,7 +120,7 @@ namespace Calendar
         {
             List<Event> newList = new List<Event>();
             var cmd = new SQLiteCommand(Database.dbConnection);
-            cmd.CommandText = "SELECT * FROM events";
+            cmd.CommandText = "SELECT Id, CategoryId, StartDateTime, DurationInMinutes, Details FROM events";
             var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
