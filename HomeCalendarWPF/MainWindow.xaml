@@ -7,6 +7,29 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition>
+            </RowDefinition>
+            <RowDefinition>
+            </RowDefinition>
+            <RowDefinition>
+            </RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="40" Margin="10"> Welcome to HomeCalendar </TextBlock>
+        <TextBlock  Grid.Row="1" HorizontalAlignment="Left" FontSize="30" Margin="10" > Create a new Calendar: </TextBlock>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Margin="10">
+            <TextBlock FontSize="18"> Choose A Calendar Name: </TextBlock>
+            <TextBox Width="400"   x:Name="newName"  ></TextBox>
+            <TextBlock FontSize="18" > Choose A Calendar Location: </TextBlock>
+            <TextBox Width="400"   x:Name="newLocation" ></TextBox>
+            <Button FontSize="20" Width="100"  Margin="10" x:Name="GoNewCalendar" Click="Btn_Click_NewCalendar">Go!</Button>
+        </StackPanel>
+        <TextBlock  Grid.Row="2" HorizontalAlignment="Left" FontSize="30" Margin="10"> Already have a calendar? </TextBlock>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Margin="10">
+            <TextBlock FontSize="18" > Choose The Calendar Location's:</TextBlock>
+            <TextBox Width="400"  x:Name="existingLocation" ></TextBox>
+            <Button FontSize="20" Width="100"  Margin="10" x:Name="goExistingCalendar" Click="Btn_Click_ExistingCalendar" > Go! </Button>
+        </StackPanel>
 
     </Grid>
 </Window>
