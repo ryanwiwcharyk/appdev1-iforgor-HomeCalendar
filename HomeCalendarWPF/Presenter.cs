@@ -19,5 +19,6 @@ namespace HomeCalendarWPF
             view = v;
 
         }
+
     }
 }

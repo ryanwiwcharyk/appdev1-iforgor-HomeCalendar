@@ -12,6 +12,8 @@ namespace HomeCalendarWPF
         public void ShowAddCategoryTab();
         public void ShowAddEventTab();
         public void CloseApplication();
+        public void ShowCalendarFileNameLocationForm();
+
 
 
     }
