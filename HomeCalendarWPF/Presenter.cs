@@ -10,9 +10,13 @@ namespace HomeCalendarWPF
 {
     internal class Presenter
     {
-        private readonly ViewInterface view;
+        //private readonly ViewInterface view;
+
+        private readonly IWelcomeViewInterface welcomeView;
+        private readonly ICreateEventViewInterface createEventView;
+        private readonly CategoryView categoryView;
         private readonly HomeCalendar model;
-        public Presenter(ViewInterface v)
+        public Presenter(IWelcomeViewInterface wv)
         {
 
             model = new HomeCalendar("example",true);
