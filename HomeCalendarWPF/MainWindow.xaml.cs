@@ -18,13 +18,16 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, ViewInterface
+    public partial class MainWindow : Window, IWelcomeViewInterface
     {
         private readonly Presenter presenter;
+        private readonly MainViewInterface mainView;
+        private readonly CategoryView categoryView;
+        private readonly ICreateEventViewInterface createEventView;
         public MainWindow()
         {
             InitializeComponent();
-            presenter = new Presenter(this);
+            presenter = new Presenter(this, categoryView, createEventView, mainView);
         }
         private void Btn_Click_NewCalendar(object sender, RoutedEventArgs e)
         {
@@ -39,6 +42,21 @@ namespace HomeCalendarWPF
             string location = newLocation.Text;
             this.Close();
             presenter.ExistingCalendar(location);
+        }
+
+        string IWelcomeViewInterface.GetCalendarName()
+        {
+            throw new NotImplementedException();
+        }
+
+        string IWelcomeViewInterface.GetExistingCalendarFileLocation()
+        {
+            throw new NotImplementedException();
+        }
+
+        string IWelcomeViewInterface.GetNewClendarFileLocation()
+        {
+            throw new NotImplementedException();
         }
     }
 }

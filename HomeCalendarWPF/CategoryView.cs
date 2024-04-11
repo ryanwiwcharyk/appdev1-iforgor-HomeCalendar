@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeCalendarWPF
 {
-    internal interface CategoryView
+    public interface CategoryView
     {
         void ShowWarning(string warning);
         void ShowSuccess(string success);

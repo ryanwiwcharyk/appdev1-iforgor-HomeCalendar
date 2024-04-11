@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace HomeCalendarWPF
 {
-    internal interface MainViewInterface
+    public interface MainViewInterface
     {
         void ShowRecentFiles();
         void ShowUpcomingEvents();
+        public void ShowAddCategoryTab();
+        public void ShowAddEventTab();
+        public void CloseApplication();
+        public void ShowCalendarFileNameLocationForm();
     }
 }
