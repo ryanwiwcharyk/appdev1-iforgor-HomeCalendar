@@ -9,6 +9,7 @@ namespace HomeCalendarWPF
     public interface IWelcomeViewInterface
     {
         public string GetCalendarName();
-        public string GetCalendarFileLocation();
+        public string GetExistingCalendarFileLocation();
+        public string GetNewClendarFileLocation();
     }
 }
