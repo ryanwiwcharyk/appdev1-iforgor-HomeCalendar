@@ -39,7 +39,12 @@ namespace HomeCalendarWPF
             Home home = new Home(this); 
         }
 
+        public void PopulateEventsList()
+        {   
+            List<Events> events = new List<Events>();
 
+            mainView.ShowUpcomingEvents();
+        }
 
     }
 }
