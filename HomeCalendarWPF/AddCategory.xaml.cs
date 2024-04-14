@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +18,48 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for AddCategory.xaml
     /// </summary>
-    public partial class AddCategory : Window
+
+
+    public partial class AddCategory : Window, CategoryView
     {
-        public AddCategory()
+        private readonly Presenter _presenter;
+        private readonly HomeCalendar _model;
+
+        public AddCategory(Presenter presenter)
         {
             InitializeComponent();
+            _presenter = presenter;
+
+        }
+
+        public void FillDropDown(List<Category.CategoryType> types)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RefreshPage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowSuccess(string success)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowWarning(string warning)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

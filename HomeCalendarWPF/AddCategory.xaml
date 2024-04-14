@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarWPF"
         mc:Ignorable="d"
-        Title="AddCategory" Height="450" Width="800">
+        Title="AddCategory" Height="450" Width="800"
+        WindowStartupLocation="Manual" Left="100" Top="100">
     <Grid>
-        
+        <StackPanel Margin="0,0,0,0" Height="400" Width="480">
+            <TextBlock Text="Add Category" FontSize="30" HorizontalAlignment="Center" />
+            <TextBlock Text="Name:" FontSize="20" Margin="0,80,300,0"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <TextBlock Text="CategoryType:" FontSize="20" Margin="0,40,300,0"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <Button Click="Btn_Add"  Content="Add" Margin="0,90,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
+            <Button Click="Btn_Cancel"  Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
+        </StackPanel>
     </Grid>
 </Window>
