@@ -48,19 +48,9 @@ namespace HomeCalendarWPF
             homeWindow.Show();
         }
 
-        string IWelcomeViewInterface.GetCalendarName()
+        void IWelcomeViewInterface.ShowWarning(string message)
         {
-            throw new NotImplementedException();
-        }
-
-        string IWelcomeViewInterface.GetExistingCalendarFileLocation()
-        {
-            throw new NotImplementedException();
-        }
-
-        string IWelcomeViewInterface.GetNewClendarFileLocation()
-        {
-            throw new NotImplementedException();
+            warningPopup.Text = message;
         }
     }
 }
