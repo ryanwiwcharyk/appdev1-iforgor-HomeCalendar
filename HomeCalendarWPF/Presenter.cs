@@ -26,6 +26,7 @@ namespace HomeCalendarWPF
             mainView = mv;
         }
 
+        #region Welcome Page
 
         public void NewCalendar(string location, string name)
         {
@@ -39,6 +40,10 @@ namespace HomeCalendarWPF
             Home home = new Home(this); 
         }
 
+        #endregion
+
+        #region Home Page
+
         public void PopulateEventsList()
         {   
             List<Events> events = new List<Events>();
@@ -46,5 +51,14 @@ namespace HomeCalendarWPF
             mainView.ShowUpcomingEvents();
         }
 
+        #endregion
+
+        #region Create Events
+
+        #endregion
+
+        #region Create Category
+
+        #endregion
     }
 }
