@@ -6,7 +6,30 @@
         xmlns:local="clr-namespace:HomeCalendarWPF"
         mc:Ignorable="d"
         Title="AddEvent" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <TextBlock FontSize="30" Margin="5"> Create A New Event </TextBlock>
+        <StackPanel Orientation="Horizontal">
+            <Label FontSize="20" Margin="10"> Details</Label>
+            <TextBox Width="200" Margin="5"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label FontSize="20" Margin="10" > Start Time </Label>
+            <DatePicker> </DatePicker>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label FontSize="20" Margin="10"> Duration </Label>
+            <TextBox Width="200" Margin="5"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label FontSize="20" Margin="10"> Category</Label>
+            <Menu Height="25">
+                <MenuItem Header="Choose a category:" FontSize="16">
+                    <MenuItem Header="Fun" />
+                    <MenuItem Header="Work" />
+                </MenuItem>
+            </Menu>
+            <Button Content="Add New Category" Margin="20" FontSize="15" Padding="5"></Button>
+        </StackPanel>
+        <Button Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left"></Button>
+    </StackPanel>
 </Window>
