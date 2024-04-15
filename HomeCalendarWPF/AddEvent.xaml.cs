@@ -19,9 +19,27 @@ namespace HomeCalendarWPF
     /// </summary>
     public partial class AddEvent : Window
     {
-        public AddEvent()
+        readonly Presenter _presenter;
+        public AddEvent(Presenter presenter)
         {
             InitializeComponent();
+            _presenter = presenter;
+            InitializeFields();
+
+        }
+        private void InitializeFields()
+        {
+            _presenter.PopulateCategoriesMenu();
+        }
+        private void AddCategoryToMenu(string categoryName)
+        {
+            
+            CategoryMenu.Items.Add(categoryName);
+        }
+        private void Btn_Click_Create_Event(object sender, RoutedEventArgs e)
+        {
+            
+
         }
     }
 }

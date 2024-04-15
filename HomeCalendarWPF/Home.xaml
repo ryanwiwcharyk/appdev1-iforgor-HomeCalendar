@@ -23,7 +23,7 @@
         
             <StackPanel Grid.Column="1" Grid.Row="0" Margin="10">
                 <Button Margin="10"  Width="150" Height="30" Content="Add Event" Name="AddEventBtn"></Button>
-                <Button Margin ="10" Width="150" Height="30" Content="Add Category" Name="AddCategoryBtn"></Button>
+                <Button Margin ="10" Width="150" Height="30" Content="Add Category" Name="AddCategoryBtn" Click="ShowAddEventTab"></Button>
             </StackPanel>
 
             <TextBlock Grid.Column="1" Grid.Row="1" Margin="10 0 10 5" Text="Upcoming Events" HorizontalAlignment="Center" FontSize="15"></TextBlock>

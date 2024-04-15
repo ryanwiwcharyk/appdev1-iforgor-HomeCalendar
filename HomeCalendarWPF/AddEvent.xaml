@@ -22,7 +22,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Category</Label>
-            <Menu Height="25">
+            <Menu x:Name="CategoryMenu" Height="25">
                 <MenuItem Header="Choose a category:" FontSize="16">
                     <MenuItem Header="Fun" />
                     <MenuItem Header="Work" />
@@ -30,6 +30,6 @@
             </Menu>
             <Button Content="Add New Category" Margin="20" FontSize="15" Padding="5"></Button>
         </StackPanel>
-        <Button Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left"></Button>
+        <Button Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left" Click="Btn_Click_Create_Event"></Button>
     </StackPanel>
 </Window>

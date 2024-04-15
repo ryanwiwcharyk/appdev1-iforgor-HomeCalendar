@@ -54,6 +54,15 @@ namespace HomeCalendarWPF
         #endregion
 
         #region Create Events
+        public void PopulateCategoriesMenu()
+        {
+            Categories categories = model.categories;
+            List<Category> categoryList = categories.List();
+            foreach (Category category in categoryList)
+            {
+                createEventView.AddCategoryToMenu(category.Description);
+            }
+        }
 
         #endregion
 

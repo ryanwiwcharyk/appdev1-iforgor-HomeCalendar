@@ -44,9 +44,11 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-        void MainViewInterface.ShowAddEventTab()
+        public void ShowAddEventTab(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            AddEvent newAddEvent = new AddEvent(_presenter);
+            newAddEvent.Show();
+            this.Close();
         }
 
         void MainViewInterface.ShowCalendarFileNameLocationForm()
@@ -59,9 +61,9 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-        void MainViewInterface.ShowUpcomingEvents()
-        {
-            throw new NotImplementedException();
-        }
+       // void MainViewInterface.ShowUpcomingEvents()
+      //  {
+      //      throw new NotImplementedException();
+       // }
     }
 }
