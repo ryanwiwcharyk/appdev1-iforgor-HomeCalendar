@@ -35,6 +35,8 @@ namespace HomeCalendarWPF
             string name = newName.Text ;
             this.Close();
             presenter.NewCalendar(location,name);
+            Home homeWindow = new Home(presenter);
+            homeWindow.Show();
 
         }
         private void Btn_Click_ExistingCalendar(object sender, RoutedEventArgs e)
@@ -42,6 +44,8 @@ namespace HomeCalendarWPF
             string location = newLocation.Text;
             this.Close();
             presenter.ExistingCalendar(location);
+            Home homeWindow = new Home(presenter);
+            homeWindow.Show();
         }
 
         string IWelcomeViewInterface.GetCalendarName()
