@@ -32,9 +32,20 @@ namespace HomeCalendarWPF
 
         }
 
+        private void Btn_Add(object sender, RoutedEventArgs e)
+        {
+            //the creation of the category is done here
+        }
+
+        private void Btn_Cancel(object sender, RoutedEventArgs e)
+        {
+            //close page
+        }
+
         public void FillDropDown(List<Category.CategoryType> types)
         {
-            throw new NotImplementedException();
+            // change this to presenter
+            CategoryType.Items.Add(types);
         }
 
         public void RefreshPage()
@@ -50,26 +61,6 @@ namespace HomeCalendarWPF
         public void ShowWarning(string warning)
         {
             throw new NotImplementedException();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click_3(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
