@@ -29,7 +29,7 @@ namespace HomeCalendarWPF
         {
             InitializeComponent();
             _presenter = presenter;
-            _presenter.mainView = this;
+            _presenter.RegisterWindow(this);
             ShowUpcomingEvents();
         }
 
@@ -48,13 +48,13 @@ namespace HomeCalendarWPF
 
         private void BtnClick_CloseApplication(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            CloseApplication();
         }
 
         // Interface implementation
-        void MainViewInterface.CloseApplication()
+        public void CloseApplication()
         {
-            
+            Application.Current.Shutdown();
         }
 
         void MainViewInterface.ShowCalendarFileNameLocationForm()

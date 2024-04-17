@@ -27,7 +27,7 @@ namespace HomeCalendarWPF
         public MainWindow()
         {
             InitializeComponent();
-            presenter = new Presenter(categoryView, createEventView, mainView);
+            presenter = new Presenter(this);
         }
         private void Btn_Click_NewCalendar(object sender, RoutedEventArgs e)
         {

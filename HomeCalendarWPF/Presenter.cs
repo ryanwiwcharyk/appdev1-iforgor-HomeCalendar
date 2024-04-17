@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Calendar;
 
 
@@ -13,16 +14,29 @@ namespace HomeCalendarWPF
     {
         //private readonly ViewInterface view;
 
-        private readonly ICreateEventViewInterface createEventView;
-        private readonly CategoryView categoryView;
-        public MainViewInterface mainView;
+        private ICreateEventViewInterface createEventView;
+        private CategoryView categoryView;
+        private MainViewInterface mainView;
+        private readonly MainWindow welcomeWindow;
         private HomeCalendar model;
-        public Presenter(CategoryView cv, ICreateEventViewInterface cev, MainViewInterface mv)
+        public Presenter(MainWindow window)
         {
-            createEventView = cev;
-            categoryView = cv;
-            mainView = mv;
+            welcomeWindow = window;
         }
+
+        #region Window Registration
+        public void RegisterWindow(Window window)
+        {
+            if (window is MainViewInterface)
+                mainView = window as MainViewInterface;
+            else if (window is CategoryView)
+                categoryView = window as CategoryView;
+            else if (window is ICreateEventViewInterface)
+                createEventView = window as ICreateEventViewInterface;
+            else
+                throw new Exception($"{window} was not able to be cast as a valid window type.");
+        }
+        #endregion
 
         #region Welcome Page
 
