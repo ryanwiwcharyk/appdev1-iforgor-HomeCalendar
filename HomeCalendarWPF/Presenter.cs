@@ -58,14 +58,13 @@ namespace HomeCalendarWPF
 
         #region Home Page
 
-        public List<CalendarItem> GetUpcomingEvents()
+        public void GetUpcomingEvents()
         {
             List<CalendarItem> events = model.GetCalendarItems(null, DateTime.Now.AddDays(7), false, 0);
             if (events.Count == 0)
                 mainView.ShowNoUpcomingEvents("There are no upcoming events");
             else
-                mainView.ShowNoUpcomingEvents("");
-            return events;  
+                mainView.ShowUpcomingEvents(events);
         }
 
         #endregion
@@ -76,6 +75,37 @@ namespace HomeCalendarWPF
             Categories categories = model.categories;
             List<Category> categoryList = categories.List();
             return categoryList;
+        }
+
+        public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, string selectedCategory)
+        {
+            if (string.IsNullOrEmpty(details))
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else if (double.TryParse(duration, out double validDurationAsDouble))
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else if (!startTime.HasValue) //from https://stackoverflow.com/questions/41447490/how-do-i-get-value-from-datepickerwpf-in-c
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else if (string.IsNullOrEmpty(selectedCategory))
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else
+            {
+                List <Category> categories = model.categories.List();
+                Category category = categories.Find(x => x.Description == selectedCategory);
+                if (category != null && startTime != null)
+                {
+                    model.events.Add(startTime, category.Id, duration, details);
+                }
+                
+
+            }
         }
 
         #endregion

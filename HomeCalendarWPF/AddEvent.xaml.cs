@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,7 +35,13 @@ namespace HomeCalendarWPF
         }
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
+            string details = eventDetails.ToString();
+            string duration = eventDuration.ToString();
+            DateTime? selectedDate = datePicker.SelectedDate;
+            string comboBoxSelectedCategory = categoryComboBox.SelectedItem as string;
+            _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, comboBoxSelectedCategory);
             
+
         }
         private void BtnClick_CancelEvent(object sender, RoutedEventArgs e)
         {

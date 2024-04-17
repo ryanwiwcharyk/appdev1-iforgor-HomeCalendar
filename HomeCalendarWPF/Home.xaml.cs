@@ -30,7 +30,7 @@ namespace HomeCalendarWPF
             InitializeComponent();
             _presenter = presenter;
             _presenter.RegisterWindow(this);
-            ShowUpcomingEvents();
+            _presenter.GetUpcomingEvents();
         }
 
         //private methods for button clicks
@@ -57,19 +57,13 @@ namespace HomeCalendarWPF
             Application.Current.Shutdown();
         }
 
-        void MainViewInterface.ShowCalendarFileNameLocationForm()
-        {
-            throw new NotImplementedException();
-        }
-
         void MainViewInterface.ShowRecentFiles()
         {
             throw new NotImplementedException();
         }
         
-        public void ShowUpcomingEvents()
+        public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
-            List<CalendarItem> upcomingEvents = _presenter.GetUpcomingEvents();
             UpcomingEvents.ItemsSource = upcomingEvents;
         }
 

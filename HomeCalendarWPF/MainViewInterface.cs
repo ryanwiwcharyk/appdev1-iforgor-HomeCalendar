@@ -10,9 +10,8 @@ namespace HomeCalendarWPF
     public interface MainViewInterface
     {
         public void ShowRecentFiles();
-        public void ShowUpcomingEvents();
+        public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents);
         public void CloseApplication();
-        public void ShowCalendarFileNameLocationForm();
         public void ShowNoUpcomingEvents(string message);
     }
 }
