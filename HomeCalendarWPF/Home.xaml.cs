@@ -25,30 +25,30 @@ namespace HomeCalendarWPF
         private readonly HomeCalendar _model;
         private readonly CategoryView categoryView;
         private readonly ICreateEventViewInterface createEventView;
-        private readonly IWelcomeViewInterface welcomeView;
         public Home(Presenter presenter)
         {
             InitializeComponent();
             _presenter = presenter;
-
-
+            ShowUpcomingEvents();
         }
 
+        //private methods for button clicks
+        private void AddEventBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddEvent newAddEvent = new AddEvent(_presenter);
+            newAddEvent.ShowDialog();
+        }
+
+        private void AddCategoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            AddCategory addNewCategory = new AddCategory(_presenter);
+            addNewCategory.ShowDialog();
+        }
+
+        // Interface implementation
         void MainViewInterface.CloseApplication()
         {
             throw new NotImplementedException();
-        }
-
-        void MainViewInterface.ShowAddCategoryTab()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ShowAddEventTab(object sender, RoutedEventArgs e)
-        {
-            AddEvent newAddEvent = new AddEvent(_presenter);
-            newAddEvent.Show();
-            this.Close();
         }
 
         void MainViewInterface.ShowCalendarFileNameLocationForm()
@@ -60,10 +60,16 @@ namespace HomeCalendarWPF
         {
             throw new NotImplementedException();
         }
+        
+        public void ShowUpcomingEvents()
+        {
+            List<CalendarItem> upcomingEvents = _presenter.GetUpcomingEvents();
+            UpcomingEvents.ItemsSource = upcomingEvents;
+        }
 
-       // void MainViewInterface.ShowUpcomingEvents()
-      //  {
-      //      throw new NotImplementedException();
-       // }
+        void MainViewInterface.ShowNoUpcomingEvents(string message)
+        {
+            UpcomingEventsStatus.Text = message;
+        }
     }
 }

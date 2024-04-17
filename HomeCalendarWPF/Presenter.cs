@@ -13,14 +13,12 @@ namespace HomeCalendarWPF
     {
         //private readonly ViewInterface view;
 
-        private readonly IWelcomeViewInterface welcomeView;
         private readonly ICreateEventViewInterface createEventView;
         private readonly CategoryView categoryView;
-        private readonly MainViewInterface mainView;
+        private MainViewInterface mainView;
         private HomeCalendar model;
-        public Presenter(IWelcomeViewInterface wv, CategoryView cv, ICreateEventViewInterface cev, MainViewInterface mv)
+        public Presenter(CategoryView cv, ICreateEventViewInterface cev, MainViewInterface mv)
         {
-            welcomeView = wv;
             createEventView = cev;
             categoryView = cv;
             mainView = mv;
@@ -32,23 +30,28 @@ namespace HomeCalendarWPF
         {
             model = new HomeCalendar($"{location}\\{name}", true);
             Home home = new Home(this);
+            home.Show();
         }
 
         public void ExistingCalendar(string location)
         {
             model = new HomeCalendar($"{location}");
-            Home home = new Home(this); 
+            Home home = new Home(this);
+            home.Show();
         }
 
         #endregion
 
         #region Home Page
 
-        public void PopulateEventsList()
-        {   
-            List<Events> events = new List<Events>();
-
-            mainView.ShowUpcomingEvents();
+        public List<CalendarItem> GetUpcomingEvents()
+        {
+            List<CalendarItem> events = model.GetCalendarItems(null, DateTime.Now.AddDays(7), false, 0);
+            if (events.Count == 0)
+                mainView.ShowNoUpcomingEvents("There are no upcoming events");
+            else
+                mainView.ShowNoUpcomingEvents("");
+            return events;  
         }
 
         #endregion

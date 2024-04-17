@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarWPF"
         mc:Ignorable="d"
-        Title="Home" Height="450" Width="800">
+        Title="Home" Height="500" Width="800">
     <StackPanel Margin="10">
         <TextBlock Margin="10" Text="Welcome To 'X' Calendar" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" FontWeight="DemiBold"></TextBlock>
         <Grid>
@@ -22,15 +22,19 @@
         
         
             <StackPanel Grid.Column="1" Grid.Row="0" Margin="10">
-                <Button Margin="10"  Width="150" Height="30" Content="Add Event" Name="AddEventBtn"></Button>
-                <Button Margin ="10" Width="150" Height="30" Content="Add Category" Name="AddCategoryBtn" Click="ShowAddEventTab"></Button>
+                <Button Margin="10"  Width="150" Height="30" Content="Add Event" Name="AddEventBtn" Click="AddEventBtn_Click"></Button>
+                <Button Margin ="10" Width="150" Height="30" Content="Add Category" Name="AddCategoryBtn" Click="AddCategoryBtn_Click"></Button>
             </StackPanel>
 
-            <TextBlock Grid.Column="1" Grid.Row="1" Margin="10 0 10 5" Text="Upcoming Events" HorizontalAlignment="Center" FontSize="15"></TextBlock>
 
             <Viewbox Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="10">
                 <Calendar></Calendar>
             </Viewbox>
+
+            <StackPanel Grid.Column="1" Grid.Row="1">
+                <TextBlock Grid.Column="1" Grid.Row="1" Margin="10 0 10 5" Text="Upcoming Events" HorizontalAlignment="Center" FontSize="15"></TextBlock>
+                <TextBlock Name="UpcomingEventsStatus" HorizontalAlignment="Center" FontWeight="DemiBold" FontSize="15"></TextBlock>
+            </StackPanel>
 
             <ListBox Grid.Column="1" Grid.Row="2" Margin="10" Name="UpcomingEvents">
                 

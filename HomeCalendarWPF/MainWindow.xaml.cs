@@ -18,7 +18,7 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IWelcomeViewInterface
+    public partial class MainWindow : Window
     {
         private readonly Presenter presenter;
         private readonly MainViewInterface mainView;
@@ -27,30 +27,21 @@ namespace HomeCalendarWPF
         public MainWindow()
         {
             InitializeComponent();
-            presenter = new Presenter(this, categoryView, createEventView, mainView);
+            presenter = new Presenter(categoryView, createEventView, mainView);
         }
         private void Btn_Click_NewCalendar(object sender, RoutedEventArgs e)
         {
             string location = newLocation.Text ;
             string name = newName.Text ;
-            this.Close();
+            this.Hide();
             presenter.NewCalendar(location,name);
-            Home homeWindow = new Home(presenter);
-            homeWindow.Show();
 
         }
         private void Btn_Click_ExistingCalendar(object sender, RoutedEventArgs e)
         {
-            string location = newLocation.Text;
-            this.Close();
+            string location = existingLocation.Text;
+            this.Hide();
             presenter.ExistingCalendar(location);
-            Home homeWindow = new Home(presenter);
-            homeWindow.Show();
-        }
-
-        void IWelcomeViewInterface.ShowWarning(string message)
-        {
-            warningPopup.Text = message;
         }
     }
 }

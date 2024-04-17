@@ -12,8 +12,8 @@
             <TextBlock Text="Add Category" FontSize="30" HorizontalAlignment="Center" />
             <TextBlock Text="Name:" FontSize="20" Margin="0,80,300,0"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <TextBlock Text="CategoryType:" FontSize="20" Margin="0,40,300,0"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <Button Click="Btn_Add"  Content="Add" Margin="0,90,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
-            <Button Click="Btn_Cancel"  Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
+            <Button Click="Button_Click_2"  Content="Add" Margin="0,90,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
+            <Button Click="Button_Click_3"  Content="Cancel" Margin="0,20,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
         </StackPanel>
     </Grid>
 </Window>
