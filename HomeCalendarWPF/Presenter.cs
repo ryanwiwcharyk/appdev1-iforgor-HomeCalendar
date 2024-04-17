@@ -15,7 +15,7 @@ namespace HomeCalendarWPF
 
         private readonly ICreateEventViewInterface createEventView;
         private readonly CategoryView categoryView;
-        private MainViewInterface mainView;
+        public MainViewInterface mainView;
         private HomeCalendar model;
         public Presenter(CategoryView cv, ICreateEventViewInterface cev, MainViewInterface mv)
         {

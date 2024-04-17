@@ -29,6 +29,7 @@ namespace HomeCalendarWPF
         {
             InitializeComponent();
             _presenter = presenter;
+            _presenter.mainView = this;
             ShowUpcomingEvents();
         }
 
@@ -45,10 +46,15 @@ namespace HomeCalendarWPF
             addNewCategory.ShowDialog();
         }
 
+        private void BtnClick_CloseApplication(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
         // Interface implementation
         void MainViewInterface.CloseApplication()
         {
-            throw new NotImplementedException();
+            
         }
 
         void MainViewInterface.ShowCalendarFileNameLocationForm()
@@ -71,5 +77,7 @@ namespace HomeCalendarWPF
         {
             UpcomingEventsStatus.Text = message;
         }
+
+        
     }
 }
