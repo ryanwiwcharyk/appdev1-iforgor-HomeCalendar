@@ -47,6 +47,17 @@ namespace HomeCalendarWPF
         {
 
         }
+        public void ShowErrorPopup(string message)
+        {
+            PopupText.Text = message;
+            Popup.IsOpen = true;
+        }
+        public void ShowSuccessPopup(string message)
+        {
+            PopupText.Text = message;
+            Popup.IsOpen = true;
+        }
+
 
         //Interface Implementation
         public string GetEventDetails()
@@ -70,16 +81,6 @@ namespace HomeCalendarWPF
         }
 
         public void AddCategoryToMenu(string categoryName)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICreateEventViewInterface.ShowSuccessPopup(string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICreateEventViewInterface.ShowErrorPopup(string message)
         {
             throw new NotImplementedException();
         }

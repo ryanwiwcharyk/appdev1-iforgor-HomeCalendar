@@ -81,19 +81,19 @@ namespace HomeCalendarWPF
         {
             if (string.IsNullOrEmpty(details))
             {
-                createEventView.ShowErrorPopup("");
+                createEventView.ShowErrorPopup("No details");
             }
             else if (double.TryParse(duration, out double validDurationAsDouble))
             {
-                createEventView.ShowErrorPopup("");
+                createEventView.ShowErrorPopup("No duration");
             }
             else if (!startTime.HasValue) //from https://stackoverflow.com/questions/41447490/how-do-i-get-value-from-datepickerwpf-in-c
             {
-                createEventView.ShowErrorPopup("");
+                createEventView.ShowErrorPopup("No start time");
             }
             else if (string.IsNullOrEmpty(selectedCategory))
             {
-                createEventView.ShowErrorPopup("");
+                createEventView.ShowErrorPopup("No category");
             }
             else
             {
@@ -103,7 +103,7 @@ namespace HomeCalendarWPF
                 if (category != null && startTime != null)
                 {
                     model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
-                    createEventView.ShowSuccessPopup("");
+                    createEventView.ShowSuccessPopup("yipee");
                 }
 
             }
