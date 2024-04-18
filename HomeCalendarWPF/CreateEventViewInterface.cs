@@ -13,5 +13,7 @@ namespace HomeCalendarWPF
         public double GetEventDurationInMinutes();
         public int GetEventCategory();
         public void AddCategoryToMenu(string categoryName);
+        public void ShowSuccessPopup(string message);
+        public void ShowErrorPopup(string message);
     }
 }

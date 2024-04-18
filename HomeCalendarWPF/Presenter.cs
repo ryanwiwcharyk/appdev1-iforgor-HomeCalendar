@@ -71,7 +71,7 @@ namespace HomeCalendarWPF
         #endregion
 
         #region Create Events
-        public List<Category> PopulateCategoriesMenu()
+        public List<Category> PopulateCategoryDropdown()
         {
             Categories categories = model.categories;
             List<Category> categoryList = categories.List();

@@ -30,11 +30,14 @@ namespace HomeCalendarWPF
         }
         private void InitializeFields()
         {
-            categoryComboBox.ItemsSource = _presenter.PopulateCategoriesMenu();
+            categoryComboBox.ItemsSource = _presenter.PopulateCategoryDropdown();
         }
-        private void Btn_Click_Create_Event(object sender, RoutedEventArgs e)
+        private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
             
+        }
+        private void BtnClick_CancelEvent(object sender, RoutedEventArgs e)
+        {
 
         }
 
@@ -63,5 +66,17 @@ namespace HomeCalendarWPF
         {
             throw new NotImplementedException();
         }
+
+        void ICreateEventViewInterface.ShowSuccessPopup(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICreateEventViewInterface.ShowErrorPopup(string message)
+        {
+            throw new NotImplementedException();
+        }
+
+       
     }
 }

@@ -25,6 +25,11 @@
             <ComboBox Name="categoryComboBox" Height="30" Width="auto" Text="Select Category" BorderThickness="2" BorderBrush="Black" IsEditable="True"/>
             <Button Content="Add New Category" Margin="20" FontSize="15" Padding="5"></Button>
         </StackPanel>
-        <Button Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left" Click="Btn_Click_Create_Event"></Button>
+
+        <StackPanel Orientation="Horizontal">
+            <Button Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left" Click="BtnClick_CreateEvent"></Button>
+            <Button Content="Cancel event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left" Click="BtnClick_CancelEvent"></Button>
+
+        </StackPanel>
     </StackPanel>
 </Window>
