@@ -82,16 +82,6 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-        void ICreateEventViewInterface.ShowSuccessPopup(string message)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICreateEventViewInterface.ShowErrorPopup(string message)
-        {
-            throw new NotImplementedException();
-        }
-
         public void AddCategoriesToDropdown(List<Category> categories)
         {
             categoryComboBox.ItemsSource = categories;
