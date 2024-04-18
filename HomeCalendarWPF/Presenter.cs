@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.ConstrainedExecution;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,7 +18,7 @@ namespace HomeCalendarWPF
         //private readonly ViewInterface view;
 
         private ICreateEventViewInterface createEventView;
-        private CategoryView categoryView;
+        private CategoryView createCategoryView;
         private MainViewInterface mainView;
         private readonly MainWindow welcomeWindow;
         private HomeCalendar model;
@@ -30,7 +33,7 @@ namespace HomeCalendarWPF
             if (window is MainViewInterface)
                 mainView = window as MainViewInterface;
             else if (window is CategoryView)
-                categoryView = window as CategoryView;
+                createCategoryView = window as CategoryView;
             else if (window is ICreateEventViewInterface)
                 createEventView = window as ICreateEventViewInterface;
             else
@@ -97,13 +100,13 @@ namespace HomeCalendarWPF
             }
             else
             {
-                List <Category> categories = model.categories.List();
+                List<Category> categories = model.categories.List();
                 Category category = categories.Find(x => x.Description == selectedCategory);
                 if (category != null && startTime != null)
                 {
                     model.events.Add(startTime, category.Id, duration, details);
                 }
-                
+
 
             }
         }
@@ -111,6 +114,44 @@ namespace HomeCalendarWPF
         #endregion
 
         #region Create Category
+
+        //populate the category Types combo box
+
+        //add category based on details + category type with validation
+
+        public List<Category.CategoryType> PopulateCategoryTypesDropdown()
+        {
+            List<Category.CategoryType> categoryTypes = new List<Category.CategoryType>();
+
+            Category.CategoryType[] catTypes = (Category.CategoryType[])Enum.GetValues(typeof(Category.CategoryType));
+            foreach (Category.CategoryType catType in catTypes)
+            {
+                categoryTypes.Add(catType);
+            }
+
+            return categoryTypes;
+        }
+
+        public void ValidateDetailsFormInputAndCreateCategory(string details, int type) //called on the add button event handler.
+        {
+            const int MAX = 3;
+            const int MIN = 1;
+
+            if (string.IsNullOrEmpty(details))
+            {
+                createCategoryView.ShowWarning("Error, details cannot be empty. Please enter the name of the details of the category");
+            }
+            else if (type > MAX || type < MIN)
+            {
+                createCategoryView.ShowWarning("Error, Please select the category type for your new category");
+            }
+            else
+            {
+
+                model.categories.Add(details, (Category.CategoryType)type);
+
+            }
+        }
 
         #endregion
     }

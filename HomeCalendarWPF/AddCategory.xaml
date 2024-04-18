@@ -13,12 +13,7 @@
             <TextBlock Name="Details" Text="Details:" FontSize="20" Margin="0,80,300,0"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <TextBox Width="300" MaxLength="300" Margin="0,-22,30,0" VerticalAlignment="Center" />
             <TextBlock Text="CategoryType:" FontSize="20" Margin="0,40,300,0"  VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <ComboBox Name="CategoryType"  Width="200" Margin="0,-30,10,-10" VerticalAlignment="Center">
-                <ComboBoxItem Content="Event"></ComboBoxItem>
-                <ComboBoxItem Content="AllDayEvent"></ComboBoxItem>
-                <ComboBoxItem Content="Holidays"></ComboBoxItem>
-                <ComboBoxItem Content="Availability"></ComboBoxItem>
-            </ComboBox>
+            <ComboBox Name="CategoryType"  Width="200" Margin="0,-30,10,-10" VerticalAlignment="Center"></ComboBox>
             <Button Click="Btn_Add"  Content="Add" Margin="0,90,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
             <Button Click="Btn_Cancel"  Content="Cancel" Margin="0,10,0,0" HorizontalAlignment="Left" Height="30" Width="75"/>
         </StackPanel>
