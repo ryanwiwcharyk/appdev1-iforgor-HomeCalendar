@@ -70,11 +70,11 @@ namespace HomeCalendarWPF
         #endregion
 
         #region Create Events
-        public List<Category> PopulateCategoryDropdown()
+        public void PopulateCategoryDropdown()
         {
             Categories categories = model.categories;
             List<Category> categoryList = categories.List();
-            return categoryList;
+            createEventView.AddCategoriesToDropdown(categoryList);
         }
 
         public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, string selectedCategory)

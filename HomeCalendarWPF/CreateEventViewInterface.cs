@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace HomeCalendarWPF
         public DateTime GetEventStartTime();
         public double GetEventDurationInMinutes();
         public int GetEventCategory();
-        public void AddCategoryToMenu(string categoryName);
+        public void AddCategoriesToDropdown(List<Category> categories);
         public void ShowSuccessPopup(string message);
         public void ShowErrorPopup(string message);
     }
