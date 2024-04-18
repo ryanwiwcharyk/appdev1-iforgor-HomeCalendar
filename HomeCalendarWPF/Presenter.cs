@@ -77,14 +77,35 @@ namespace HomeCalendarWPF
             return categoryList;
         }
 
-        public void ValidateEventFormInput(string details, string duration)
+        public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, string selectedCategory)
         {
+            if (string.IsNullOrEmpty(details))
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else if (double.TryParse(duration, out double validDurationAsDouble))
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else if (!startTime.HasValue) //from https://stackoverflow.com/questions/41447490/how-do-i-get-value-from-datepickerwpf-in-c
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else if (string.IsNullOrEmpty(selectedCategory))
+            {
+                createEventView.ShowErrorPopup("");
+            }
+            else
+            {
+                List <Category> categories = model.categories.List();
+                Category category = categories.Find(x => x.Description == selectedCategory);
+                if (category != null && startTime != null)
+                {
+                    model.events.Add(startTime, category.Id, duration, details);
+                }
+                
 
-        }
-
-        public void CreateEvent()
-        {
-
+            }
         }
 
         #endregion
