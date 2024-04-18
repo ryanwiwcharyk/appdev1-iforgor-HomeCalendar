@@ -99,11 +99,12 @@ namespace HomeCalendarWPF
             {
                 List <Category> categories = model.categories.List();
                 Category category = categories.Find(x => x.Description == selectedCategory);
+                
                 if (category != null && startTime != null)
                 {
-                    model.events.Add(startTime, category.Id, duration, details);
+                    model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
+                    createEventView.ShowSuccessPopup("");
                 }
-                
 
             }
         }
