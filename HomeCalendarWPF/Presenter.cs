@@ -115,6 +115,7 @@ namespace HomeCalendarWPF
                 {
                     model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("yipee");
+                    GetUpcomingEvents();
                     
                 }
                 else

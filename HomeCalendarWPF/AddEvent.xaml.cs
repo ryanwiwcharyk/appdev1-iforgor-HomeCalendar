@@ -42,7 +42,11 @@ namespace HomeCalendarWPF
         }
         private void BtnClick_CancelEvent(object sender, RoutedEventArgs e)
         {
-
+            MessageBoxResult messageBoxResult = MessageBox.Show("You are about to cancel the addition of this event", "Home Calendar", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                this.Close();
+            }
         }
         public void ShowErrorPopup(string message)
         {
@@ -52,7 +56,7 @@ namespace HomeCalendarWPF
         public void ShowSuccessPopup(string message)
         {
             MessageBox.Show(message, "Home Calendar");
-
+            this.Close();
 
         }
 
