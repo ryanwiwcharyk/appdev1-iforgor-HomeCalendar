@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="AddEvent" Height="450" Width="800">
     <StackPanel>
-        <TextBlock FontSize="30" Margin="5"> Create A New Event </TextBlock>
+        <TextBlock FontSize="30" Margin="5"> Create A New Event</TextBlock>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Details</Label>
             <TextBox Width="200" Margin="5" Name="eventDetails"></TextBox>
@@ -21,7 +21,7 @@
             <TextBox Width="200" Margin="5" Name="eventDuration"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Label FontSize="20" Margin="10"> Category</Label>
+            <Label FontSize="20" Margin="10">Category</Label>
             <ComboBox Name="categoryComboBox" Height="30" Width="auto" Text="Select Category" BorderThickness="2" BorderBrush="Black" IsEditable="True"/>
             <Button Content="Add New Category" Margin="20" FontSize="15" Padding="5"></Button>
         </StackPanel>
