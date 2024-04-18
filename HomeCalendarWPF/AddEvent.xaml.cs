@@ -52,7 +52,7 @@ namespace HomeCalendarWPF
         public void ShowSuccessPopup(string message)
         {
             MessageBox.Show(message, "Home Calendar");
-
+            this.Close();
 
         }
 
