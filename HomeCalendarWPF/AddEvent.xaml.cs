@@ -35,8 +35,9 @@ namespace HomeCalendarWPF
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
             string details = eventDetails.ToString();
+            string duration = eventDuration.ToString();
+            
 
-            double duration = double.Parse(eventDuration.ToString());
         }
         private void BtnClick_CancelEvent(object sender, RoutedEventArgs e)
         {
