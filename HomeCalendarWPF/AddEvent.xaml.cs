@@ -49,13 +49,13 @@ namespace HomeCalendarWPF
         }
         public void ShowErrorPopup(string message)
         {
-            PopupText.Text = message;
-            Popup.IsOpen = true;
+            MessageBox.Show( message, "Home Calendar");
+
         }
         public void ShowSuccessPopup(string message)
         {
-            PopupText.Text = message;
-            Popup.IsOpen = true;
+            MessageBox.Show(message, "Home Calendar");
+
         }
 
 

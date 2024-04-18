@@ -83,7 +83,7 @@ namespace HomeCalendarWPF
             {
                 createEventView.ShowErrorPopup("No details");
             }
-            else if (double.TryParse(duration, out double validDurationAsDouble))
+            else if (!double.TryParse(duration, out double validDurationAsDouble))
             {
                 createEventView.ShowErrorPopup("No duration");
             }
