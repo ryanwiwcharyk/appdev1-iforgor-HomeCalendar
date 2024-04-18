@@ -32,8 +32,8 @@ namespace HomeCalendarWPF
         }
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
-            string details = eventDetails.ToString();
-            string duration = eventDuration.ToString();
+            string details = eventDetails.Text;
+            string duration = eventDuration.Text;
             DateTime? selectedDate = datePicker.SelectedDate;
             string comboBoxSelectedCategory = categoryComboBox.Text;
             _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, comboBoxSelectedCategory);
@@ -52,6 +52,7 @@ namespace HomeCalendarWPF
         public void ShowSuccessPopup(string message)
         {
             MessageBox.Show(message, "Home Calendar");
+
 
         }
 

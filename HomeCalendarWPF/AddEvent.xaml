@@ -32,11 +32,5 @@
 
         </StackPanel>
         
-        <Popup Name="Popup" Width="300" IsOpen="False" Placement="Center">
-            <StackPanel Background="WhiteSmoke" >
-                <TextBlock Name="PopupText" Foreground="Black"> This is popup text</TextBlock>
-                <Button Width="100" Content="Close" />
-            </StackPanel>
-        </Popup>
     </StackPanel>
 </Window>

@@ -61,10 +61,15 @@ namespace HomeCalendarWPF
         public void GetUpcomingEvents()
         {
             List<CalendarItem> events = model.GetCalendarItems(null, DateTime.Now.AddDays(7), false, 0);
+            List<string> names = new List<string>();
+            foreach (CalendarItem item in events)
+            {
+                names.Add($"{item.ShortDescription} - {item.StartDateTime}");
+            }
             if (events.Count == 0)
                 mainView.ShowNoUpcomingEvents("There are no upcoming events");
             else
-                mainView.ShowUpcomingEvents(events);
+                mainView.ShowUpcomingEvents(names);
         }
 
         #endregion
@@ -100,10 +105,15 @@ namespace HomeCalendarWPF
                 List <Category> categories = model.categories.List();
                 Category category = categories.Find(x => x.Description == selectedCategory);
                 
-                if (category != null && startTime != null)
+                if (category != null && startTime != null && validDurationAsDouble>0)
                 {
                     model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("yipee");
+                    
+                }
+                else
+                {
+                    createEventView.ShowErrorPopup("bad");
                 }
 
             }

@@ -62,7 +62,7 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
         
-        public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
+        public void ShowUpcomingEvents(List<string> upcomingEvents)
         {
             UpcomingEvents.ItemsSource = upcomingEvents;
         }
