@@ -44,6 +44,17 @@ namespace HomeCalendarWPF
         {
 
         }
+        public void ShowErrorPopup(string message)
+        {
+            PopupText.Text = message;
+            Popup.IsOpen = true;
+        }
+        public void ShowSuccessPopup(string message)
+        {
+            PopupText.Text = message;
+            Popup.IsOpen = true;
+        }
+
 
         //Interface Implementation
         public string GetEventDetails()
