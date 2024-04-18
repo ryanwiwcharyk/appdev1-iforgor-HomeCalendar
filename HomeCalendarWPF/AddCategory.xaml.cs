@@ -35,7 +35,7 @@ namespace HomeCalendarWPF
         private void Btn_Add(object sender, RoutedEventArgs e)
         {
             //the creation of the category is done here
-            _presenter.ValidateDetailsFormInputAndCreateCategory(Details.Text.ToString(), Convert.ToInt32(CategoryType.Text));
+            _presenter.ValidateDetailsFormInputAndCreateCategory(Details.Text.ToString(), Convert.ToInt32(CategoryType.SelectedItem.ToString));
         }
 
         private void Btn_Cancel(object sender, RoutedEventArgs e)
@@ -47,7 +47,8 @@ namespace HomeCalendarWPF
         {
             // change this to presenter
 
-            //CategoryType.Items.SourceCollection = _presenter.PopulateCategoryTypesDropdown();
+            CategoryType.ItemsSource = types;
+
         }
 
         public void RefreshPage()
