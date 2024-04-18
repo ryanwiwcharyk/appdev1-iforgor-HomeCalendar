@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
@@ -26,12 +27,8 @@ namespace HomeCalendarWPF
             InitializeComponent();
             _presenter = presenter;
             _presenter.RegisterWindow(this);
-            InitializeFields();
+            _presenter.PopulateCategoryDropdown();
 
-        }
-        private void InitializeFields()
-        {
-            categoryComboBox.ItemsSource = _presenter.PopulateCategoryDropdown();
         }
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
@@ -69,7 +66,7 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-        public void AddCategoryToMenu(string categoryName)
+        public void AddCategoriesToDropdown(string categoryName)
         {
             throw new NotImplementedException();
         }
@@ -84,6 +81,9 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-       
+        public void AddCategoriesToDropdown(List<Category> categories)
+        {
+            categoryComboBox.ItemsSource = categories;
+        }
     }
 }
