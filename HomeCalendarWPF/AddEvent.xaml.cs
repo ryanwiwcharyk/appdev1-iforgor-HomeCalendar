@@ -38,7 +38,7 @@ namespace HomeCalendarWPF
             string details = eventDetails.ToString();
             string duration = eventDuration.ToString();
             DateTime? selectedDate = datePicker.SelectedDate;
-            string comboBoxSelectedCategory = categoryComboBox.SelectedItem as string;
+            string comboBoxSelectedCategory = categoryComboBox.Text;
             _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, comboBoxSelectedCategory);
             
 
