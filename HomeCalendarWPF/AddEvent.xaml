@@ -10,7 +10,7 @@
         <TextBlock FontSize="30" Margin="5"> Create A New Event </TextBlock>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Details</Label>
-            <TextBox Width="200" Margin="5"></TextBox>
+            <TextBox Width="200" Margin="5" Name="eventDetails"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10" > Start Time </Label>
@@ -18,7 +18,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Duration </Label>
-            <TextBox Width="200" Margin="5"></TextBox>
+            <TextBox Width="200" Margin="5" Name="eventDuration"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Category</Label>

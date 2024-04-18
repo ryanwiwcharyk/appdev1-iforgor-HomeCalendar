@@ -78,6 +78,11 @@ namespace HomeCalendarWPF
             return categoryList;
         }
 
+        public void CreateEvent()
+        {
+
+        }
+
         #endregion
 
         #region Create Category
