@@ -29,13 +29,13 @@ namespace HomeCalendarWPF
         {
             InitializeComponent();
             _presenter = presenter;
-
+            _presenter.RegisterWindow(this);
+            _presenter.PopulateCategoryTypesDropdown();
         }
 
         private void Btn_Add(object sender, RoutedEventArgs e)
         {
-            //the creation of the category is done here
-            _presenter.ValidateDetailsFormInputAndCreateCategory(Details.Text.ToString(), Convert.ToInt32(CategoryType.Text));
+           _presenter.ValidateDetailsFormInputAndCreateCategory(Details.Text, categoryTypeComboBox.Text);
         }
 
         private void Btn_Cancel(object sender, RoutedEventArgs e)
@@ -45,9 +45,8 @@ namespace HomeCalendarWPF
 
         public void FillDropDown(List<Category.CategoryType> types)
         {
-            // change this to presenter
 
-            //CategoryType.Items.SourceCollection = _presenter.PopulateCategoryTypesDropdown();
+            categoryTypeComboBox.ItemsSource = types;
         }
 
         public void RefreshPage()
@@ -55,9 +54,10 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-        public void ShowSuccess(string success)
+        public void ShowSuccessPopup(string message)
         {
-            throw new NotImplementedException();
+            MessageBox.Show(message, "Home Calendar");
+            this.Close();
         }
 
         public void ShowWarning(string warning)

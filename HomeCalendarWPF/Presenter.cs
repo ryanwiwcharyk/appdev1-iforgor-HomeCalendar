@@ -89,35 +89,39 @@ namespace HomeCalendarWPF
         {
             if (string.IsNullOrEmpty(details))
             {
-                createEventView.ShowErrorPopup("No details");
+                createEventView.ShowErrorPopup("Please provide event details.");
             }
             else if (!double.TryParse(duration, out double validDurationAsDouble))
             {
-                createEventView.ShowErrorPopup("No duration");
+                createEventView.ShowErrorPopup("Please provide a valid duration.");
+            }
+            else if (validDurationAsDouble <= 0)
+            {
+                createEventView.ShowErrorPopup("Please provide a positive duration.");
             }
             else if (!startTime.HasValue) //from https://stackoverflow.com/questions/41447490/how-do-i-get-value-from-datepickerwpf-in-c
             {
-                createEventView.ShowErrorPopup("No start time");
+                createEventView.ShowErrorPopup("Please provide a start time.");
             }
             else if (string.IsNullOrEmpty(selectedCategory))
             {
-                createEventView.ShowErrorPopup("No category");
+                createEventView.ShowErrorPopup("Please pick a category.");
             }
             else
             {
                 List<Category> categories = model.categories.List();
                 Category category = categories.Find(x => x.Description == selectedCategory);
                 
-                if (category != null && startTime != null && validDurationAsDouble>0)
+                if (category != null && startTime != null)
                 {
                     model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
-                    createEventView.ShowSuccessPopup("yipee");
+                    createEventView.ShowSuccessPopup("Event was successfully created.");
                     GetUpcomingEvents();
                     
                 }
                 else
                 {
-                    createEventView.ShowErrorPopup("bad");
+                    createEventView.ShowErrorPopup("Event couldn't be created. Please double check your input.");
                 }
 
             }
@@ -131,7 +135,7 @@ namespace HomeCalendarWPF
 
         //add category based on details + category type with validation
 
-        public List<Category.CategoryType> PopulateCategoryTypesDropdown()
+        public void PopulateCategoryTypesDropdown()
         {
             List<Category.CategoryType> categoryTypes = new List<Category.CategoryType>();
 
@@ -141,26 +145,47 @@ namespace HomeCalendarWPF
                 categoryTypes.Add(catType);
             }
 
-            return categoryTypes;
+            createCategoryView.FillDropDown(categoryTypes);
         }
 
-        public void ValidateDetailsFormInputAndCreateCategory(string details, int type) //called on the add button event handler.
+        public void ValidateDetailsFormInputAndCreateCategory(string details, string type) //called on the add button event handler.
         {
-            const int MAX = 3;
-            const int MIN = 1;
+   
+            int typeAsNumber = 0;
+            switch (type)
+            {
+                case "Event":
+                    typeAsNumber = 1;
+                    break;
+
+                case "Availability":
+                    typeAsNumber = 2;
+                    break;
+                case "AllDayEvent":
+                    typeAsNumber = 3;
+                    break;
+
+                case "Holiday":
+                    typeAsNumber = 4;
+                    break;
+                default:
+                    typeAsNumber = 0;
+                    break;
+
+            }
 
             if (string.IsNullOrEmpty(details))
             {
                 createCategoryView.ShowWarning("Error, details cannot be empty. Please enter the name of the details of the category");
             }
-            else if (type > MAX || type < MIN)
+            else if (typeAsNumber == 0)
             {
                 createCategoryView.ShowWarning("Error, Please select the category type for your new category");
             }
             else
             {
-
-                model.categories.Add(details, (Category.CategoryType)type);
+                createCategoryView.ShowSuccessPopup("New category was successfully created.");
+                model.categories.Add(details, (Category.CategoryType)typeAsNumber);
 
             }
         }
