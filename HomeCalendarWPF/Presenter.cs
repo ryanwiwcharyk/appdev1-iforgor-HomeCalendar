@@ -37,8 +37,7 @@ namespace HomeCalendarWPF
             {
 
                 createCategoryView = window as CategoryView;
-                List<Category.CategoryType> allCategoryTypes = PopulateCategoryTypesDropdown();
-                createCategoryView.FillDropDown(allCategoryTypes);
+
             }
             else if (window is ICreateEventViewInterface)
                 createEventView = window as ICreateEventViewInterface;
