@@ -49,11 +49,6 @@ namespace HomeCalendarWPF
             categoryTypeComboBox.ItemsSource = types;
         }
 
-        public void RefreshPage()
-        {
-            throw new NotImplementedException();
-        }
-
         public void ShowSuccessPopup(string message)
         {
             MessageBox.Show(message, "Home Calendar");

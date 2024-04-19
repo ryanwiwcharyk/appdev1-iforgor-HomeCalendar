@@ -11,7 +11,6 @@ namespace HomeCalendarWPF
     {
         void ShowWarning(string warning);
 
-        void RefreshPage();
         void FillDropDown(List<Category.CategoryType> types);
 
         public void ShowSuccessPopup(string message);
