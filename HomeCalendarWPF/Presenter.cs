@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -33,7 +34,12 @@ namespace HomeCalendarWPF
             if (window is MainViewInterface)
                 mainView = window as MainViewInterface;
             else if (window is CategoryView)
+            {
+
                 createCategoryView = window as CategoryView;
+                List<Category.CategoryType> allCategoryTypes = PopulateCategoryTypesDropdown();
+                createCategoryView.FillDropDown(allCategoryTypes);
+            }
             else if (window is ICreateEventViewInterface)
                 createEventView = window as ICreateEventViewInterface;
             else
@@ -188,7 +194,11 @@ namespace HomeCalendarWPF
                 model.categories.Add(details, (Category.CategoryType)typeAsNumber);
 
             }
+
+            
         }
+
+       
 
         #endregion
     }
