@@ -48,6 +48,12 @@ namespace HomeCalendarWPF
                 this.Close();
             }
         }
+        private void BtnClick_AddCategory(object sender, RoutedEventArgs e)
+        {
+            AddCategory category = new AddCategory(_presenter);
+            category.Show();
+
+        }
         public void ShowErrorPopup(string message)
         {
             MessageBox.Show( message, "Home Calendar");
