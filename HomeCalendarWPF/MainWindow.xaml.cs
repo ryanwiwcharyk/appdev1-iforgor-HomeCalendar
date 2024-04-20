@@ -32,25 +32,22 @@ namespace HomeCalendarWPF
             string location = newLocation.Text ;
             string name = newName.Text ;
             this.Hide();
-            NewDatabase(location, name);
+            ConnectToDb(location, name);
 
 
         }
         private void Btn_Click_ExistingCalendar(object sender, RoutedEventArgs e)
         {
             string location = existingLocation.Text;
+            string name = "";
             this.Hide();
-            ExistingDatabase(location);
+            ConnectToDb(location, name);
         }
 
-        public void NewDatabase(string location, string name)
+        public void ConnectToDb(string location, string name)
         {
-            presenter.NewCalendar(location, name);
+            presenter.ConnectingToExistingOrNewDatabase(location, name); //new method I created, may need extra error handling
         }
 
-        public void ExistingDatabase(string location)
-        {
-            presenter.ExistingCalendar(location);
-        }
     }
 }

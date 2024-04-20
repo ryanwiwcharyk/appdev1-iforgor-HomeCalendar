@@ -21,46 +21,78 @@ namespace HomeCalendarWPF
         private ICreateEventViewInterface createEventView;
         private CategoryView createCategoryView;
         private MainViewInterface mainView;
-        private readonly MainWindow welcomeWindow;
+        private readonly DatabaseViewInterface welcomeWindow;
         private HomeCalendar model;
-        public Presenter(MainWindow window)
+        public Presenter(DatabaseViewInterface window) //changed from MainWindow to DatabaseInterface, allowing for specific database selection in unit testing, lmkk
         {
             welcomeWindow = window;
         }
 
         #region Window Registration
-        public void RegisterWindow(Window window)
+        //public void RegisterWindow(Window window)
+        //{
+        //    if (window is MainViewInterface)
+        //        mainView = window as MainViewInterface;
+        //    else if (window is CategoryView)
+        //    {
+
+        //        createCategoryView = window as CategoryView;
+
+        //    }
+        //    else if (window is ICreateEventViewInterface)
+        //        createEventView = window as ICreateEventViewInterface;
+        //    else
+        //        throw new Exception($"{window} was not able to be cast as a valid window type.");
+        //}
+
+        public void RegisterWindow(ICreateEventViewInterface view) //overloaded register window instead, lmkk
         {
-            if (window is MainViewInterface)
-                mainView = window as MainViewInterface;
-            else if (window is CategoryView)
-            {
+            createEventView = view;
+        }
 
-                createCategoryView = window as CategoryView;
+        public void RegisterWindow(CategoryView view)
+        {
+            createCategoryView = view;
+        }
 
-            }
-            else if (window is ICreateEventViewInterface)
-                createEventView = window as ICreateEventViewInterface;
-            else
-                throw new Exception($"{window} was not able to be cast as a valid window type.");
+        public void RegisterWindow(MainViewInterface view)
+        {
+            mainView = view;
         }
         #endregion
 
         #region Welcome Page
 
-        public void NewCalendar(string location, string name)
+        public void ConnectingToExistingOrNewDatabase(string location, string name) //new method created to dinstinguish between existing or new without a bool required, lmkk
         {
-            model = new HomeCalendar($"{location}\\{name}", true);
-            Home home = new Home(this);
-            home.Show();
+            if(string.IsNullOrEmpty(name))
+            {
+                model = new HomeCalendar($"{location}");
+                Home home = new Home(this);
+                home.Show();
+            }
+            else
+            {
+                model = new HomeCalendar($"{location}\\{name}", true);
+                Home home = new Home(this);
+                home.Show();
+            }
+
         }
 
-        public void ExistingCalendar(string location)
-        {
-            model = new HomeCalendar($"{location}");
-            Home home = new Home(this);
-            home.Show();
-        }
+        //public void NewCalendar(string location, string name)
+        //{
+        //    model = new HomeCalendar($"{location}\\{name}", true);
+        //    Home home = new Home(this);
+        //    home.Show();
+        //}
+
+        //public void ExistingCalendar(string location)
+        //{
+        //    model = new HomeCalendar($"{location}");
+        //    Home home = new Home(this);
+        //    home.Show();
+        //}
 
         #endregion
 

@@ -8,8 +8,8 @@ namespace HomeCalendarWPF
 {
     public interface DatabaseViewInterface
     {
-        public void NewDatabase(string location, string name);
+        //This method will dinstinguish between existing and new by the name param check validation in main 
+        public void ConnectToDb(string location, string name);
 
-        public void ExistingDatabase(string location);
     }
 }

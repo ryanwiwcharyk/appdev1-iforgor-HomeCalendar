@@ -20,17 +20,13 @@ namespace TestProject_Presenter
 
         public class TestDatabaseView : DatabaseViewInterface
         {
-            public bool calledExistingDatabase = false;
-            public bool calledNewDatabase = false;
-            public void ExistingDatabase(string location)
+            public bool calledConnectToDb = false;
+
+            public void ConnectToDb(string location, string name)
             {
-                calledExistingDatabase = true;
+                calledConnectToDb = true;
             }
 
-            public void NewDatabase(string location, string name)
-            {
-                calledNewDatabase = true;
-            }
         }
 
         public class TestHomeView : MainViewInterface
@@ -123,7 +119,16 @@ namespace TestProject_Presenter
             {
                 //Im not sure how to setup tests from db input
                 TestDatabaseView databaseView = new TestDatabaseView();
-                //var presenter = new Presenter(databaseView);
+                Presenter presenter = new Presenter(databaseView);
+                TestHomeView homeView = new TestHomeView();
+                string filePath = Directory.GetCurrentDirectory();
+                string fileName = "testDBInput.db";
+                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
+                homeView.calledShowUpcomingEvents = false;
+                homeView.upcomingEventsCount = 0;
+
+                presenter.RegisterWindow(homeView);
+
             }
 
             [Fact]
