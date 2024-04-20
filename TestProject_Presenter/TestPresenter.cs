@@ -113,11 +113,28 @@ namespace TestProject_Presenter
 
         public class UnitTests
         {
+            #region Database Selection Tests
+            [Fact]
+            public void TestConnectingToExistingOrNewDatabase()
+            {
+                TestDatabaseView databaseView = new TestDatabaseView();
+                Presenter presenter = new Presenter(databaseView);
+                string fileName = "testDBInput.db";
+                string filePath = Directory.GetCurrentDirectory();
+
+
+                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
+
+
+                Assert.True(databaseView.calledConnectToDb);
+            }
+
+            #endregion
+
             #region HomePage Tests
             [Fact]
             public void TestRegisterHomeView()
             {
-                //Im not sure how to setup tests from db input
                 TestDatabaseView databaseView = new TestDatabaseView();
                 Presenter presenter = new Presenter(databaseView);
                 TestHomeView homeView = new TestHomeView();
@@ -125,22 +142,45 @@ namespace TestProject_Presenter
                 string fileName = "testDBInput.db";
                 presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
                 homeView.calledShowUpcomingEvents = false;
-                homeView.upcomingEventsCount = 0;
+
 
                 presenter.RegisterWindow(homeView);
 
+                Assert.True(homeView.calledShowUpcomingEvents);
             }
 
             [Fact]
             public void TestRegisterCreateCategoryView()
             {
+                TestDatabaseView databaseView = new TestDatabaseView();
+                Presenter presenter = new Presenter(databaseView);
+                TestAddCategoryView categoryView = new TestAddCategoryView();
+                string filePath = Directory.GetCurrentDirectory();
+                string fileName = "testDBInput.db";
+                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
+                categoryView.calledFillDropDown = false;
 
+
+                presenter.RegisterWindow(categoryView);
+
+                Assert.True(categoryView.calledFillDropDown);
             }
 
             [Fact]
             public void TestRegisterCreateEventView()
             {
+                TestDatabaseView databaseView = new TestDatabaseView();
+                Presenter presenter = new Presenter(databaseView);
+                TestAddCategoryView eventView = new TestAddCategoryView();
+                string filePath = Directory.GetCurrentDirectory();
+                string fileName = "testDBInput.db";
+                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
+                eventView.calledFillDropDown = false;
 
+
+                presenter.RegisterWindow(eventView);
+
+                Assert.True(eventView.calledFillDropDown);
             }
 
             #endregion
