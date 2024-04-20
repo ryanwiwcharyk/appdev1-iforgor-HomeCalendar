@@ -57,19 +57,18 @@ namespace HomeCalendarWPF
             Application.Current.Shutdown();
         }
 
-        
         public void ShowUpcomingEvents(List<string> upcomingEvents)
         {
             UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
-        void MainViewInterface.ShowNoUpcomingEvents(string message)
+        public void ShowNoUpcomingEvents(string message)
         {
             UpcomingEventsStatus.Text = message;
         }
 
         //gonna assume this is optional? - wont worry about it
-        void MainViewInterface.ShowRecentFiles()
+        public void ShowRecentFiles()
         {
             throw new NotImplementedException();
         }

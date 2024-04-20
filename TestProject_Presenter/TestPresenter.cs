@@ -38,6 +38,7 @@ namespace TestProject_Presenter
 
             public void ShowRecentFiles()
             {
+                //not implemented yet (method in window)
                 calledShowRecentFiles = true;
             }
 
@@ -101,7 +102,37 @@ namespace TestProject_Presenter
 
         public class UnitTests
         {
+            #region HomePage Tests
+            [Fact]
+            public void TestRegisterHomeView()
+            {
+                //Im not sure how to setup tests from db input
+                TestHomeView window = new TestHomeView();
+                var presenter = new Presenter(window);
+                presenter.NewCalendar(location, name);
+            }
 
+            [Fact]
+            public void TestRegisterCreateCategoryView()
+            {
+
+            }
+
+            [Fact]
+            public void TestRegisterCreateEventView()
+            {
+
+            }
+
+            #endregion
+
+            #region Create Events Tests
+
+            #endregion
+
+            #region Create Category Tests
+
+            #endregion
         }
     }
 }
