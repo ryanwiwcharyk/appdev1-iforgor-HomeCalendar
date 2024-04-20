@@ -22,9 +22,6 @@ namespace HomeCalendarWPF
     public partial class Home : Window, MainViewInterface
     {
         readonly Presenter _presenter;
-        private readonly HomeCalendar _model;
-        private readonly CategoryView categoryView;
-        private readonly ICreateEventViewInterface createEventView;
         public Home(Presenter presenter)
         {
             InitializeComponent();

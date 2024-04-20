@@ -18,6 +18,21 @@ namespace TestProject_Presenter
     namespace TestProject_Presenter
     {
 
+        public class TestDatabaseView : DatabaseViewInterface
+        {
+            public bool calledExistingDatabase = false;
+            public bool calledNewDatabase = false;
+            public void ExistingDatabase(string location)
+            {
+                calledExistingDatabase = true;
+            }
+
+            public void NewDatabase(string location, string name)
+            {
+                calledNewDatabase = true;
+            }
+        }
+
         public class TestHomeView : MainViewInterface
         {
             public bool calledCloseApplication = false;
@@ -107,9 +122,8 @@ namespace TestProject_Presenter
             public void TestRegisterHomeView()
             {
                 //Im not sure how to setup tests from db input
-                TestHomeView window = new TestHomeView();
-                var presenter = new Presenter(window);
-                presenter.NewCalendar(location, name);
+                TestDatabaseView databaseView = new TestDatabaseView();
+                //var presenter = new Presenter(databaseView);
             }
 
             [Fact]
