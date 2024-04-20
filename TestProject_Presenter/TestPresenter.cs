@@ -6,53 +6,102 @@ using System.Threading.Tasks;
 
 namespace TestProject_Presenter
 {
-    internal class TestPresenter
+    using HomeCalendarWPF;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using Calendar;
+
+    namespace TestProject_Presenter
     {
-        //RegisterWindow 
-        //Test MainViewInterface window
-        //Test CategoryView window
-        //Test ICreateEventViewInterface
 
+        public class TestHomeView : MainViewInterface
+        {
+            public bool calledCloseApplication = false;
+            public bool calledShowNoUpcomingEvents = false;
+            public bool calledShowRecentFiles = false;
+            public bool calledShowUpcomingEvents = false;
+            public int upcomingEventsCount = 0;
 
-        //NewCalendar
-        //Test creation with proper params
-        //Test to verify Home window is being displayed
+            public void CloseApplication()
+            {
+                calledCloseApplication = true;
+            }
 
+            public void ShowNoUpcomingEvents(string message)
+            {
+                calledShowNoUpcomingEvents = true;
+            }
 
-        //ExistingCalendar
-        //opening of the calendar
-        //Verify that Home window is being displayed
+            public void ShowRecentFiles()
+            {
+                calledShowRecentFiles = true;
+            }
 
+            public void ShowUpcomingEvents(List<string> upcomingEvents)
+            {
+                calledShowUpcomingEvents = true;
+                upcomingEventsCount = upcomingEvents.Count();
+            }
+        }
 
-        //GetUpcomingEvents
-        //no upcoming events
-        //with some upcoming events
-        //correct passing of events to mainview
+        public class TestAddCategoryView : CategoryView
+        {
+            public bool calledFillDropDown = false;
+            public bool calledShowSuccessPopup = false;
+            public bool calledShowWarningPopup = false;
+            public int dropDownListCount = 0;
+            public void FillDropDown(List<Category.CategoryType> types)
+            {
+                calledFillDropDown = true;
+                dropDownListCount = types.Count();
+            }
 
+            public void ShowSuccessPopup(string message)
+            {
+                calledShowSuccessPopup = true;
+            }
 
-        //PopulateCategoryDropdown
-        //ensure valid population of dropdown with categories
+            public void ShowWarning(string warning)
+            {
+                calledShowWarningPopup = true;
+            }
+        }
 
+        public class TestAddEventView : ICreateEventViewInterface
+        {
+            public bool calledAddCategoriesToDropdown = false;
+            public bool calledGetEventCategory = false;
+            public bool calledGetEventDetails = false;
+            public bool calledGetEventDurationInMinutes = false;
+            public bool calledGetEventStartTime = false;
+            public bool calledShowErrorPopup = false;
+            public bool calledShowSuccessPopup = false;
+            public int categoryDropdownCount = 0;
 
-        //ValidateEventFormAndCreate
-        //Test each params for valid creation
-        //No details 
-        //Invalid duration
-        //No start time 
-        //No category
-        //ensure a succesful event creation
-        //ensure failed creation due to invalid params^
+            public void AddCategoriesToDropdown(List<Category> categories)
+            {
+                calledAddCategoriesToDropdown = true;
+                categoryDropdownCount = categories.Count();
+            }
 
+            public void ShowErrorPopup(string message)
+            {
+                throw new NotImplementedException();
+            }
 
-        //PopulateCategoryTypesDropdown
-        //Ensure proper categroy types in dropdown.
+            public void ShowSuccessPopup(string message)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
+        public class UnitTests
+        {
 
-        //ValidateDetailsFormInputAndCreateCategory
-        //No details
-        //invalid type
-        //all valid types (4 of them iykyk)
-        //creation of category is successful
-        //ensuring the call to PopulateCategoryDropdown once created
+        }
     }
 }

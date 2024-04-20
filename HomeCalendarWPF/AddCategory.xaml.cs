@@ -40,7 +40,11 @@ namespace HomeCalendarWPF
 
         private void Btn_Cancel(object sender, RoutedEventArgs e)
         {
-            //close page
+            MessageBoxResult messageBoxResult = MessageBox.Show("You are about to cancel the addition of this category", "Home Calendar", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                this.Close();
+            }
         }
 
         public void FillDropDown(List<Category.CategoryType> types)

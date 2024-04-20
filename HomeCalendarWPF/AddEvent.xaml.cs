@@ -65,34 +65,6 @@ namespace HomeCalendarWPF
             this.Close();
 
         }
-
-
-        //Interface Implementation
-        public string GetEventDetails()
-        {
-            throw new NotImplementedException();
-        }
-
-        public DateTime GetEventStartTime()
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetEventDurationInMinutes()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetEventCategory()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddCategoriesToDropdown(string categoryName)
-        {
-            throw new NotImplementedException();
-        }
-
         public void AddCategoriesToDropdown(List<Category> categories)
         {
             categoryComboBox.ItemsSource = categories;

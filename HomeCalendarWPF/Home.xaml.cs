@@ -57,10 +57,6 @@ namespace HomeCalendarWPF
             Application.Current.Shutdown();
         }
 
-        void MainViewInterface.ShowRecentFiles()
-        {
-            throw new NotImplementedException();
-        }
         
         public void ShowUpcomingEvents(List<string> upcomingEvents)
         {
@@ -72,6 +68,10 @@ namespace HomeCalendarWPF
             UpcomingEventsStatus.Text = message;
         }
 
-        
+        //gonna assume this is optional? - wont worry about it
+        void MainViewInterface.ShowRecentFiles()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace HomeCalendarWPF
 {
     public interface CategoryView
     {
-        void ShowWarning(string warning);
+        public void ShowWarning(string warning);
 
-        void FillDropDown(List<Category.CategoryType> types);
+        public void FillDropDown(List<Category.CategoryType> types);
 
         public void ShowSuccessPopup(string message);
 

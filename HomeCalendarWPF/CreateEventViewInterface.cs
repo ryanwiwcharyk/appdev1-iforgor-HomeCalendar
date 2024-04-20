@@ -9,10 +9,6 @@ namespace HomeCalendarWPF
 {
     public interface ICreateEventViewInterface
     {
-        public string GetEventDetails();
-        public DateTime GetEventStartTime();
-        public double GetEventDurationInMinutes();
-        public int GetEventCategory();
         public void AddCategoriesToDropdown(List<Category> categories);
         public void ShowSuccessPopup(string message);
         public void ShowErrorPopup(string message);
