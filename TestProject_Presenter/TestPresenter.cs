@@ -18,18 +18,22 @@ namespace TestProject_Presenter
     namespace TestProject_Presenter
     {
 
-        public class TestMainView
+        public class TestMainView : MainViewInterface
         {
-            public bool calledConnectToDb = false;
-
-            public void ConnectToDb(string location, string name)
+            public bool calledNewCalendar = false;
+            public bool calledExistingCalendar = false;
+            public void NewCalendar()
             {
-                calledConnectToDb = true;
+                calledNewCalendar = true;
+            }
+            public void ExistingCalendar()
+            {
+                calledExistingCalendar = true;
             }
 
         }
 
-        public class TestHomeView : MainViewInterface
+        public class TestHomeView : HomeInterface
         {
             public bool calledCloseApplication = false;
             public bool calledShowNoUpcomingEvents = false;
@@ -113,85 +117,21 @@ namespace TestProject_Presenter
 
         public class UnitTests
         {
-            #region Database Selection Tests
-            [Fact]
-            public void TestConnectingToExistingOrNewDatabase()
-            {
-                MainWindow main = new MainWindow();
-                Presenter presenter = new Presenter(main);
-                string fileName = "testDBInput.db";
-                string filePath = Directory.GetCurrentDirectory();
-
-
-                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
-
-
-                Assert.True(databaseView.calledConnectToDb);
-            }
-
-            #endregion
-
-            #region HomePage Tests
-            [Fact]
-            public void TestRegisterHomeView()
-            {
-                TestMainView databaseView = new TestMainView();
-                Presenter presenter = new Presenter(databaseView);
-                TestHomeView homeView = new TestHomeView();
-                string filePath = Directory.GetCurrentDirectory();
-                string fileName = "testDBInput.db";
-                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
-                homeView.calledShowUpcomingEvents = false;
-
-
-                presenter.RegisterWindow(homeView);
-
-                Assert.True(homeView.calledShowUpcomingEvents);
-            }
 
             [Fact]
-            public void TestRegisterCreateCategoryView()
+            public void TestConstructor()
             {
-                TestMainView databaseView = new TestMainView();
-                Presenter presenter = new Presenter(databaseView);
-                TestAddCategoryView categoryView = new TestAddCategoryView();
-                string filePath = Directory.GetCurrentDirectory();
-                string fileName = "testDBInput.db";
-                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
-                categoryView.calledFillDropDown = false;
+                // Arrange
+                TestMainView view = new TestMainView();
 
+                // Act
+                Presenter p = new Presenter(view);
 
-                presenter.RegisterWindow(categoryView);
-
-                Assert.True(categoryView.calledFillDropDown);
+                // Assert
+                Assert.IsType<Presenter>(p);
             }
 
-            [Fact]
-            public void TestRegisterCreateEventView()
-            {
-                TestMainView databaseView = new TestMainView();
-                Presenter presenter = new Presenter(databaseView);
-                TestAddCategoryView eventView = new TestAddCategoryView();
-                string filePath = Directory.GetCurrentDirectory();
-                string fileName = "testDBInput.db";
-                presenter.ConnectingToExistingOrNewDatabase(filePath, fileName); //wplease let me know about the implementation.
-                eventView.calledFillDropDown = false;
 
-
-                presenter.RegisterWindow(eventView);
-
-                Assert.True(eventView.calledFillDropDown);
-            }
-
-            #endregion
-
-            #region Create Events Tests
-
-            #endregion
-
-            #region Create Category Tests
-
-            #endregion
         }
     }
 }

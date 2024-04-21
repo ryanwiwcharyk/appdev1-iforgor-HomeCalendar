@@ -21,7 +21,7 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, MainViewInterface
     {
         private readonly Presenter presenter;
 
@@ -33,19 +33,16 @@ namespace HomeCalendarWPF
 
         private void BtnClick_OpenFileExplorer(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            bool? success = openFileDialog.ShowDialog();
-
-            if (success == true)
-            {
-                string? filePath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
-                string? fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
-                presenter.ExistingCalendar(openFileDialog.FileName);
-                this.Close();
-            }
+            ExistingCalendar();
         }
 
         private void BtnClick_OpenFolderPicker(object sender, RoutedEventArgs e)
+        {
+            NewCalendar();
+
+
+        }
+        public void NewCalendar()
         {
             WinForms.FolderBrowserDialog folderBrowserDialog = new WinForms.FolderBrowserDialog();
             string name = newName.Text;
@@ -61,9 +58,20 @@ namespace HomeCalendarWPF
                 presenter.NewCalendar(folder, name);
                 this.Close();
             }
-           
-
-
         }
+        public void ExistingCalendar()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            bool? success = openFileDialog.ShowDialog();
+
+            if (success == true)
+            {
+                string? filePath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                string? fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
+                presenter.ExistingCalendar(openFileDialog.FileName);
+                this.Close();
+            }
+        }
+
     }
 }

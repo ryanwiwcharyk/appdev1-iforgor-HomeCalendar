@@ -1,5 +1,4 @@
-﻿using Calendar;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +8,7 @@ namespace HomeCalendarWPF
 {
     public interface MainViewInterface
     {
-        public void ShowRecentFiles();
-        public void ShowUpcomingEvents(List<string> upcomingEvents);
-        public void CloseApplication();
-        public void ShowNoUpcomingEvents(string message);
+        public void NewCalendar();
+        public void ExistingCalendar();
     }
 }

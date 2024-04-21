@@ -19,7 +19,7 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class Home : Window, MainViewInterface
+    public partial class Home : Window, HomeInterface
     {
         readonly Presenter _presenter;
         public Home(Presenter presenter)

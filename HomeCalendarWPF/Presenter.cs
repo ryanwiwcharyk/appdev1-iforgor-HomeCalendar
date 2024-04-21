@@ -20,17 +20,17 @@ namespace HomeCalendarWPF
 
         private ICreateEventViewInterface createEventView;
         private CategoryView createCategoryView;
+        private HomeInterface homeView;
         private MainViewInterface mainView;
-        private MainWindow mainWindow;
         private HomeCalendar model;
-        public Presenter(MainWindow window) //changed from MainWindow to DatabaseInterface, allowing for specific database selection in unit testing, lmkk
+        public Presenter(MainViewInterface window)
         {
-            mainWindow = window;
+            mainView = window;
         }
 
         #region Window Registration
 
-        public void RegisterWindow(ICreateEventViewInterface view) //overloaded register window instead, lmkk
+        public void RegisterWindow(ICreateEventViewInterface view)
         {
             createEventView = view;
         }
@@ -40,9 +40,9 @@ namespace HomeCalendarWPF
             createCategoryView = view;
         }
 
-        public void RegisterWindow(MainViewInterface view)
+        public void RegisterWindow(HomeInterface view)
         {
-            mainView = view;
+            homeView = view;
         }
         #endregion
 
@@ -75,9 +75,9 @@ namespace HomeCalendarWPF
                 names.Add($"{item.ShortDescription} - {item.StartDateTime}");
             }
             if (events.Count == 0)
-                mainView.ShowNoUpcomingEvents("There are no upcoming events");
+                homeView.ShowNoUpcomingEvents("There are no upcoming events");
             else
-                mainView.ShowUpcomingEvents(names);
+                homeView.ShowUpcomingEvents(names);
         }
 
         #endregion
