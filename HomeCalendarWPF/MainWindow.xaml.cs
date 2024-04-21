@@ -40,7 +40,6 @@ namespace HomeCalendarWPF
         {
             NewCalendar();
 
-
         }
         public void NewCalendar()
         {
