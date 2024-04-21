@@ -6,30 +6,38 @@
         xmlns:local="clr-namespace:HomeCalendarWPF"
         mc:Ignorable="d"
         Title="AddEvent" Height="450" Width="800">
+    <Window.FontFamily>
+        <FontFamily>Copperplate</FontFamily>
+    </Window.FontFamily>
     <StackPanel>
-        <TextBlock FontSize="30" Margin="5"> Create A New Event</TextBlock>
+        <StackPanel.Background>
+            <RadialGradientBrush>
+                <GradientStop Color="#f1f8ff" Offset="0"/>
+                <GradientStop Color="#a7bbcd" Offset="1.05"/>
+            </RadialGradientBrush>
+        </StackPanel.Background>
+        <TextBlock FontSize="30" Margin="5" FontStyle="Italic"  Foreground="#ecf6ff"> Create A New Event</TextBlock>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Details</Label>
             <TextBox Width="200" Margin="5" Name="eventDetails"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10" > Start Time </Label>
-            <DatePicker Name="datePicker"> </DatePicker>
+            <DatePicker Name="datePicker" BorderThickness="0" Margin="15"> </DatePicker>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Label FontSize="20" Margin="10"> Duration </Label>
-            <TextBox Width="200" Margin="5" Name="eventDuration"></TextBox>
+            <Label FontSize="20" Margin="10"> Duration (minutes) </Label>
+            <TextBox Width="70" Height="30" Margin="5" Name="eventDuration"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10">Category</Label>
             <ComboBox Name="categoryComboBox" Height="30" Width="auto" Text="Select Category" BorderThickness="2" BorderBrush="Black" IsEditable="True"/>
-            <Button Content="Add New Category" Margin="20" FontSize="15" Padding="5"  Click="BtnClick_AddCategory" ></Button>
+            <Button Background="#9fcfec" BorderThickness="0"   Content="Add New Category" Margin="20" FontSize="15" Padding="5"  Click="BtnClick_AddCategory" ></Button>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <Button Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left" Click="BtnClick_CreateEvent"></Button>
-            <Button Content="Cancel event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Left" Click="BtnClick_CancelEvent"></Button>
-
+            <Button Background="#e0ffde" BorderThickness="0"  Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_CreateEvent"></Button>
+            <Button Background="#ffdede"  BorderThickness="0" Content="Cancel event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_CancelEvent"></Button>
         </StackPanel>
         
     </StackPanel>
