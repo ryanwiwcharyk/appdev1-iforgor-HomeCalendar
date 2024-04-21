@@ -18,7 +18,7 @@ namespace TestProject_Presenter
     namespace TestProject_Presenter
     {
 
-        public class TestDatabaseView : DatabaseViewInterface
+        public class TestMainView
         {
             public bool calledConnectToDb = false;
 
@@ -117,8 +117,8 @@ namespace TestProject_Presenter
             [Fact]
             public void TestConnectingToExistingOrNewDatabase()
             {
-                TestDatabaseView databaseView = new TestDatabaseView();
-                Presenter presenter = new Presenter(databaseView);
+                MainWindow main = new MainWindow();
+                Presenter presenter = new Presenter(main);
                 string fileName = "testDBInput.db";
                 string filePath = Directory.GetCurrentDirectory();
 
@@ -135,7 +135,7 @@ namespace TestProject_Presenter
             [Fact]
             public void TestRegisterHomeView()
             {
-                TestDatabaseView databaseView = new TestDatabaseView();
+                TestMainView databaseView = new TestMainView();
                 Presenter presenter = new Presenter(databaseView);
                 TestHomeView homeView = new TestHomeView();
                 string filePath = Directory.GetCurrentDirectory();
@@ -152,7 +152,7 @@ namespace TestProject_Presenter
             [Fact]
             public void TestRegisterCreateCategoryView()
             {
-                TestDatabaseView databaseView = new TestDatabaseView();
+                TestMainView databaseView = new TestMainView();
                 Presenter presenter = new Presenter(databaseView);
                 TestAddCategoryView categoryView = new TestAddCategoryView();
                 string filePath = Directory.GetCurrentDirectory();
@@ -169,7 +169,7 @@ namespace TestProject_Presenter
             [Fact]
             public void TestRegisterCreateEventView()
             {
-                TestDatabaseView databaseView = new TestDatabaseView();
+                TestMainView databaseView = new TestMainView();
                 Presenter presenter = new Presenter(databaseView);
                 TestAddCategoryView eventView = new TestAddCategoryView();
                 string filePath = Directory.GetCurrentDirectory();

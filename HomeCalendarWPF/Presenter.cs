@@ -21,11 +21,11 @@ namespace HomeCalendarWPF
         private ICreateEventViewInterface createEventView;
         private CategoryView createCategoryView;
         private MainViewInterface mainView;
-        private readonly DatabaseViewInterface welcomeWindow;
+        private MainWindow mainWindow;
         private HomeCalendar model;
-        public Presenter(DatabaseViewInterface window) //changed from MainWindow to DatabaseInterface, allowing for specific database selection in unit testing, lmkk
+        public Presenter(MainWindow window) //changed from MainWindow to DatabaseInterface, allowing for specific database selection in unit testing, lmkk
         {
-            welcomeWindow = window;
+            mainWindow = window;
         }
 
         #region Window Registration
