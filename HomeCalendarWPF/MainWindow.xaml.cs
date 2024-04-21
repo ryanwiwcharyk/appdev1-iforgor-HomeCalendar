@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
+using WinForms = System.Windows.Forms;
 
 namespace HomeCalendarWPF
 {
@@ -27,27 +30,44 @@ namespace HomeCalendarWPF
             InitializeComponent();
             presenter = new Presenter(this);
         }
-        private void Btn_Click_NewCalendar(object sender, RoutedEventArgs e)
-        {
-            string location = newLocation.Text ;
-            string name = newName.Text ;
-            this.Hide();
-            ConnectToDb(location, name);
-
-
-        }
-        private void Btn_Click_ExistingCalendar(object sender, RoutedEventArgs e)
-        {
-            string location = existingLocation.Text;
-            string name = "";
-            this.Hide();
-            ConnectToDb(location, name);
-        }
-
         public void ConnectToDb(string location, string name)
         {
             presenter.ConnectingToExistingOrNewDatabase(location, name); //new method I created, may need extra error handling
         }
 
+        private void BtnClick_OpenFileExplorer(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            bool? success = openFileDialog.ShowDialog();
+
+            if (success == true)
+            {
+                string? filePath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
+                string? fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
+                ConnectToDb(filePath, fileName);
+                this.Close();
+            }
+        }
+
+        private void BtnClick_OpenFolderPicker(object sender, RoutedEventArgs e)
+        {
+            WinForms.FolderBrowserDialog folderBrowserDialog = new WinForms.FolderBrowserDialog();
+            string name = newName.Text;
+            folderBrowserDialog.InitialDirectory = $"{System.Environment.SpecialFolder.MyDocuments.ToString()}";
+            WinForms.DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == WinForms.DialogResult.OK)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    name = "newCalendar";
+                }
+                string folder = folderBrowserDialog.SelectedPath;
+                ConnectToDb(folder, name);
+                this.Close();
+            }
+           
+
+
+        }
     }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Home" Height="500" Width="800">
     <StackPanel Margin="10">
-        <TextBlock Margin="10" Text="Welcome To 'X' Calendar" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" FontWeight="DemiBold"></TextBlock>
+        <TextBlock Margin="10" Text="Welcome To Calendar" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="25" FontWeight="DemiBold"></TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
