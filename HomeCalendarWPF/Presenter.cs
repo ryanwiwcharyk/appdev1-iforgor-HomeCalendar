@@ -29,21 +29,6 @@ namespace HomeCalendarWPF
         }
 
         #region Window Registration
-        //public void RegisterWindow(Window window)
-        //{
-        //    if (window is MainViewInterface)
-        //        mainView = window as MainViewInterface;
-        //    else if (window is CategoryView)
-        //    {
-
-        //        createCategoryView = window as CategoryView;
-
-        //    }
-        //    else if (window is ICreateEventViewInterface)
-        //        createEventView = window as ICreateEventViewInterface;
-        //    else
-        //        throw new Exception($"{window} was not able to be cast as a valid window type.");
-        //}
 
         public void RegisterWindow(ICreateEventViewInterface view) //overloaded register window instead, lmkk
         {
@@ -63,36 +48,19 @@ namespace HomeCalendarWPF
 
         #region Welcome Page
 
-        public void ConnectingToExistingOrNewDatabase(string location, string name) //new method created to dinstinguish between existing or new without a bool required, lmkk
+        public void NewCalendar(string location, string name)
         {
-            if(string.IsNullOrEmpty(name))
-            {
-                model = new HomeCalendar($"{location}");
-                Home home = new Home(this);
-                home.Show();
-            }
-            else
-            {
-                model = new HomeCalendar($"{location}\\{name}", true);
-                Home home = new Home(this);
-                home.Show();
-            }
-
+            model = new HomeCalendar($"{location}\\{name}", true);
+            Home home = new Home(this);
+            home.Show();
         }
 
-        //public void NewCalendar(string location, string name)
-        //{
-        //    model = new HomeCalendar($"{location}\\{name}", true);
-        //    Home home = new Home(this);
-        //    home.Show();
-        //}
-
-        //public void ExistingCalendar(string location)
-        //{
-        //    model = new HomeCalendar($"{location}");
-        //    Home home = new Home(this);
-        //    home.Show();
-        //}
+        public void ExistingCalendar(string location)
+        {
+            model = new HomeCalendar($"{location}");
+            Home home = new Home(this);
+            home.Show();
+        }
 
         #endregion
 

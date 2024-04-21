@@ -30,10 +30,6 @@ namespace HomeCalendarWPF
             InitializeComponent();
             presenter = new Presenter(this);
         }
-        public void ConnectToDb(string location, string name)
-        {
-            presenter.ConnectingToExistingOrNewDatabase(location, name); //new method I created, may need extra error handling
-        }
 
         private void BtnClick_OpenFileExplorer(object sender, RoutedEventArgs e)
         {
@@ -44,7 +40,7 @@ namespace HomeCalendarWPF
             {
                 string? filePath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
                 string? fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
-                ConnectToDb(filePath, fileName);
+                presenter.ExistingCalendar(openFileDialog.FileName);
                 this.Close();
             }
         }
@@ -62,7 +58,7 @@ namespace HomeCalendarWPF
                     name = "newCalendar";
                 }
                 string folder = folderBrowserDialog.SelectedPath;
-                ConnectToDb(folder, name);
+                presenter.NewCalendar(folder, name);
                 this.Close();
             }
            
