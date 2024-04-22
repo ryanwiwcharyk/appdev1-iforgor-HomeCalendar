@@ -108,7 +108,7 @@ namespace TestProject_Presenter
         public class UnitTests
         {
 
-            [Fact]
+            [StaFact]
             public void TestConstructor()
             {
                 // Arrange
@@ -121,7 +121,7 @@ namespace TestProject_Presenter
                 Assert.IsType<Presenter>(p);
             }
 
-            [Fact]
+            [StaFact]
             public void ConstructorRegistersWelcomeWindow()
             {
                 TestMainView view = new TestMainView();
@@ -131,7 +131,7 @@ namespace TestProject_Presenter
                 Assert.NotNull(p.MainViewInterface);
             }
 
-            [Fact]
+            [StaFact]
             public void RegisterEventWindow()
             {
                 TestAddEventView testAddEventView = new TestAddEventView();
@@ -145,7 +145,7 @@ namespace TestProject_Presenter
 
             }
 
-            [Fact]
+            [StaFact]
             public void RegisterHomeWindow()
             {
                 TestMainView view = new TestMainView();
@@ -157,7 +157,7 @@ namespace TestProject_Presenter
                 Assert.NotNull(p.HomeInterface);
             }
 
-            [Fact]
+            [StaFact]
             public void RegisterCategoryWindow()
             {
                 TestMainView view = new TestMainView();
@@ -169,13 +169,14 @@ namespace TestProject_Presenter
                 Assert.NotNull(p.CategoryView);
             }
 
-            [Fact]
+            [StaFact]
             public void NewCalendarCreatesEmptyCalendar()
             {
                 TestMainView view = new TestMainView();
                 Presenter p = new Presenter(view);
                 TestHomeView testHomeView = new TestHomeView();
                 p.RegisterWindow(testHomeView);
+                
 
                 string path = Directory.GetCurrentDirectory();
                 string name = "testNewCalendar";
@@ -187,13 +188,16 @@ namespace TestProject_Presenter
 
             }
 
-            [Fact]
+            [StaFact]
             public void ExistingCalendarIsOpenedAndShowsUpcomingEvents()
             {
                 TestMainView view = new TestMainView();
                 Presenter p = new Presenter(view);
                 TestHomeView testHomeView = new TestHomeView();
+                TestAddEventView addEventView = new TestAddEventView();
+
                 p.RegisterWindow(testHomeView);
+                p.RegisterWindow(addEventView);
                 string path = Directory.GetCurrentDirectory();
                 string name = "testNewCalendar";
                 string details = "new event";
@@ -210,7 +214,7 @@ namespace TestProject_Presenter
                 Assert.True(testHomeView.upcomingEventsCount == 1);
 
             }
-            [Fact]
+            [StaFact]
             public void TestPopulateCategoryDropdown()
             {
                 TestMainView view = new TestMainView();
@@ -229,7 +233,7 @@ namespace TestProject_Presenter
 
             }
 
-            [Fact]
+            [StaFact]
             public void TestCreateInputNoDetailsProvided()
             {
                 TestMainView view = new TestMainView();
@@ -242,14 +246,15 @@ namespace TestProject_Presenter
                 string details = "";
                 string duration = "30";
                 DateTime startTime = DateTime.Now;
-                string cat = "AllDayEvent";
+                string cat = "Sleep";
                 testAddEventView.calledShowErrorPopup = false;
+
                 p.ValidateEventFormInputAndCreate(details,duration, startTime, cat);
 
                 Assert.True(testAddEventView.calledShowErrorPopup);
             }
 
-            [Fact]
+            [StaFact]
             public void TestCreateInputInvalidDurationProvided()
             {
                 TestMainView view = new TestMainView();
@@ -262,14 +267,15 @@ namespace TestProject_Presenter
                 string details = "wowie";
                 string duration = "duration";
                 DateTime startTime = DateTime.Now;
-                string cat = "AllDayEvent";
+                string cat = "Sleep";
                 testAddEventView.calledShowErrorPopup = false;
+
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
 
                 Assert.True(testAddEventView.calledShowErrorPopup);
             }
 
-            [Fact]
+            [StaFact]
             public void TestCreateInputNegativeDurationProvided() 
             {
                 TestMainView view = new TestMainView();
@@ -282,14 +288,15 @@ namespace TestProject_Presenter
                 string details = "wowie";
                 string duration = "-30";
                 DateTime startTime = DateTime.Now;
-                string cat = "AllDayEvent";
+                string cat = "Sleep";
                 testAddEventView.calledShowErrorPopup = false;
+
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
 
                 Assert.True(testAddEventView.calledShowErrorPopup);
             }
 
-            [Fact]
+            [StaFact]
             public void TestCreateInputNoStartTimeProvided()
             {
                 TestMainView view = new TestMainView();
@@ -302,14 +309,15 @@ namespace TestProject_Presenter
                 string details = "wowie";
                 string duration = "30";
                 DateTime? startTime = null;
-                string cat = "AllDayEvent";
+                string cat = "Sleep";
                 testAddEventView.calledShowErrorPopup = false;
+
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
 
                 Assert.True(testAddEventView.calledShowErrorPopup);
             }
 
-            [Fact]
+            [StaFact]
             public void TestCreateInputNoCategorySelected()
             {
                 TestMainView view = new TestMainView();
@@ -324,10 +332,33 @@ namespace TestProject_Presenter
                 DateTime? startTime = DateTime.Now;
                 string? cat = null;
                 testAddEventView.calledShowErrorPopup = false;
+
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
 
                 Assert.True(testAddEventView.calledShowErrorPopup);
             }
+
+            [StaFact]
+            public void TestCreateInputAllDataValid()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestAddEventView testAddEventView = new TestAddEventView();
+                p.RegisterWindow(testAddEventView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                p.NewCalendar(path, name);
+                string details = "wowie";
+                string duration = "30";
+                DateTime? startTime = DateTime.Now;
+                string? cat = "Sleep";
+                testAddEventView.calledShowSuccessPopup = false;
+
+                p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
+
+                Assert.True(testAddEventView.calledShowSuccessPopup);
+            }
+
 
 
 

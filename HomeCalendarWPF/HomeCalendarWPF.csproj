@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+    <PackageReference Include="Xunit.StaFact" Version="1.1.11" />
   </ItemGroup>
 
   <ItemGroup>
