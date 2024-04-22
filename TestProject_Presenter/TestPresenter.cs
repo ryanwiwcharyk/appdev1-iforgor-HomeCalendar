@@ -174,17 +174,17 @@ namespace TestProject_Presenter
             {
                 TestMainView view = new TestMainView();
                 Presenter p = new Presenter(view);
-                TestHomeView testHomeView = new TestHomeView();
-                p.RegisterWindow(testHomeView);
-                
-
                 string path = Directory.GetCurrentDirectory();
                 string name = "testNewCalendar";
-                testHomeView.calledShowNoUpcomingEvents = false;
                 p.NewCalendar(path, name);
-                
-                Assert.True(testHomeView.calledShowNoUpcomingEvents);
+                TestHomeView testHomeView = new TestHomeView();
+                p.RegisterWindow(testHomeView);
+                testHomeView.calledShowNoUpcomingEvents = false;
+
+                p.GetUpcomingEvents();
+
                 Assert.True(testHomeView.upcomingEventsCount == 0);
+                Assert.True(testHomeView.calledShowNoUpcomingEvents);
 
             }
 
@@ -193,10 +193,7 @@ namespace TestProject_Presenter
             {
                 TestMainView view = new TestMainView();
                 Presenter p = new Presenter(view);
-                TestHomeView testHomeView = new TestHomeView();
                 TestAddEventView addEventView = new TestAddEventView();
-
-                p.RegisterWindow(testHomeView);
                 p.RegisterWindow(addEventView);
                 string path = Directory.GetCurrentDirectory();
                 string name = "testNewCalendar";
@@ -206,12 +203,16 @@ namespace TestProject_Presenter
                 string cat = "AllDayEvent";
                 p.NewCalendar(path, name);
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
+
+                p.ExistingCalendar($"{Directory.GetCurrentDirectory()}\\{name}");
+                TestHomeView testHomeView = new TestHomeView();
+                p.RegisterWindow(testHomeView);
                 testHomeView.calledShowUpcomingEvents = false;
 
-                p.ExistingCalendar(Directory.GetCurrentDirectory());
+                p.GetUpcomingEvents();
 
-                Assert.True(testHomeView.calledShowUpcomingEvents);
                 Assert.True(testHomeView.upcomingEventsCount == 1);
+                Assert.True(testHomeView.calledShowUpcomingEvents);
 
             }
             [StaFact]
