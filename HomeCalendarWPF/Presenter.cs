@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Calendar;
+[assembly: InternalsVisibleTo("TestProject_Presenter")]
 
 
 namespace HomeCalendarWPF
@@ -30,13 +32,13 @@ namespace HomeCalendarWPF
 
         #region Properties
 
-        public MainViewInterface MainViewInterface { get { return mainView; } }
+        internal MainViewInterface MainViewInterface { get { return mainView; } }
 
-        public HomeInterface HomeInterface { get { return homeView; } }
+        internal HomeInterface HomeInterface { get { return homeView; } }
 
-        public ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
+        internal ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
 
-        public CategoryView CategoryView { get {  return createCategoryView; } }    
+        internal CategoryView CategoryView { get {  return createCategoryView; } }    
 
 
         #endregion
