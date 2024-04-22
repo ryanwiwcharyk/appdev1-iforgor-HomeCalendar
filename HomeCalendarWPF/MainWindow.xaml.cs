@@ -12,65 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
-using System.IO;
-using WinForms = System.Windows.Forms;
 
 namespace HomeCalendarWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, MainViewInterface
+    public partial class MainWindow : Window, ViewInterface
     {
         private readonly Presenter presenter;
-
         public MainWindow()
         {
             InitializeComponent();
             presenter = new Presenter(this);
         }
-
-        private void BtnClick_OpenFileExplorer(object sender, RoutedEventArgs e)
+        private void Btn_Click_NewCalendar(object sender, RoutedEventArgs e)
         {
-            ExistingCalendar();
-        }
-
-        private void BtnClick_OpenFolderPicker(object sender, RoutedEventArgs e)
-        {
-            NewCalendar();
+            string location = newLocation.Text ;
+            string name = newName.Text ;
+            this.Close();
+            presenter.NewCalendar(location,name);
 
         }
-        public void NewCalendar()
+        private void Btn_Click_ExistingCalendar(object sender, RoutedEventArgs e)
         {
-            WinForms.FolderBrowserDialog folderBrowserDialog = new WinForms.FolderBrowserDialog();
-            string name = newName.Text;
-            folderBrowserDialog.InitialDirectory = $"{System.Environment.SpecialFolder.MyDocuments.ToString()}";
-            WinForms.DialogResult result = folderBrowserDialog.ShowDialog();
-            if (result == WinForms.DialogResult.OK)
-            {
-                if (string.IsNullOrEmpty(name))
-                {
-                    name = "newCalendar";
-                }
-                string folder = folderBrowserDialog.SelectedPath;
-                presenter.NewCalendar(folder, name);
-                this.Close();
-            }
+            string location = newLocation.Text;
+            this.Close();
+            presenter.ExistingCalendar(location);
         }
-        public void ExistingCalendar()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            bool? success = openFileDialog.ShowDialog();
-
-            if (success == true)
-            {
-                string? filePath = System.IO.Path.GetDirectoryName(openFileDialog.FileName);
-                string? fileName = System.IO.Path.GetFileName(openFileDialog.FileName);
-                presenter.ExistingCalendar(openFileDialog.FileName);
-                this.Close();
-            }
-        }
-
     }
 }

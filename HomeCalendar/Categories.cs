@@ -147,7 +147,6 @@ namespace Calendar
 
             cmd.CommandText = "DELETE FROM categoryTypes";
             cmd.ExecuteNonQuery();
-//perchance
             Category.CategoryType[] catTypes = (Category.CategoryType[])Enum.GetValues(typeof(Category.CategoryType));
             foreach (Category.CategoryType catType in catTypes)
             {

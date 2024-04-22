@@ -1,5 +1,4 @@
-﻿using Calendar;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,50 +17,11 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for AddCategory.xaml
     /// </summary>
-
-
-    public partial class AddCategory : Window, CategoryView
+    public partial class AddCategory : Window
     {
-        private readonly Presenter _presenter;
-        private readonly HomeCalendar _model;
-
-        public AddCategory(Presenter presenter)
+        public AddCategory()
         {
             InitializeComponent();
-            _presenter = presenter;
-            _presenter.RegisterWindow(this);
-            _presenter.PopulateCategoryTypesDropdown();
-        }
-
-        private void Btn_Add(object sender, RoutedEventArgs e)
-        {
-           _presenter.ValidateDetailsFormInputAndCreateCategory(Details.Text, categoryTypeComboBox.Text);
-        }
-
-        private void Btn_Cancel(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult messageBoxResult = MessageBox.Show("You are about to cancel the addition of this category", "Home Calendar", MessageBoxButton.YesNo);
-            if (messageBoxResult == MessageBoxResult.Yes)
-            {
-                this.Close();
-            }
-        }
-
-        public void FillDropDown(List<Category.CategoryType> types)
-        {
-
-            categoryTypeComboBox.ItemsSource = types;
-        }
-
-        public void ShowSuccessPopup(string message)
-        {
-            MessageBox.Show(message, "Home Calendar");
-            this.Close();
-        }
-
-        public void ShowWarning(string warning)
-        {
-            MessageBox.Show(warning);
         }
     }
 }
