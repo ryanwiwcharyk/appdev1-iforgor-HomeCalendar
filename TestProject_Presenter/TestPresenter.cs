@@ -108,18 +108,18 @@ namespace TestProject_Presenter
         public class UnitTests
         {
 
+            // Testing constructor
             [StaFact]
             public void TestConstructor()
             {
-                // Arrange
                 TestMainView view = new TestMainView();
 
-                // Act
                 Presenter p = new Presenter(view);
 
-                // Assert
                 Assert.IsType<Presenter>(p);
             }
+
+            // Testing Window registration
 
             [StaFact]
             public void ConstructorRegistersWelcomeWindow()
@@ -169,6 +169,8 @@ namespace TestProject_Presenter
                 Assert.NotNull(p.CategoryView);
             }
 
+            // Testing Home window
+
             [StaFact]
             public void NewCalendarCreatesEmptyCalendar()
             {
@@ -179,15 +181,44 @@ namespace TestProject_Presenter
                 p.NewCalendar(path, name);
                 TestHomeView testHomeView = new TestHomeView();
                 p.RegisterWindow(testHomeView);
-                testHomeView.calledShowNoUpcomingEvents = false;
 
+                testHomeView.calledShowNoUpcomingEvents = false;
                 p.GetUpcomingEvents();
 
                 Assert.True(testHomeView.upcomingEventsCount == 0);
                 Assert.True(testHomeView.calledShowNoUpcomingEvents);
 
             }
+            [StaFact]
+            public void NewCalendarNewEventUpcomingEventsUpdates()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestHomeView testHomeView = new TestHomeView();
+                TestAddEventView testAddEventView = new TestAddEventView();
 
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                string details = "wowie";
+                string duration = "30";
+                DateTime startTime = DateTime.Now;
+                string cat = "Sleep";
+
+                p.NewCalendar(path, name);
+                p.RegisterWindow(testAddEventView);
+                p.RegisterWindow(testHomeView);
+
+                testHomeView.upcomingEventsCount = 0;
+                testHomeView.calledShowUpcomingEvents = false;
+
+                p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
+
+                Assert.Equal(1, testHomeView.upcomingEventsCount);
+                Assert.True(testHomeView.calledShowUpcomingEvents);
+
+            }
+
+            // Testing Event window
             [StaFact]
             public void ExistingCalendarIsOpenedAndShowsUpcomingEvents()
             {
@@ -360,10 +391,109 @@ namespace TestProject_Presenter
                 Assert.True(testAddEventView.calledShowSuccessPopup);
             }
 
+            // Testing Category window
+
+            [StaFact]
+            public void CategoryTypeDropDown_GetsFilled()
+            {
+                const int CATEGORY_TYPES_NB = 4;
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestAddCategoryView addCategoryView = new TestAddCategoryView();
+                p.RegisterWindow(addCategoryView);
+                p.PopulateCategoryTypesDropdown();
+
+                Assert.True(addCategoryView.calledFillDropDown);
+                Assert.Equal(CATEGORY_TYPES_NB, addCategoryView.dropDownListCount);
+
+
+            }
+            [StaFact]
+            public void TestCreateCategoryNoDetailsProvided()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestAddCategoryView testAddCategoryView = new TestAddCategoryView();
+                p.RegisterWindow(testAddCategoryView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                p.NewCalendar(path, name); 
+                string details = "";
+                string type = "AllDayEvent";
+
+                testAddCategoryView.calledShowWarningPopup = false;
+
+                p.ValidateDetailsFormInputAndCreateCategory(details, type);
+
+                Assert.True(testAddCategoryView.calledShowWarningPopup);
+            }
+            [StaFact]
+            public void TestCreateCategoryUnvalidCategoryTypeProvided()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestAddCategoryView testAddCategoryView = new TestAddCategoryView();
+                p.RegisterWindow(testAddCategoryView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                p.NewCalendar(path, name); ;
+                string details = "details";
+                string type = "UnvalidType";
+
+                testAddCategoryView.calledShowWarningPopup = false;
+
+                p.ValidateDetailsFormInputAndCreateCategory(details, type);
+
+                Assert.True(testAddCategoryView.calledShowWarningPopup);
+            }
+            [StaFact]
+            public void TestCreateCategoryAllValidProvided()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestAddCategoryView testAddCategoryView = new TestAddCategoryView();
+                p.RegisterWindow(testAddCategoryView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                p.NewCalendar(path, name); ;
+                string details = "details";
+                string type = "AllDayEvent";
+
+                testAddCategoryView.calledShowSuccessPopup = false;
+
+                p.ValidateDetailsFormInputAndCreateCategory(details, type);
+
+                Assert.True(testAddCategoryView.calledShowSuccessPopup);
+            }
+            [StaFact]
+            public void TestCreateCategoryAndCreateEventWithCategory()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestAddCategoryView testAddCategoryView = new TestAddCategoryView();
+                TestAddEventView testAddEventView = new TestAddEventView();
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                string details = "Tutoring";
+                string type = "AllDayEvent";
+                string eventDetails = "Tutoring Prog";
+                string duration = "30";
+                DateTime startTime = DateTime.Now;
+                string cat = "Tutoring";
+
+                p.RegisterWindow(testAddCategoryView);
+                p.RegisterWindow(testAddEventView);
+                p.NewCalendar(path, name);
+                p.ValidateDetailsFormInputAndCreateCategory(details, type);
+                testAddEventView.calledShowSuccessPopup = false;
+                p.ValidateEventFormInputAndCreate(eventDetails, duration, startTime, cat);
+
+                Assert.True(testAddEventView.calledShowSuccessPopup);
+            }
 
 
 
-            
+
 
         }
     }
