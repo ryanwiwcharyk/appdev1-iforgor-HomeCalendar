@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace HomeCalendarWPF
 {
-    public interface ICreateEventViewInterface
+    public interface CategoryView
     {
-        public void AddCategoriesToDropdown(List<Category> categories);
+        public void ShowWarning(string warning);
+
+        public void FillDropDown(List<Category.CategoryType> types);
+
         public void ShowSuccessPopup(string message);
-        public void ShowErrorPopup(string message);
+
+
+
+
     }
 }
