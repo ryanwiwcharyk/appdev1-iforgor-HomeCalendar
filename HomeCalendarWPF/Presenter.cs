@@ -205,6 +205,10 @@ namespace HomeCalendarWPF
             {
                 createCategoryView.ShowSuccessPopup("New category was successfully created.");
                 model.categories.Add(details, (Category.CategoryType)typeAsNumber);
+                if (createCategoryView != null)
+                {
+                    PopulateCategoryDropdown();
+                }
             }
 
             
