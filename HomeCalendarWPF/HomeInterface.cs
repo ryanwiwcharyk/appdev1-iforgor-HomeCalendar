@@ -10,7 +10,6 @@ namespace HomeCalendarWPF
     public interface HomeInterface
     {
         public void ShowUpcomingEvents(List<string> upcomingEvents);
-        public void CloseApplication();
         public void ShowNoUpcomingEvents(string message);
     }
 }

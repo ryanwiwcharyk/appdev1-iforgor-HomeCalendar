@@ -28,6 +28,19 @@ namespace HomeCalendarWPF
             mainView = window;
         }
 
+        #region Properties
+
+        public MainViewInterface MainViewInterface { get { return mainView; } }
+
+        public HomeInterface HomeInterface { get { return homeView; } }
+
+        public ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
+
+        public CategoryView CategoryView { get {  return createCategoryView; } }    
+
+
+        #endregion
+
         #region Window Registration
 
         public void RegisterWindow(ICreateEventViewInterface view)
@@ -126,7 +139,7 @@ namespace HomeCalendarWPF
                 }
                 else
                 {
-                    createEventView.ShowErrorPopup("Event couldn't be created. Please double check your input.");
+                    createEventView.ShowErrorPopup("The selected category could not be found.");
                 }
 
             }

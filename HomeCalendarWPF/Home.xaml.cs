@@ -45,14 +45,10 @@ namespace HomeCalendarWPF
 
         private void BtnClick_CloseApplication(object sender, RoutedEventArgs e)
         {
-            CloseApplication();
+            Application.Current.Shutdown();
         }
 
         // Interface implementation
-        public void CloseApplication()
-        {
-            Application.Current.Shutdown();
-        }
 
         public void ShowUpcomingEvents(List<string> upcomingEvents)
         {
