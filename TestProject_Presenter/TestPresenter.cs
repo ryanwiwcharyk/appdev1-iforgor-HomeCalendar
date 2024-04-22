@@ -200,11 +200,11 @@ namespace TestProject_Presenter
                 string details = "new event";
                 string duration = "30";
                 DateTime startTime = DateTime.Now;
-                string cat = "AllDayEvent";
+                string cat = "School";
                 p.NewCalendar(path, name);
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, cat);
 
-                p.ExistingCalendar($"{Directory.GetCurrentDirectory()}\\{name}");
+                p.ExistingCalendar($"{path}\\{name}");
                 TestHomeView testHomeView = new TestHomeView();
                 p.RegisterWindow(testHomeView);
                 testHomeView.calledShowUpcomingEvents = false;
