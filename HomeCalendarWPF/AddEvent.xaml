@@ -16,7 +16,7 @@
                 <GradientStop Color="#a7bbcd" Offset="1.05"/>
             </RadialGradientBrush>
         </StackPanel.Background>
-        <TextBlock FontSize="30" Margin="5" FontStyle="Italic"  Foreground="#ecf6ff"> Create A New Event</TextBlock>
+        <TextBlock FontSize="30" Margin="5" FontStyle="Italic" HorizontalAlignment="Center" Foreground="#ecf6ff"> Create A New Event</TextBlock>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Details</Label>
             <TextBox Width="200" Margin="5" Name="eventDetails"></TextBox>
