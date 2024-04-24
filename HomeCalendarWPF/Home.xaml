@@ -30,7 +30,7 @@
             </Grid.RowDefinitions>
 
 
-            <ListBox Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents"/>
+            <DataGrid Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents"/>
 
 
             <GroupBox Header="Filter" Grid.Column="1" Grid.Row="0" Grid.RowSpan="1" Margin="10">
