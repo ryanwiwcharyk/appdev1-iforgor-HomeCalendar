@@ -216,8 +216,7 @@ namespace HomeCalendarWPF
             
         }
 
-       
-
+      
         #endregion
     }
 }

@@ -52,12 +52,11 @@ namespace HomeCalendarWPF
 
         public void ShowUpcomingEvents(List<string> upcomingEvents)
         {
-            UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
         public void ShowNoUpcomingEvents(string message)
         {
-            UpcomingEventsStatus.Text = message;
+            
         }
 
         //gonna assume this is optional? - wont worry about it
