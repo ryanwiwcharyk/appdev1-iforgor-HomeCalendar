@@ -127,7 +127,9 @@ namespace HomeCalendarWPF
 
                 List<CalendarItemsByCategory> updatedList = new List<CalendarItemsByCategory> ();
 
-                updatedList = model.GetCalendarItemsByCategory(filterFlag, selectedCategory); //why is this bugging out, am I slow??
+                updatedList = model.GetCalendarItemsByCategory(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
+
+                //now with updatedList i need to modify the
             }
         }
 
