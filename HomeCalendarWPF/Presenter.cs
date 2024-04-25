@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -28,6 +29,19 @@ namespace HomeCalendarWPF
         public Presenter(MainViewInterface window)
         {
             mainView = window;
+        }
+
+        private List<Category> GetCategoryList()
+        {
+            Categories categories = model.categories;
+            return categories.List();
+        }
+
+        private string FindCategoryNameById(int id)
+        {
+            List<Category> cats = GetCategoryList();
+            Category cat = cats.Find(x => x.Id == id);
+            return cat.Description;
         }
 
         #region Properties
@@ -85,6 +99,7 @@ namespace HomeCalendarWPF
         {
             const int weekInAdvance = 7;
             List<CalendarItem> events = model.GetCalendarItems(null, DateTime.Now.AddDays(weekInAdvance), false, 0);
+            //ObservableCollection<CalendarItem> events2 = new ObservableCollection<CalendarItem>(events);
             List<string> names = new List<string>();
             foreach (CalendarItem item in events)
             {
@@ -93,7 +108,13 @@ namespace HomeCalendarWPF
             if (events.Count == 0)
                 homeView.ShowNoUpcomingEvents("There are no upcoming events");
             else
-                homeView.ShowUpcomingEvents(names);
+                homeView.ShowUpcomingEvents(events);
+        }
+
+        public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate)
+        {
+            List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, false, 0);
+            homeView.ShowUpcomingEvents(ci);
         }
 
         #endregion
@@ -101,8 +122,7 @@ namespace HomeCalendarWPF
         #region Create Events
         public void PopulateCategoryDropdown()
         {
-            Categories categories = model.categories;
-            List<Category> categoryList = categories.List();
+            List<Category> categoryList = GetCategoryList();
             createEventView.AddCategoriesToDropdown(categoryList);
         }
 
