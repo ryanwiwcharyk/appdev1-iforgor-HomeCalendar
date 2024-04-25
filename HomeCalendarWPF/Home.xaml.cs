@@ -61,8 +61,9 @@ namespace HomeCalendarWPF
 
         // Interface implementation
 
-        public void ShowUpcomingEvents(List<string> upcomingEvents)
+        public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
+            UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
         public void ShowNoUpcomingEvents(string message)
@@ -72,6 +73,21 @@ namespace HomeCalendarWPF
 
         //gonna assume this is optional? - wont worry about it
         public void ShowRecentFiles()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HomeInterface.ShowEventsByCategory()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HomeInterface.ShowEventsByMonth()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HomeInterface.ShowEventsByMonthAndCategory()
         {
             throw new NotImplementedException();
         }

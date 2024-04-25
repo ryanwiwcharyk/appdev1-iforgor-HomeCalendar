@@ -9,7 +9,10 @@ namespace HomeCalendarWPF
 {
     public interface HomeInterface
     {
-        public void ShowUpcomingEvents(List<string> upcomingEvents);
+        public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents);
+        public void ShowEventsByCategory();
+        public void ShowEventsByMonth();
+        public void ShowEventsByMonthAndCategory();
         public void ShowNoUpcomingEvents(string message);
         public void AddCategoriesToDropdown(List<Category> categories);
     }
