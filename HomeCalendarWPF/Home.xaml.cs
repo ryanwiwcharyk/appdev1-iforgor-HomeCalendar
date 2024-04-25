@@ -1,6 +1,7 @@
 ﻿using Calendar;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,8 @@ namespace HomeCalendarWPF
             Application.Current.Shutdown();
         }
 
+        
+
         // Interface implementation
 
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
@@ -79,6 +82,23 @@ namespace HomeCalendarWPF
         void HomeInterface.ShowEventsByMonthAndCategory()
         {
             throw new NotImplementedException();
+        }
+
+        private void endDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (startDatePicker.SelectedDate != null)
+            {
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            }
+        }
+
+        private void startDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (endDatePicker.SelectedDate != null)
+            {
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+
+            }
         }
     }
 }

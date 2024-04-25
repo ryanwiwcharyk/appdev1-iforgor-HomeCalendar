@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -98,6 +99,7 @@ namespace HomeCalendarWPF
         {
             const int weekInAdvance = 7;
             List<CalendarItem> events = model.GetCalendarItems(null, DateTime.Now.AddDays(weekInAdvance), false, 0);
+            //ObservableCollection<CalendarItem> events2 = new ObservableCollection<CalendarItem>(events);
             List<string> names = new List<string>();
             foreach (CalendarItem item in events)
             {
@@ -107,6 +109,12 @@ namespace HomeCalendarWPF
                 homeView.ShowNoUpcomingEvents("There are no upcoming events");
             else
                 homeView.ShowUpcomingEvents(events);
+        }
+
+        public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate)
+        {
+            List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, false, 0);
+            homeView.ShowUpcomingEvents(ci);
         }
 
         #endregion
