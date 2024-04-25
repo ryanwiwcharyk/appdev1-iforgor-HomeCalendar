@@ -11,10 +11,7 @@
     </Window.FontFamily>
     <StackPanel Margin="10">
         <StackPanel.Background>
-            <RadialGradientBrush>
-                <GradientStop Color="#f1f8ff" Offset="0"/>
-                <GradientStop Color="#a7bbcd" Offset="1.05"/>
-            </RadialGradientBrush>
+            <ImageBrush ImageSource="images/wallpaper2.png"/>
         </StackPanel.Background>
         <TextBlock Margin="10" Text="Welcome To Calendar" Foreground="#ecf6ff"  VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="35" FontStyle="Italic" FontWeight="DemiBold"></TextBlock>
         <Grid>

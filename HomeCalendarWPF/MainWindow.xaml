@@ -5,56 +5,166 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
+        Title="MainWindow" Height="520" Width="800">
     <Window.FontFamily>
-        <FontFamily>Copperplate</FontFamily>
+        <FontFamily>GulimChe</FontFamily>
     </Window.FontFamily>
-    <Grid>
-        <Grid.Background>
-            <RadialGradientBrush>
-                <GradientStop Color="#f1f8ff" Offset="0"/>
-                <GradientStop Color="#a7bbcd" Offset="1.05"/>
-            </RadialGradientBrush>
-        </Grid.Background>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+    <Border BorderThickness="3" BorderBrush="White" CornerRadius="10" Padding="2" Width="800"   Height="500"  HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid>
+            <Grid.Background>
+                <ImageBrush ImageSource="images/wallpaper.webp"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
 
-            <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
 
-            <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
 
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
 
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" FontSize="30" Margin="5" FontStyle="Italic" HorizontalAlignment="Center" Foreground="#ecf6ff"> Welcome to HomeCalendar</TextBlock>
-        <TextBlock  Grid.Row="1" HorizontalAlignment="Center" FontSize="25" Margin="10" > Create a new Calendar: </TextBlock>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="10" Width="380">
-            <StackPanel.Background>
-                <RadialGradientBrush>
-                    <GradientStop Color="#a7bbcd" Offset="1.05"/>
-                </RadialGradientBrush>
-   
-            </StackPanel.Background>
-            <TextBlock FontSize="18" TextAlignment="Center"> Choose A Calendar Name: </TextBlock>
-            <TextBox Width="300" Height="20" FontSize="15" x:Name="newName" Text="newCalendar" Margin="10" TextAlignment="Center"></TextBox>
-            <TextBlock FontSize="18" TextAlignment="Center" Margin="10"> Choose A Calendar Location:</TextBlock>
-            <Button FontSize="20" Width="100"  Margin="10" x:Name="GoNewCalendar" Click="BtnClick_OpenFolderPicker" BorderBrush="White">Browse</Button>
-        </StackPanel>
-        <TextBlock  Grid.Row="3" HorizontalAlignment="Center" FontSize="25" Margin="10"> Already have a calendar? </TextBlock>
-        <StackPanel Grid.Row="4" HorizontalAlignment="Center" Margin="20">
-            <StackPanel.Background>
-                <RadialGradientBrush>
-                    <GradientStop Color="#a7bbcd" Offset="1.05"/>
-                </RadialGradientBrush>
-            </StackPanel.Background>
-            <TextBlock FontSize="18" > Choose The Calendar File:</TextBlock>
-            <Button FontSize="20" Width="100"  Margin="10" x:Name="browse" Click="BtnClick_OpenFileExplorer" BorderBrush="White"> Browse </Button>
-        </StackPanel>
+            </Grid.RowDefinitions>
 
-        <Popup>
-            <TextBlock x:Name="warningPopup"></TextBlock>
-        </Popup>
+            <Border Name="mask" Background="#1871d9" CornerRadius="50"/>
 
-    </Grid>
+            <TextBlock Grid.Row="0" FontSize="30" Margin="5" FontStyle="Italic" HorizontalAlignment="Center" Foreground="White"> Welcome to HomeCalendar
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                ShadowDepth="5"
+                Direction="360"                
+                Color="Black"
+                Opacity="0.7"
+                BlurRadius="10"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock  Grid.Row="1" HorizontalAlignment="Center" FontSize="25" Margin="10" Foreground="White"> Create a new calendar?
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                ShadowDepth="5"
+                Direction="330"
+                Color="Black"
+                Opacity="1"
+                BlurRadius="5"/>
+                </TextBlock.Effect>
+            </TextBlock>
+
+
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="10" Width="380">
+     
+                <StackPanel.Background>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#1d63f0" Offset="0.1"/>
+                        <GradientStop Color=" #11398a" Offset="1.5"/>
+
+                    </RadialGradientBrush>
+
+                </StackPanel.Background>
+                <StackPanel.Effect>
+                    <DropShadowEffect
+                ShadowDepth="5"
+                Direction="360"                
+                Color="Black"
+                Opacity="1"
+                BlurRadius="10"/>
+                </StackPanel.Effect>
+                <TextBlock FontSize="18" Foreground="White" TextAlignment="Center" Padding="5"> Choose A Calendar Name:
+
+                    <TextBlock.Effect>
+                        <DropShadowEffect
+                ShadowDepth="5"
+                Direction="360"                
+                Color="Black"
+                Opacity="1"
+                BlurRadius="10"/>
+                    </TextBlock.Effect></TextBlock>
+                <TextBox Width="300" Height="20" FontSize="15" x:Name="newName" Text="newCalendar" Margin="10" TextAlignment="Center">
+                    <TextBox.Effect>
+                        <DropShadowEffect
+                ShadowDepth="5"
+                Direction="300"
+                Color="Black"
+                Opacity="0.7"
+                BlurRadius="10"/>
+                    </TextBox.Effect>
+                    <TextBox.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=mask}"/>
+                    </TextBox.OpacityMask>
+                </TextBox>
+                <TextBlock FontSize="18" Foreground="White" TextAlignment="Center" Margin="10"> Choose A Calendar Location:
+
+                    <TextBlock.Effect>
+                        <DropShadowEffect
+                ShadowDepth="5"
+                Direction="360"                
+                Color="Black"
+                Opacity="1"
+                BlurRadius="10"/>
+                    </TextBlock.Effect></TextBlock>
+                <Button FontSize="20" Width="100" Foreground="#131e59"  Margin="10" x:Name="GoNewCalendar" Click="BtnClick_OpenFolderPicker"  Background="#b8b8b8">Browse
+                    <Button.BitmapEffect>
+                        <DropShadowBitmapEffect Color="Gray" Direction="1" Softness=".7" />
+                    </Button.BitmapEffect>
+                    <Button.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=mask}"/>
+                    </Button.OpacityMask>
+                </Button>
+            </StackPanel>
+
+            <TextBlock  Grid.Row="3" HorizontalAlignment="Center" FontSize="25" Margin="10" Foreground="White"> Already have a calendar?
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                ShadowDepth="5"
+                Direction="330"
+                Color="Black"
+                Opacity="1"
+                BlurRadius="5"/>
+                </TextBlock.Effect>
+            </TextBlock>
+            <StackPanel Grid.Row="4" HorizontalAlignment="Center" Margin="20">
+
+                <StackPanel.Background>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#1d63f0" Offset="0.1"/>
+                        <GradientStop Color=" #11398a" Offset="1.5"/>
+                    </RadialGradientBrush>
+                </StackPanel.Background>
+                <StackPanel.Effect>
+                    <DropShadowEffect
+                ShadowDepth="5"
+                Direction="360"                
+                Color="Black"
+                Opacity="1"
+                BlurRadius="10"/>
+                </StackPanel.Effect>
+                <TextBlock FontSize="18" Foreground="White" Padding="10"> Choose The Calendar File:
+                    <TextBlock.Effect>
+                        <DropShadowEffect
+                ShadowDepth="5"
+                Direction="360"                
+                Color="Black"
+                Opacity="1"
+                BlurRadius="10"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                <Button FontSize="20" Width="100" Foreground="#131e59"  Margin="10" x:Name="browse" Click="BtnClick_OpenFileExplorer" Background="#b8b8b8">Browse
+                    <Button.BitmapEffect>
+                        <DropShadowBitmapEffect Color="Gray" Direction="1" Softness=".7" />
+                    </Button.BitmapEffect>
+                    <Button.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=mask}"/>
+                    </Button.OpacityMask>
+                </Button>
+
+            </StackPanel>
+
+            <Popup>
+                <TextBlock x:Name="warningPopup"></TextBlock>
+
+            </Popup>
+        </Grid>
+
+
+    </Border>
 </Window>
