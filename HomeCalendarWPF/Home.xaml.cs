@@ -50,8 +50,9 @@ namespace HomeCalendarWPF
 
         // Interface implementation
 
-        public void ShowUpcomingEvents(List<string> upcomingEvents)
+        public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
+            UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
         public void ShowNoUpcomingEvents(string message)

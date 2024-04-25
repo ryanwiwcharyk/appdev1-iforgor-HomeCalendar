@@ -30,6 +30,19 @@ namespace HomeCalendarWPF
             mainView = window;
         }
 
+        public List<Category> GetCategoryList()
+        {
+            Categories categories = model.categories;
+            return categories.List();
+        }
+
+        public string FindCategoryNameById(int id)
+        {
+            List<Category> cats = GetCategoryList();
+            Category cat = cats.Find(x => x.Id == id);
+            return cat.Description;
+        }
+
         #region Properties
 
         internal MainViewInterface MainViewInterface { get { return mainView; } }
@@ -93,7 +106,7 @@ namespace HomeCalendarWPF
             if (events.Count == 0)
                 homeView.ShowNoUpcomingEvents("There are no upcoming events");
             else
-                homeView.ShowUpcomingEvents(names);
+                homeView.ShowUpcomingEvents(events);
         }
 
         #endregion
@@ -101,8 +114,7 @@ namespace HomeCalendarWPF
         #region Create Events
         public void PopulateCategoryDropdown()
         {
-            Categories categories = model.categories;
-            List<Category> categoryList = categories.List();
+            List<Category> categoryList = GetCategoryList();
             createEventView.AddCategoriesToDropdown(categoryList);
         }
 
