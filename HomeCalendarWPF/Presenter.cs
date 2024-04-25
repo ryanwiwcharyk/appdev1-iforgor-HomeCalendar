@@ -30,13 +30,13 @@ namespace HomeCalendarWPF
             mainView = window;
         }
 
-        public List<Category> GetCategoryList()
+        private List<Category> GetCategoryList()
         {
             Categories categories = model.categories;
             return categories.List();
         }
 
-        public string FindCategoryNameById(int id)
+        private string FindCategoryNameById(int id)
         {
             List<Category> cats = GetCategoryList();
             Category cat = cats.Find(x => x.Id == id);

@@ -30,9 +30,14 @@
             </Grid.RowDefinitions>
 
 
-            <DataGrid Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents">
+            <DataGrid CanUserAddRows="False" AutoGenerateColumns="False" Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents">
                 <DataGrid.Columns>
-
+                    <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
+                    <DataGridTextColumn Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:HH:mm:ss\}}"/>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
+                    <DataGridTextColumn Header="Description" Binding="{Binding ShortDescription}"/>
+                    <DataGridTextColumn Header="Duration" Binding="{Binding DurationInMinutes}"/>
+                    <DataGridTextColumn Header="Busy Time" Binding="{Binding BusyTime}"/>
                 </DataGrid.Columns>
             </DataGrid>
 

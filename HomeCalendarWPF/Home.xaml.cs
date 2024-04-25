@@ -65,5 +65,20 @@ namespace HomeCalendarWPF
         {
             throw new NotImplementedException();
         }
+
+        void HomeInterface.ShowEventsByCategory()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HomeInterface.ShowEventsByMonth()
+        {
+            throw new NotImplementedException();
+        }
+
+        void HomeInterface.ShowEventsByMonthAndCategory()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
