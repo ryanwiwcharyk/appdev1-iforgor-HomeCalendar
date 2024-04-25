@@ -104,13 +104,17 @@ namespace HomeCalendarWPF
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void ValidateFilterToggleByCategory(bool flag, string selectedCategory)
+        public void ValidateFilterToggleByCategory(bool filterFlag, int selectedCategory)
         {
-            if (flag)
+            if (filterFlag)
             {
-                //if true, filter by the specific category
-
+                //if true, validate that the specific category is valid 
+                //Call appropriate home calendar method to filter by that specific category
                 //maybe add a refresh view method
+
+                List<CalendarItemsByCategory> updatedList = new List<CalendarItemsByCategory> ();
+
+                updatedList = model.GetCalendarItemsByCategory(filterFlag, selectedCategory); //why is this bugging out, am I slow??
             }
         }
 
