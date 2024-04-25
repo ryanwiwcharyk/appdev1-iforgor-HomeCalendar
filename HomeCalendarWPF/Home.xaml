@@ -39,8 +39,8 @@
                     <DatePicker></DatePicker>
                     <Label>End Date</Label>
                     <DatePicker></DatePicker>
-                    <CheckBox Content="Filter by Category?"></CheckBox>
-                    <ComboBox></ComboBox>
+                    <CheckBox Name="FilterCategory" Click="FilterCateory_Btn" Content="Filter by Category?" Margin="5"></CheckBox>
+                    <ComboBox Name="categoryComboBox" Height="30" Width="auto" Text="Select Category" BorderThickness="2" BorderBrush="Black" IsEditable="True" Margin="5,0,5,5"/>
                 </StackPanel>
                 
             </GroupBox>

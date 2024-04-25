@@ -77,6 +77,7 @@ namespace HomeCalendarWPF
             home.Show();
         }
 
+
         #endregion
 
         #region Home Page
@@ -94,6 +95,23 @@ namespace HomeCalendarWPF
                 homeView.ShowNoUpcomingEvents("There are no upcoming events");
             else
                 homeView.ShowUpcomingEvents(names);
+        }
+
+        public void PopulateCategoryDropdownInHomePage() //combo box category drop down
+        {
+            Categories categories = model.categories;
+            List<Category> categoryList = categories.List();
+            homeView.AddCategoriesToDropdown(categoryList);
+        }
+
+        public void ValidateFilterToggleByCategory(bool flag, string selectedCategory)
+        {
+            if (flag)
+            {
+                //if true, filter by the specific category
+
+                //maybe add a refresh view method
+            }
         }
 
         #endregion

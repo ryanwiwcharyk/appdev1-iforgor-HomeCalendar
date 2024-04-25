@@ -11,5 +11,6 @@ namespace HomeCalendarWPF
     {
         public void ShowUpcomingEvents(List<string> upcomingEvents);
         public void ShowNoUpcomingEvents(string message);
+        public void AddCategoriesToDropdown(List<Category> categories);
     }
 }

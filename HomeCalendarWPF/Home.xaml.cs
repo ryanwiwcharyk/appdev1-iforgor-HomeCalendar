@@ -28,6 +28,7 @@ namespace HomeCalendarWPF
             _presenter = presenter;
             _presenter.RegisterWindow(this);
             _presenter.GetUpcomingEvents();
+            _presenter.PopulateCategoryDropdownInHomePage();
         }
 
         //private methods for button clicks
@@ -46,6 +47,18 @@ namespace HomeCalendarWPF
         private void BtnClick_CloseApplication(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        public void AddCategoriesToDropdown(List<Category> categories)
+        {
+            categoryComboBox.ItemsSource = categories;
+        }
+
+        public void FilterCateory_Btn(object sender, RoutedEventArgs e)
+        {
+            _presenter.ValidateFilterToggleByCategory((bool)FilterCategory.IsChecked, categoryComboBox.Text);
+            //call presenter method to validate the event handler
+            //categoryComboBox.SelectedIndex = 0;
         }
 
         // Interface implementation
