@@ -11,10 +11,7 @@
     </Window.FontFamily>
     <StackPanel Margin="10">
         <StackPanel.Background>
-            <RadialGradientBrush>
-                <GradientStop Color="#f1f8ff" Offset="0"/>
-                <GradientStop Color="#a7bbcd" Offset="1.05"/>
-            </RadialGradientBrush>
+            <ImageBrush ImageSource="images/wallpaper2.png"/>
         </StackPanel.Background>
         <TextBlock Margin="10" Text="Welcome To Calendar" Foreground="#ecf6ff"  VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="35" FontStyle="Italic" FontWeight="DemiBold"></TextBlock>
         <Grid>
@@ -45,11 +42,11 @@
             <GroupBox Header="Filter" Grid.Column="1" Grid.Row="0" Grid.RowSpan="1" Margin="10">
                 <StackPanel>
                     <Label>Start Date</Label>
-                    <DatePicker></DatePicker>
+                    <DatePicker Name="startDatePicker" SelectedDateChanged="DatePickerStart_SelectedDateChanged"></DatePicker>
                     <Label>End Date</Label>
-                    <DatePicker></DatePicker>
-                    <CheckBox Name="FilterCategory" Click="FilterCateory_Btn" Content="Filter by Category?" Margin="5"></CheckBox>
-                    <ComboBox Name="categoryComboBox" Height="30" Width="auto" Text="Select Category" BorderThickness="2" BorderBrush="Black" IsEditable="True" Margin="5,0,5,5"/>
+                    <DatePicker Name="endDatePicker" SelectedDateChanged="DatePickerEnd_SelectedDateChanged"></DatePicker>
+                    <CheckBox Content="Filter by Category?"></CheckBox>
+                    <ComboBox></ComboBox>
                 </StackPanel>
                 
             </GroupBox>

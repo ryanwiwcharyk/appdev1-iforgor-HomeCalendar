@@ -1,6 +1,7 @@
 ﻿using Calendar;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -90,6 +91,22 @@ namespace HomeCalendarWPF
         void HomeInterface.ShowEventsByMonthAndCategory()
         {
             throw new NotImplementedException();
+        }
+
+        private void DatePickerEnd_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (endDatePicker.SelectedDate != null)
+            {
+                _presenter.GetEventsFilteredByDate(DateTime.MinValue, endDatePicker.SelectedDate.Value.AddDays(1));
+            }
+        }
+
+        private void DatePickerStart_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (startDatePicker.SelectedDate != null)
+            {
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate.Value, DateTime.MaxValue);
+            }
         }
     }
 }
