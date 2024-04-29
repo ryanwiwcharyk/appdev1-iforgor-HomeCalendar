@@ -125,11 +125,13 @@ namespace HomeCalendarWPF
                 //Call appropriate home calendar method to filter by that specific category
                 //maybe add a refresh view method
 
-                List<CalendarItemsByCategory> updatedList = new List<CalendarItemsByCategory> ();
-
-                updatedList = model.GetCalendarItemsByCategory(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
+                List<CalendarItem> updatedList = new List<CalendarItem> ();
+                //get category Id from its detials comparing to .TEXT
+                updatedList = model.GetCalendarItems(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
 
                 //now with updatedList i need to modify the
+                //show upcoming events
+                homeView.ShowUpcomingEvents(updatedList);
             }
         }
 
