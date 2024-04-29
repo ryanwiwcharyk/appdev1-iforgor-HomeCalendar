@@ -92,6 +92,7 @@ namespace HomeCalendarWPF
             home.Show();
         }
 
+
         #endregion
 
         #region Home Page
@@ -110,6 +111,31 @@ namespace HomeCalendarWPF
                 homeView.ShowNoUpcomingEvents("There are no upcoming events");
             else
                 homeView.ShowUpcomingEvents(events);
+        }
+
+        public void PopulateCategoryDropdownInHomePage() //combo box category drop down
+        {
+            Categories categories = model.categories;
+            List<Category> categoryList = categories.List();
+            homeView.AddCategoriesToDropdown(categoryList);
+        }
+
+        public void ValidateFilterToggleByCategory(bool filterFlag, int selectedCategory)
+        {
+            if (filterFlag)
+            {
+                //if true, validate that the specific category is valid 
+                //Call appropriate home calendar method to filter by that specific category
+                //maybe add a refresh view method
+
+                List<CalendarItem> updatedList = new List<CalendarItem> ();
+                //get category Id from its detials comparing to .TEXT
+                updatedList = model.GetCalendarItems(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
+
+                //now with updatedList i need to modify the
+                //show upcoming events
+                homeView.ShowUpcomingEvents(updatedList);
+            }
         }
 
         public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate)

@@ -16,5 +16,6 @@ namespace HomeCalendarWPF
         public void ShowEventsByMonth();
         public void ShowEventsByMonthAndCategory();
         public void ShowNoUpcomingEvents(string message);
+        public void AddCategoriesToDropdown(List<Category> categories);
     }
 }
