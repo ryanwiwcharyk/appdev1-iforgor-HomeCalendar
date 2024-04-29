@@ -119,7 +119,7 @@ namespace HomeCalendarWPF
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void ValidateFilterToggleByCategory(bool filterFlag, int selectedCategory)
+        public void ValidateFilterToggleByCategory(bool filterFlag, string selectedCategory)
         {
             if (filterFlag)
             {

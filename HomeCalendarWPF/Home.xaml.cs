@@ -57,7 +57,8 @@ namespace HomeCalendarWPF
 
         public void FilterCateory_Btn(object sender, RoutedEventArgs e)
         {
-            _presenter.ValidateFilterToggleByCategory((bool)FilterCategory.IsChecked, categoryComboBox.SelectedIndex);
+            _presenter.ValidateFilterToggleByCategory((bool)FilterCategory.IsChecked, categoryComboBox.Text);
+
         }
 
         // Interface implementation
@@ -69,7 +70,7 @@ namespace HomeCalendarWPF
 
         public void ShowNoUpcomingEvents(string message)
         {
-            
+
         }
 
         //gonna assume this is optional? - wont worry about it

@@ -45,8 +45,8 @@
                     <DatePicker Name="startDatePicker" SelectedDateChanged="DatePickerStart_SelectedDateChanged"></DatePicker>
                     <Label>End Date</Label>
                     <DatePicker Name="endDatePicker" SelectedDateChanged="DatePickerEnd_SelectedDateChanged"></DatePicker>
-                    <CheckBox Content="Filter by Category?"></CheckBox>
-                    <ComboBox></ComboBox>
+                    <CheckBox Name="FilterCategory" Content="Filter by Category?"></CheckBox>
+                    <ComboBox Name="categoryComboBox"></ComboBox>
                 </StackPanel>
                 
             </GroupBox>
