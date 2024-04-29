@@ -90,31 +90,12 @@ namespace HomeCalendarWPF
             throw new NotImplementedException();
         }
 
-        private void DatePickerEnd_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DateTime? startDate = null;
-            if (startDatePicker.SelectedDate != null)
-                startDate = startDatePicker.SelectedDate;
-            else 
-                startDate = DateTime.MinValue;
-            if (endDatePicker.SelectedDate != null)
-            {
-                _presenter.GetEventsFilteredByDate(startDate, endDatePicker.SelectedDate.Value.AddDays(1));
-            }
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        { 
+           _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            
         }
 
-        private void DatePickerStart_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DateTime? endDate = null;
-            if (endDatePicker.SelectedDate != null)
-                endDate = endDatePicker.SelectedDate;
-            else
-                endDate = DateTime.MaxValue;
-            if (startDatePicker.SelectedDate != null)
-            {
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate.Value, endDate);
-            }
-        }
 
         private void filterByCategory_Checked(object sender, RoutedEventArgs e)
         {
