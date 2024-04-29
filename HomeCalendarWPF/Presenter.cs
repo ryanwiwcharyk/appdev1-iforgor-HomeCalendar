@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -115,6 +116,18 @@ namespace HomeCalendarWPF
         {
             List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, false, 0);
             homeView.ShowUpcomingEvents(ci);
+        }
+
+        public void GetEventsSortedByCategory(DateTime? start, DateTime? end)
+        {
+            if (start is null)
+                start = DateTime.MinValue;
+            if (end is null)
+                end = DateTime.MaxValue;
+            //Change to accept a filter flag if it is selected
+            List<CalendarItemsByCategory> calendarItems = model.GetCalendarItemsByCategory(start, end, false, 0);
+            homeView.ShowUpcomingEventsByCategory(calendarItems);
+
         }
 
         #endregion

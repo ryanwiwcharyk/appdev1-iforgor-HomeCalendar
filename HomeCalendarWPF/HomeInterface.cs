@@ -11,6 +11,7 @@ namespace HomeCalendarWPF
     public interface HomeInterface
     {
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents);
+        public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> upcomingEventsByCategory);
         public void ShowEventsByCategory();
         public void ShowEventsByMonth();
         public void ShowEventsByMonthAndCategory();

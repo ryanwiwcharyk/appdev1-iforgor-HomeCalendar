@@ -63,10 +63,16 @@ namespace HomeCalendarWPF
             
         }
 
-        //gonna assume this is optional? - wont worry about it
-        public void ShowRecentFiles()
+        public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> items)
         {
-            throw new NotImplementedException();
+            UpcomingEvents.ItemsSource = items;
+            ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
+            foreach (DataGridColumn column in columns)
+            {
+                column.Visibility = Visibility.Visible;
+                if (string.IsNullOrEmpty(column.ToString()))
+                    column.Visibility = Visibility.Collapsed;
+            }
         }
 
         void HomeInterface.ShowEventsByCategory()
@@ -86,18 +92,42 @@ namespace HomeCalendarWPF
 
         private void DatePickerEnd_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            DateTime? startDate = null;
+            if (startDatePicker.SelectedDate != null)
+                startDate = startDatePicker.SelectedDate;
+            else 
+                startDate = DateTime.MinValue;
             if (endDatePicker.SelectedDate != null)
             {
-                _presenter.GetEventsFilteredByDate(DateTime.MinValue, endDatePicker.SelectedDate.Value.AddDays(1));
+                _presenter.GetEventsFilteredByDate(startDate, endDatePicker.SelectedDate.Value.AddDays(1));
             }
         }
 
         private void DatePickerStart_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            DateTime? endDate = null;
+            if (endDatePicker.SelectedDate != null)
+                endDate = endDatePicker.SelectedDate;
+            else
+                endDate = DateTime.MaxValue;
             if (startDatePicker.SelectedDate != null)
             {
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate.Value, DateTime.MaxValue);
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate.Value, endDate);
             }
+        }
+
+        private void filterByCategory_Checked(object sender, RoutedEventArgs e)
+        {
+            
+            DateTime? startDate = startDatePicker.SelectedDate;
+            DateTime? endDate = endDatePicker.SelectedDate;
+            //add varaible to get filter by category once implemented
+            _presenter.GetEventsSortedByCategory(startDate, endDate);
+        }
+
+        private void filterByCategory_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
     }
 }
