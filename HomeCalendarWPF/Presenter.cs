@@ -120,37 +120,31 @@ namespace HomeCalendarWPF
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void ValidateFilterToggleByCategory(bool filterFlag, string selectedCategory)
+        public void ValidateFilterToggleByCategory(bool isChecked, string selectedCategory)
         {
-            if (filterFlag)
+            DateTime start = new DateTime(1900, 1, 1);
+            DateTime end = new DateTime(2500, 1, 1);
+
+            //if true, validate that the specific category is valid 
+            //Call appropriate home calendar method to filter by that specific category
+            //maybe add a refresh view method
+
+            List<CalendarItem> updatedList = new List<CalendarItem>();
+            //get category Id from its detials comparing to .TEXT
+
+            List<Category> categories = model.categories.List();
+            Category category = categories.Find(x => x.Description == selectedCategory);
+
+            if (category != null)
             {
-                //if true, validate that the specific category is valid 
-                //Call appropriate home calendar method to filter by that specific category
-                //maybe add a refresh view method
 
-                List<CalendarItem> updatedList = new List<CalendarItem>();
-                //get category Id from its detials comparing to .TEXT
-
-                List<Category> categories = model.categories.List();
-                Category category = categories.Find(x => x.Description == selectedCategory);
-
-                if (category != null)
-                {
-
-                    updatedList = model.GetCalendarItems(null, null, filterFlag, category.Id); //why is this bugging out, am I slow??
+                updatedList = model.GetCalendarItems(start, end, true, category.Id); //why is this bugging out, am I slow??
+                homeView.ShowUpcomingEvents(updatedList);//this should update the view
 
 
-                }
-                else
-                {
-                    //error message display
-                }
-
-
-                //now with updatedList i need to modify the
-                //show upcoming events
-                homeView.ShowUpcomingEvents(updatedList);
             }
+
+
         }
 
         public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate)
