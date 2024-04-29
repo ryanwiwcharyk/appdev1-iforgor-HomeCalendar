@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Calendar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 [assembly: InternalsVisibleTo("TestProject_Presenter")]
 
 
@@ -52,7 +53,7 @@ namespace HomeCalendarWPF
 
         internal ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
 
-        internal CategoryView CategoryView { get {  return createCategoryView; } }    
+        internal CategoryView CategoryView { get { return createCategoryView; } }
 
 
         #endregion
@@ -127,9 +128,24 @@ namespace HomeCalendarWPF
                 //Call appropriate home calendar method to filter by that specific category
                 //maybe add a refresh view method
 
-                List<CalendarItem> updatedList = new List<CalendarItem> ();
+                List<CalendarItem> updatedList = new List<CalendarItem>();
                 //get category Id from its detials comparing to .TEXT
-                updatedList = model.GetCalendarItems(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
+
+                List<Category> categories = model.categories.List();
+                Category category = categories.Find(x => x.Description == selectedCategory);
+
+                if (category != null)
+                {
+
+                    updatedList = model.GetCalendarItems(null, null, filterFlag, category.Id); //why is this bugging out, am I slow??
+
+
+                }
+                else
+                {
+                    //error message display
+                }
+
 
                 //now with updatedList i need to modify the
                 //show upcoming events
@@ -178,13 +194,13 @@ namespace HomeCalendarWPF
             {
                 List<Category> categories = model.categories.List();
                 Category category = categories.Find(x => x.Description == selectedCategory);
-                
+
                 if (category != null && startTime != null)
                 {
                     model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("Event was successfully created.");
                     GetUpcomingEvents();
-                    
+
                 }
                 else
                 {
@@ -217,7 +233,7 @@ namespace HomeCalendarWPF
 
         public void ValidateDetailsFormInputAndCreateCategory(string details, string type) //called on the add button event handler.
         {
-   
+
             int typeAsNumber = 0;
             switch (type)
             {
@@ -259,10 +275,10 @@ namespace HomeCalendarWPF
                 }
             }
 
-            
+
         }
 
-      
+
         #endregion
     }
 }
