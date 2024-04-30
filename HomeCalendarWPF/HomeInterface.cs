@@ -12,9 +12,8 @@ namespace HomeCalendarWPF
     {
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents);
         public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> upcomingEventsByCategory);
-        public void ShowEventsByCategory();
-        public void ShowEventsByMonth();
-        public void ShowEventsByMonthAndCategory();
+        public void ShowUpcomingEventsByMonth(List<CalendarItemsByMonth> upcomingEventsByMonth);
+        public void ShowUpcomingEventsByMonthAndCategory();
         public void ShowNoUpcomingEvents(string message);
         public void AddCategoriesToDropdown(List<Category> categories);
     }

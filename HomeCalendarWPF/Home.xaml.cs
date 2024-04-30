@@ -85,20 +85,22 @@ namespace HomeCalendarWPF
             }
         }
 
-        void HomeInterface.ShowEventsByCategory()
+        public void ShowUpcomingEventsByMonth(List<CalendarItemsByMonth> items)
         {
-            throw new NotImplementedException();
+            UpcomingEvents.ItemsSource = items;
+            ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
+            foreach (DataGridColumn column in columns)
+            {
+                column.Visibility = Visibility.Visible;
+                if (string.IsNullOrEmpty(column.ToString()))
+                    column.Visibility = Visibility.Collapsed;
+            }
+        }
+        public void ShowUpcomingEventsByMonthAndCategory()
+        {
+
         }
 
-        void HomeInterface.ShowEventsByMonth()
-        {
-            throw new NotImplementedException();
-        }
-
-        void HomeInterface.ShowEventsByMonthAndCategory()
-        {
-            throw new NotImplementedException();
-        }
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         { 
@@ -117,6 +119,20 @@ namespace HomeCalendarWPF
         }
 
         private void filterByCategory_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+        }
+
+        private void filterByMonth_Checked(object sender, RoutedEventArgs e)
+        {
+
+            DateTime? startDate = startDatePicker.SelectedDate;
+            DateTime? endDate = endDatePicker.SelectedDate;
+
+            _presenter.GetEventsSortedByMonth(startDate, endDate);
+        }
+
+        private void filterByMonth_Unchecked(object sender, RoutedEventArgs e)
         {
             _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }

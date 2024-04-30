@@ -130,7 +130,7 @@ namespace HomeCalendarWPF
 
                 List<CalendarItem> updatedList = new List<CalendarItem> ();
                 //get category Id from its detials comparing to .TEXT
-                updatedList = model.GetCalendarItems(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
+              //  updatedList = model.GetCalendarItems(null, null, filterFlag, selectedCategory); //why is this bugging out, am I slow??
 
                 //now with updatedList i need to modify the
                 //show upcoming events
@@ -153,6 +153,18 @@ namespace HomeCalendarWPF
             //Change to accept a filter flag if it is selected
             List<CalendarItemsByCategory> calendarItems = model.GetCalendarItemsByCategory(start, end, false, 0);
             homeView.ShowUpcomingEventsByCategory(calendarItems);
+
+        }
+
+        public void GetEventsSortedByMonth(DateTime? start, DateTime? end)
+        {
+            if (start is null)
+                start = DateTime.MinValue;
+            if (end is null)
+                end = DateTime.MaxValue;
+            //Change to accept a filter flag if it is selected
+            List<CalendarItemsByMonth> calendarItems = model.GetCalendarItemsByMonth(start, end, false, 0);
+            homeView.ShowUpcomingEventsByMonth(calendarItems);
 
         }
 
