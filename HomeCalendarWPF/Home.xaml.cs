@@ -55,9 +55,14 @@ namespace HomeCalendarWPF
             categoryComboBox.ItemsSource = categories;
         }
 
-        public void FilterCateory_Btn(object sender, RoutedEventArgs e)
+        public void FilterCategory_Checked(object sender, RoutedEventArgs e)
         {
-            _presenter.ValidateFilterToggleByCategory((bool)FilterCategory.IsChecked, categoryComboBox.Text);
+            _presenter.ValidateFilterToggleByCategory(categoryComboBox.Text);
+
+        }
+        public void FilterCategory_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _presenter.ValidateFilterToggleByCategory(categoryComboBox.Text);
 
         }
 
@@ -131,7 +136,7 @@ namespace HomeCalendarWPF
         }
 
 
-        private void filterByCategory_Checked(object sender, RoutedEventArgs e)
+        private void summaryByCategory_Checked(object sender, RoutedEventArgs e)
         {
             
             DateTime? startDate = startDatePicker.SelectedDate;
@@ -140,12 +145,12 @@ namespace HomeCalendarWPF
             _presenter.GetEventsSortedByCategory(startDate, endDate);
         }
 
-        private void filterByCategory_Unchecked(object sender, RoutedEventArgs e)
+        private void summaryByCategory_Unchecked(object sender, RoutedEventArgs e)
         {
             _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
 
-        private void filterByMonth_Checked(object sender, RoutedEventArgs e)
+        private void summaryByMonth_Checked(object sender, RoutedEventArgs e)
         {
 
             DateTime? startDate = startDatePicker.SelectedDate;
@@ -154,7 +159,7 @@ namespace HomeCalendarWPF
             _presenter.GetEventsSortedByMonth(startDate, endDate);
         }
 
-        private void filterByMonth_Unchecked(object sender, RoutedEventArgs e)
+        private void summaryByMonth_Unchecked(object sender, RoutedEventArgs e)
         {
             _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
