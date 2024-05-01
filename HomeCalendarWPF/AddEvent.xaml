@@ -22,8 +22,10 @@
             <TextBox Width="200" Margin="5" Name="eventDetails"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <Label FontSize="20" Margin="10" > Start Time </Label>
-            <DatePicker Name="datePicker" BorderThickness="0" Margin="15"> </DatePicker>
+            <Label FontSize="20" Margin="10" > Start Date And Time </Label>
+            <DatePicker  Name="datePicker" BorderThickness="0" Margin="15"></DatePicker>
+            <ComboBox Name="hourSelector"  Height="30" Width="auto" Margin="10" Text="Hour" IsEditable="True"></ComboBox>
+            <ComboBox Name="minuteSelector"  Height="30" Width="auto" Margin="10" IsEditable="True" Text="Minutes"></ComboBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <Label FontSize="20" Margin="10"> Duration (minutes) </Label>

@@ -26,15 +26,42 @@ namespace HomeCalendarWPF
         {
             InitializeComponent();
             _presenter = presenter;
-            _presenter.RegisterWindow(this);
-            _presenter.PopulateCategoryDropdown();
+            InitializeWindow();
 
         }
+
+        private void InitializeWindow()
+        {
+            _presenter.RegisterWindow(this);
+            _presenter.PopulateCategoryDropdown();
+            PopulateHourDropdown();
+            PopulateMinutesDropdown();
+        }
+
+        private void PopulateHourDropdown()
+        {
+            const int HOURS_IN_DAY = 24;
+            List<int> hours = new List<int>();  
+            for (int i = 1; i <= HOURS_IN_DAY; i++)
+            {
+                hours.Add(i);
+            }
+            hourSelector.ItemsSource = hours;
+        }
+
+        private void PopulateMinutesDropdown()
+        {
+            List<int> minutesByFifteen = new List<int>() { 0, 15, 30, 45 };
+            minuteSelector.ItemsSource = minutesByFifteen;
+        }
+
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
             string details = eventDetails.Text;
             string duration = eventDuration.Text;
-            DateTime? selectedDate = datePicker.SelectedDate;
+            int hour = (int)hourSelector.SelectedItem;
+            int minute = (int)minuteSelector.SelectedItem;
+            DateTime? selectedDate = new DateTime(DateTime.Now.Year,datePicker.SelectedDate.Value.Month,datePicker.SelectedDate.Value.Day, hour, minute,0);
             string comboBoxSelectedCategory = categoryComboBox.Text;
             _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, comboBoxSelectedCategory);
             

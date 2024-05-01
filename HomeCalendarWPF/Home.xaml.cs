@@ -86,9 +86,11 @@ namespace HomeCalendarWPF
             var column = new DataGridTextColumn();
             column.Header = "Start Date";
             column.Binding = new System.Windows.Data.Binding("StartDateTime");
+            column.Binding.StringFormat = "{0:yyyy/MM/dd}";
             var column2 = new DataGridTextColumn();
             column2.Header = "Start Time";
             column2.Binding = new System.Windows.Data.Binding("StartDateTime");  
+            column2.Binding.StringFormat = "{0:HH:mm:ss}";
             var column3 = new DataGridTextColumn();
             column3.Header = "Category";
             column3.Binding = new System.Windows.Data.Binding("Category"); 
@@ -101,6 +103,7 @@ namespace HomeCalendarWPF
             var column6 = new DataGridTextColumn();
             column6.Header = "Busy Time";
             column6.Binding = new System.Windows.Data.Binding("BusyTime");
+            column6.Binding.StringFormat = "{0:F2}";
 
             UpcomingEvents.Columns.Clear();
 
@@ -130,7 +133,8 @@ namespace HomeCalendarWPF
             column.Binding = new System.Windows.Data.Binding("Category");
             var column2 = new DataGridTextColumn();
             column2.Header = "Total Busy Time";
-            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime"); // need to format 
+            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime");
+            column2.Binding.StringFormat = "{0:F2}"; 
             UpcomingEvents.Columns.Add(column);
             UpcomingEvents.Columns.Add(column2);
 
@@ -146,7 +150,8 @@ namespace HomeCalendarWPF
             column.Binding = new System.Windows.Data.Binding("Month");         
             var column2 = new DataGridTextColumn(); 
             column2.Header = "Total Busy Time";
-            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime");          
+            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime");
+            column2.Binding.StringFormat = "{0:F2}";
             UpcomingEvents.Columns.Add(column);
             UpcomingEvents.Columns.Add(column2);
 
@@ -167,6 +172,7 @@ namespace HomeCalendarWPF
             var column1 = new DataGridTextColumn();
             column1.Header = "Total Busy Time";
             column1.Binding = new System.Windows.Data.Binding($"[TotalBusyTime]");
+            column1.Binding.StringFormat = "{0:F2}";
             UpcomingEvents.Columns.Add(column1);
             addedKeys.Add("TotalBusyTime");
 
