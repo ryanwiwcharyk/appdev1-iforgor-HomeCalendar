@@ -232,6 +232,12 @@ namespace HomeCalendarWPF
         {
             
         }
+        public void DeleteEvent(CalendarItem item)
+        {
+            model.events.Delete(item.EventID);
+            GetUpcomingEvents();
+            
+        }
 
         #endregion
 

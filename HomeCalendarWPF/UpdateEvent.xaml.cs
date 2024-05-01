@@ -22,7 +22,7 @@ namespace HomeCalendarWPF.interfaces
         readonly Presenter _presenter;
         public UpdateEvent(Presenter presenter)
         {
-            InitializeComponent();
+            //InitializeComponent();
             _presenter = presenter;
             _presenter.RegisterWindow(this);
         }

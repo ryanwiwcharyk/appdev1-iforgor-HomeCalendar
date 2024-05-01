@@ -39,9 +39,7 @@
                 <DataGrid.ContextMenu>
                     <StaticResource ResourceKey="ItemContextMenu"/>
                 </DataGrid.ContextMenu>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Total Busy Time" Binding="{Binding TotalBusyTime, StringFormat=\{0:0.00\}}"/>
-                </DataGrid.Columns>
+
             </DataGrid>
 
 
