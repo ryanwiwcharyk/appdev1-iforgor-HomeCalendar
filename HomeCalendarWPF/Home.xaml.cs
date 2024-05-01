@@ -16,13 +16,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HomeCalendarWPF
 {
     /// <summary>
     /// Interaction logic for Home.xaml
     /// </summary>
-    public partial class Home : Window, HomeInterface
+    public partial class Home : System.Windows.Window, HomeInterface
     {
         readonly Presenter _presenter;
         public Home(Presenter presenter)
@@ -81,21 +82,43 @@ namespace HomeCalendarWPF
 
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
-            UpcomingEvents.ItemsSource = upcomingEvents;
-            UpcomingEvents.Columns.Clear();
+  
             var column = new DataGridTextColumn();
             column.Header = "Start Date";
             column.Binding = new System.Windows.Data.Binding("StartDateTime");
             var column2 = new DataGridTextColumn();
-            column2.Header = "Total Busy Time";
-            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime"); // need to format 
+            column2.Header = "Start Time";
+            column2.Binding = new System.Windows.Data.Binding("StartDateTime");  
+            var column3 = new DataGridTextColumn();
+            column3.Header = "Category";
+            column3.Binding = new System.Windows.Data.Binding("Category"); 
+            var column4 = new DataGridTextColumn();
+            column4.Header = "Description";
+            column4.Binding = new System.Windows.Data.Binding("ShortDescription");
+            var column5 = new DataGridTextColumn();
+            column5.Header = "Duration";
+            column5.Binding = new System.Windows.Data.Binding("DurationInMinutes");
+            var column6 = new DataGridTextColumn();
+            column6.Header = "Busy Time";
+            column6.Binding = new System.Windows.Data.Binding("BusyTime");
+
+            UpcomingEvents.Columns.Clear();
+
             UpcomingEvents.Columns.Add(column);
             UpcomingEvents.Columns.Add(column2);
+            UpcomingEvents.Columns.Add(column3);
+            UpcomingEvents.Columns.Add(column4);
+            UpcomingEvents.Columns.Add(column5);
+            UpcomingEvents.Columns.Add(column6);
+
+            UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
         public void ShowNoUpcomingEvents(string message)
         {
-
+            var column = new DataGridTextColumn();
+            column.Header = "There are no events to show.";
+            UpcomingEvents.Columns.Add(column);
         }
 
         public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> items)
@@ -130,52 +153,36 @@ namespace HomeCalendarWPF
         }
         public void ShowUpcomingEventsByMonthAndCategory(List<Dictionary<string, object>> items, List<Category> categories)
         {
-
-            UpcomingEvents.ItemsSource = items;
-            ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
-
-            foreach (DataGridColumn column in columns)
-            {
-                if ((string)column.Header != "Month" && (string)column.Header != "Total Busy Time")
-                {
-                    column.Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    column.Visibility = Visibility.Visible;
-                }
-            }
-
+            UpcomingEvents.Columns.Clear();
             List<string> addedKeys = new List<string>();
 
-            // get list of column name from first dictionary in the list
-            // and create column and bind to dictionary element
-            foreach (Dictionary<string, object> item in items)
+
+            var column2 = new DataGridTextColumn();
+            column2.Header = "Month";
+            column2.Binding = new System.Windows.Data.Binding($"[Month]");
+            UpcomingEvents.Columns.Add(column2);
+            addedKeys.Add("Month");
+
+
+            var column1 = new DataGridTextColumn();
+            column1.Header = "Total Busy Time";
+            column1.Binding = new System.Windows.Data.Binding($"[TotalBusyTime]");
+            UpcomingEvents.Columns.Add(column1);
+            addedKeys.Add("TotalBusyTime");
+
+
+            foreach (Category category in categories)
             {
-                foreach (string key in item.Keys)
-                {
-
-                    if (key.Contains("items"))
-                    {
-
-                    }
-                    else if (addedKeys.Contains(key))
-                    {
-
-                    }
-                    else
-                    {
-
-                        
-                        var column = new DataGridTextColumn();
-                        column.Header = key;
-                        column.Binding = new System.Windows.Data.Binding($"[{key}]"); // Notice the square brackets!
-                        UpcomingEvents.Columns.Add(column);
-                        addedKeys.Add(key);
-                    }
-
-                }
+                var column = new DataGridTextColumn();
+                column.Header = category.Description;
+                column.Binding = new System.Windows.Data.Binding($"[{category.Description}]");
+                UpcomingEvents.Columns.Add(column);
+                addedKeys.Add(category.Description);
             }
+
+ 
+            UpcomingEvents.ItemsSource = items;
+
 
         }
 
