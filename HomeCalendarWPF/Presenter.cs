@@ -120,13 +120,11 @@ namespace HomeCalendarWPF
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void ValidateFilterToggleByCategory(string selectedCategory)
+        public void ValidateFilterToggleByCategory(Category selectedCategory)
         {
-            if (selectedCategory != "")
+            if (selectedCategory!=null)
             {
-                List<Category> categories = model.categories.List();
-                Category category = categories.Find(x => x.Description == selectedCategory);
-                List<CalendarItem> updatedList = model.GetCalendarItems(null, null, true, category.Id);
+                List<CalendarItem> updatedList = model.GetCalendarItems(null, null, true, selectedCategory.Id);
                 homeView.ShowUpcomingEvents(updatedList);
             }
 

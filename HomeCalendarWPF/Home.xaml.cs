@@ -59,14 +59,23 @@ namespace HomeCalendarWPF
 
         public void FilterCategory_Checked(object sender, RoutedEventArgs e)
         {
-            _presenter.ValidateFilterToggleByCategory(categoryComboBox.Text);
+            _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem);
 
         }
         public void FilterCategory_Unchecked(object sender, RoutedEventArgs e)
         {
-            _presenter.ValidateFilterToggleByCategory(categoryComboBox.Text);
+            _presenter.GetUpcomingEvents();
 
         }
+        private void categoryComboBox_SelectionChange(object sender, RoutedEventArgs e)
+        {
+            if ((bool)FilterCategory.IsChecked)
+            {
+                _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem);
+            }
+
+        }
+
 
         // Interface implementation
 
@@ -214,6 +223,11 @@ namespace HomeCalendarWPF
                 _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+        }
+
+        private void categoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
