@@ -58,21 +58,21 @@ namespace HomeCalendarWPF
             categoryComboBox.ItemsSource = categories;
         }
 
-        public void FilterCategory_Checked(object sender, RoutedEventArgs e)
+        private void FilterCategory_Checked(object sender, RoutedEventArgs e)
         {
-            _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem);
+            _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem, startDatePicker.SelectedDate, endDatePicker.SelectedDate);
 
         }
-        public void FilterCategory_Unchecked(object sender, RoutedEventArgs e)
+        private void FilterCategory_Unchecked(object sender, RoutedEventArgs e)
         {
-            _presenter.GetUpcomingEvents();
+            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
 
         }
         private void categoryComboBox_SelectionChange(object sender, RoutedEventArgs e)
         {
             if ((bool)FilterCategory.IsChecked)
             {
-                _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem);
+                _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem, startDatePicker.SelectedDate, endDatePicker.SelectedDate);
             }
 
         }
@@ -194,8 +194,19 @@ namespace HomeCalendarWPF
 
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        { 
-           _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+        {
+            Category cat;
+            int catId;
+            if (categoryComboBox.SelectedItem is not null && (bool)FilterCategory.IsChecked)
+            {
+                cat = (Category)categoryComboBox.SelectedItem;
+                catId = cat.Id;
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
+            }
+            else
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+
+
         }
 
 
@@ -207,6 +218,18 @@ namespace HomeCalendarWPF
             
             if ((bool)summaryByMonth.IsChecked)
                 _presenter.GetEventsByMonthAndCategory(startDate, endDate);
+            else if ((bool)FilterCategory.IsChecked)
+            {
+                if (categoryComboBox.SelectedItem is not null)
+                {
+                    Category? cat = (Category)categoryComboBox.SelectedItem;
+                    int catId = cat.Id;
+                    _presenter.GetEventsSortedByCategory(startDate, endDate, true, catId);
+                }
+                else
+                    _presenter.GetEventsSortedByCategory(startDate, endDate);
+
+            }
             else
                 _presenter.GetEventsSortedByCategory(startDate, endDate);
         }
@@ -215,6 +238,17 @@ namespace HomeCalendarWPF
         {
             if ((bool)summaryByMonth.IsChecked)
                 _presenter.GetEventsSortedByMonth(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            else if ((bool)FilterCategory.IsChecked)
+            {
+                if (categoryComboBox.SelectedItem is not null)
+                {
+                    Category? cat = (Category)categoryComboBox.SelectedItem;
+                    int catId = cat.Id;
+                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
+                }
+                else
+                    _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            }
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
@@ -226,6 +260,17 @@ namespace HomeCalendarWPF
 
             if ((bool)summaryByCategory.IsChecked)
                 _presenter.GetEventsByMonthAndCategory(startDate, endDate);
+            else if ((bool)FilterCategory.IsChecked)
+            {
+                if (categoryComboBox.SelectedItem is not null)
+                {
+                    Category? cat = (Category)categoryComboBox.SelectedItem;
+                    int catId = cat.Id;
+                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
+                }
+                else
+                    _presenter.GetEventsSortedByMonth(startDate, endDate);
+            }
             else
                 _presenter.GetEventsSortedByMonth(startDate, endDate);
         }
@@ -234,6 +279,17 @@ namespace HomeCalendarWPF
         {
             if ((bool)summaryByCategory.IsChecked)
                 _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            else if ((bool)FilterCategory.IsChecked)
+            {
+                if (categoryComboBox.SelectedItem is not null)
+                {
+                    Category? cat = (Category)categoryComboBox.SelectedItem;
+                    int catId = cat.Id;
+                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
+                }
+                else
+                    _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            }
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }

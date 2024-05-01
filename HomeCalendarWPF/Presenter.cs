@@ -120,30 +120,30 @@ namespace HomeCalendarWPF
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void ValidateFilterToggleByCategory(Category selectedCategory)
+        public void ValidateFilterToggleByCategory(Category selectedCategory, DateTime? start, DateTime? end)
         {
             if (selectedCategory!=null)
             {
-                List<CalendarItem> updatedList = model.GetCalendarItems(null, null, true, selectedCategory.Id);
+                List<CalendarItem> updatedList = model.GetCalendarItems(start, end, true, selectedCategory.Id);
                 homeView.ShowUpcomingEvents(updatedList);
             }
-
+                
         }
 
-        public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate)
+        public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate, bool filter = false, int catId = 0)
         {
-            List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, false, 0);
+            List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, filter, catId);
             homeView.ShowUpcomingEvents(ci);
         }
 
-        public void GetEventsSortedByCategory(DateTime? start, DateTime? end)
+        public void GetEventsSortedByCategory(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
         {
             if (start is null)
                 start = DateTime.MinValue;
             if (end is null)
                 end = DateTime.MaxValue;
             //Change to accept a filter flag if it is selected
-            List<CalendarItemsByCategory> calendarItems = model.GetCalendarItemsByCategory(start, end, false, 0);
+            List<CalendarItemsByCategory> calendarItems = model.GetCalendarItemsByCategory(start, end, filter, catId);
             homeView.ShowUpcomingEventsByCategory(calendarItems);
 
         }
