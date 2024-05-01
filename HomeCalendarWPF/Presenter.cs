@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Calendar;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 [assembly: InternalsVisibleTo("TestProject_Presenter")]
 
 
@@ -53,7 +54,7 @@ namespace HomeCalendarWPF
 
         internal ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
 
-        internal CategoryView CategoryView { get {  return createCategoryView; } }    
+        internal CategoryView CategoryView { get { return createCategoryView; } }
 
 
         #endregion
@@ -203,13 +204,13 @@ namespace HomeCalendarWPF
             {
                 List<Category> categories = model.categories.List();
                 Category category = categories.Find(x => x.Description == selectedCategory);
-                
+
                 if (category != null && startTime != null)
                 {
                     model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("Event was successfully created.");
                     GetUpcomingEvents();
-                    
+
                 }
                 else
                 {
@@ -242,7 +243,7 @@ namespace HomeCalendarWPF
 
         public void ValidateDetailsFormInputAndCreateCategory(string details, string type) //called on the add button event handler.
         {
-   
+
             int typeAsNumber = 0;
             switch (type)
             {
@@ -284,10 +285,10 @@ namespace HomeCalendarWPF
                 }
             }
 
-            
+
         }
 
-      
+
         #endregion
     }
 }
