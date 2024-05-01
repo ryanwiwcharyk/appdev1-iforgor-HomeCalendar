@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeCalendarWPF.interfaces
 {
-    internal interface UpdateEventViewInterface
+    public interface UpdateEventViewInterface
     {
 
     }

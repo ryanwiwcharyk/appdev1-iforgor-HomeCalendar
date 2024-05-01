@@ -29,6 +29,7 @@ namespace HomeCalendarWPF
         private CategoryView createCategoryView;
         private HomeInterface homeView;
         private MainViewInterface mainView;
+        private UpdateEventViewInterface updateView;
         private HomeCalendar model;
         public Presenter(MainViewInterface window)
         {
@@ -76,6 +77,11 @@ namespace HomeCalendarWPF
         public void RegisterWindow(HomeInterface view)
         {
             homeView = view;
+        }
+
+        public void RegisterWindow(UpdateEventViewInterface view)
+        {
+            updateView = view;
         }
         #endregion
 
