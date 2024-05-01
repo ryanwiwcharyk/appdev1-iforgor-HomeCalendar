@@ -34,9 +34,9 @@
                     <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
                     <DataGridTextColumn Header="Description" Binding="{Binding ShortDescription}"/>
                     <DataGridTextColumn Header="Duration" Binding="{Binding DurationInMinutes}"/>
-                    <DataGridTextColumn Header="Busy Time" Binding="{Binding BusyTime}"/>
+                    <DataGridTextColumn Header="Busy Time" Binding="{Binding BusyTime, StringFormat=\{0:0.00\}}"/>
                     <DataGridTextColumn Header="Month" Binding="{Binding Month}"/>
-                    <DataGridTextColumn Header="Total Busy Time" Binding="{Binding TotalBusyTime}"/>
+                    <DataGridTextColumn Header="Total Busy Time" Binding="{Binding TotalBusyTime, StringFormat=\{0:0.00\}}"/>
                 </DataGrid.Columns>
             </DataGrid>
 
