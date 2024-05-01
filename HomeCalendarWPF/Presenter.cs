@@ -99,8 +99,8 @@ namespace HomeCalendarWPF
 
         public void GetUpcomingEvents()
         {
-            const int weekInAdvance = 7;
-            List<CalendarItem> events = model.GetCalendarItems(null, DateTime.Now.AddDays(weekInAdvance), false, 0);
+
+            List<CalendarItem> events = model.GetCalendarItems(null, null, false, 0);
             //ObservableCollection<CalendarItem> events2 = new ObservableCollection<CalendarItem>(events);
             List<string> names = new List<string>();
             foreach (CalendarItem item in events)
