@@ -47,7 +47,7 @@
                     <DatePicker Name="startDatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"></DatePicker>
                     <Label>End Date</Label>
                     <DatePicker Name="endDatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"></DatePicker>
-                    <CheckBox Name="FilterCategory" Content="Filter by Category?"></CheckBox>
+                    <CheckBox Name="FilterCategory" Content="Filter by Category?"  Checked="FilterCategory_Checked"  Unchecked="FilterCategory_Unchecked" ></CheckBox>
                     <ComboBox Name="categoryComboBox"></ComboBox>
                 </StackPanel>
                 
@@ -55,8 +55,8 @@
 
             <GroupBox Header="Summary" Grid.Column="1" Grid.Row="2" Margin="10,5,10,85" >
                 <StackPanel>
-                    <CheckBox Content="By Month" Name="filterByMonth" Checked="filterByMonth_Checked" Unchecked="filterByMonth_Unchecked"></CheckBox>
-                    <CheckBox Content="By Category" Name="filterByCategory" Checked="filterByCategory_Checked" Unchecked="filterByCategory_Unchecked"></CheckBox>
+                    <CheckBox Content="By Month" Name="filterByMonth" Checked="summaryByMonth_Checked" Unchecked="summaryByMonth_Unchecked"></CheckBox>
+                    <CheckBox Content="By Category" Name="filterByCategory" Checked="summaryByCategory_Checked" Unchecked="summaryByCategory_Unchecked"></CheckBox>
                 </StackPanel>
             </GroupBox>
             
