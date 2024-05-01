@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity.Core.Mapping;
+using System.Data.SQLite;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
@@ -13,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Calendar;
+using HomeCalendarWPF.interfaces;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 [assembly: InternalsVisibleTo("TestProject_Presenter")]
 
@@ -218,6 +220,11 @@ namespace HomeCalendarWPF
                 }
 
             }
+        }
+
+        public void UpdateEvent(CalendarItem item)
+        {
+            
         }
 
         #endregion

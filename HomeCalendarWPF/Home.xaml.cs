@@ -1,4 +1,5 @@
 ﻿using Calendar;
+using HomeCalendarWPF.interfaces;
 using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
@@ -292,6 +293,16 @@ namespace HomeCalendarWPF
             }
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+        }
+
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

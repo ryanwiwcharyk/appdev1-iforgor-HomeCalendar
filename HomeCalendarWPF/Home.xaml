@@ -9,6 +9,7 @@
     <Window.FontFamily>
         <FontFamily>Copperplate</FontFamily>
     </Window.FontFamily>
+    
     <StackPanel Margin="10">
         <StackPanel.Background>
             <ImageBrush ImageSource="images/wallpaper2.png"/>
@@ -27,7 +28,17 @@
             </Grid.RowDefinitions>
 
 
-            <DataGrid CanUserAddRows="False" AutoGenerateColumns="False" Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents">
+            <DataGrid IsReadOnly="True"  CanUserAddRows="False" AutoGenerateColumns="False" Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents" >
+                <DataGrid.Resources>
+                    <ContextMenu x:Key="ItemContextMenu">
+                        <MenuItem Header="Edit" Click="MenuItemEdit_Click"/>
+                        <MenuItem Header="Delete" Click="MenuItemDelete_Click"/>
+                    </ContextMenu>
+                </DataGrid.Resources>
+                
+                <DataGrid.ContextMenu>
+                    <StaticResource ResourceKey="ItemContextMenu"/>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Total Busy Time" Binding="{Binding TotalBusyTime, StringFormat=\{0:0.00\}}"/>
                 </DataGrid.Columns>
