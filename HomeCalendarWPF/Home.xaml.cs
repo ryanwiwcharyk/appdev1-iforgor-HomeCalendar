@@ -1,4 +1,5 @@
 ﻿using Calendar;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -47,7 +49,7 @@ namespace HomeCalendarWPF
 
         private void BtnClick_CloseApplication(object sender, RoutedEventArgs e)
         {
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
         }
 
         public void AddCategoriesToDropdown(List<Category> categories)
@@ -71,18 +73,15 @@ namespace HomeCalendarWPF
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
             UpcomingEvents.ItemsSource = upcomingEvents;
-            ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
-            foreach (DataGridColumn column in columns)
-            {
-                if ((string)column.Header == "Month" || (string)column.Header == "Total Busy Time")
-                {
-                    column.Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    column.Visibility = Visibility.Visible;
-                }
-            }
+            UpcomingEvents.Columns.Clear();
+            var column = new DataGridTextColumn();
+            column.Header = "Start Date";
+            column.Binding = new System.Windows.Data.Binding("StartDateTime");
+            var column2 = new DataGridTextColumn();
+            column2.Header = "Total Busy Time";
+            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime"); // need to format 
+            UpcomingEvents.Columns.Add(column);
+            UpcomingEvents.Columns.Add(column2);
         }
 
         public void ShowNoUpcomingEvents(string message)
@@ -93,24 +92,39 @@ namespace HomeCalendarWPF
         public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> items)
         {
             UpcomingEvents.ItemsSource = items;
-            ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
-            foreach (DataGridColumn column in columns)
-            {
-                if ((string)column.Header != "Category" && (string)column.Header != "Total Busy Time")
-                {
-                    column.Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    column.Visibility = Visibility.Visible;
-                }
-            }
+            UpcomingEvents.Columns.Clear();
+            var column = new DataGridTextColumn();
+            column.Header = "Category";
+            column.Binding = new System.Windows.Data.Binding("Category");
+            var column2 = new DataGridTextColumn();
+            column2.Header = "Total Busy Time";
+            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime"); // need to format 
+            UpcomingEvents.Columns.Add(column);
+            UpcomingEvents.Columns.Add(column2);
+
         }
 
         public void ShowUpcomingEventsByMonth(List<CalendarItemsByMonth> items)
         {
+
+            UpcomingEvents.ItemsSource = items;
+            UpcomingEvents.Columns.Clear();                      
+            var column = new DataGridTextColumn();    
+            column.Header = "Month";
+            column.Binding = new System.Windows.Data.Binding("Month");         
+            var column2 = new DataGridTextColumn(); 
+            column2.Header = "Total Busy Time";
+            column2.Binding = new System.Windows.Data.Binding("TotalBusyTime");          
+            UpcomingEvents.Columns.Add(column);
+            UpcomingEvents.Columns.Add(column2);
+
+        }
+        public void ShowUpcomingEventsByMonthAndCategory(List<Dictionary<string, object>> items, List<Category> categories)
+        {
+
             UpcomingEvents.ItemsSource = items;
             ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
+
             foreach (DataGridColumn column in columns)
             {
                 if ((string)column.Header != "Month" && (string)column.Header != "Total Busy Time")
@@ -122,9 +136,37 @@ namespace HomeCalendarWPF
                     column.Visibility = Visibility.Visible;
                 }
             }
-        }
-        public void ShowUpcomingEventsByMonthAndCategory()
-        {
+
+            List<string> addedKeys = new List<string>();
+
+            // get list of column name from first dictionary in the list
+            // and create column and bind to dictionary element
+            foreach (Dictionary<string, object> item in items)
+            {
+                foreach (string key in item.Keys)
+                {
+
+                    if (key.Contains("items"))
+                    {
+
+                    }
+                    else if (addedKeys.Contains(key))
+                    {
+
+                    }
+                    else
+                    {
+
+                        
+                        var column = new DataGridTextColumn();
+                        column.Header = key;
+                        column.Binding = new System.Windows.Data.Binding($"[{key}]"); // Notice the square brackets!
+                        UpcomingEvents.Columns.Add(column);
+                        addedKeys.Add(key);
+                    }
+
+                }
+            }
 
         }
 
@@ -132,36 +174,46 @@ namespace HomeCalendarWPF
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         { 
            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            
         }
 
 
         private void summaryByCategory_Checked(object sender, RoutedEventArgs e)
         {
-            
             DateTime? startDate = startDatePicker.SelectedDate;
             DateTime? endDate = endDatePicker.SelectedDate;
             //add varaible to get filter by category once implemented
-            _presenter.GetEventsSortedByCategory(startDate, endDate);
+            
+            if ((bool)summaryByMonth.IsChecked)
+                _presenter.GetEventsByMonthAndCategory(startDate, endDate);
+            else
+                _presenter.GetEventsSortedByCategory(startDate, endDate);
         }
 
         private void summaryByCategory_Unchecked(object sender, RoutedEventArgs e)
         {
-            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            if ((bool)summaryByMonth.IsChecked)
+                _presenter.GetEventsSortedByMonth(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            else
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
 
         private void summaryByMonth_Checked(object sender, RoutedEventArgs e)
         {
-
             DateTime? startDate = startDatePicker.SelectedDate;
             DateTime? endDate = endDatePicker.SelectedDate;
 
-            _presenter.GetEventsSortedByMonth(startDate, endDate);
+            if ((bool)summaryByCategory.IsChecked)
+                _presenter.GetEventsByMonthAndCategory(startDate, endDate);
+            else
+                _presenter.GetEventsSortedByMonth(startDate, endDate);
         }
 
         private void summaryByMonth_Unchecked(object sender, RoutedEventArgs e)
         {
-            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            if ((bool)summaryByCategory.IsChecked)
+                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+            else
+                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
     }
 }

@@ -35,7 +35,6 @@
                     <DataGridTextColumn Header="Description" Binding="{Binding ShortDescription}"/>
                     <DataGridTextColumn Header="Duration" Binding="{Binding DurationInMinutes}"/>
                     <DataGridTextColumn Header="Busy Time" Binding="{Binding BusyTime, StringFormat=\{0:0.00\}}"/>
-                    <DataGridTextColumn Header="Month" Binding="{Binding Month}"/>
                     <DataGridTextColumn Header="Total Busy Time" Binding="{Binding TotalBusyTime, StringFormat=\{0:0.00\}}"/>
                 </DataGrid.Columns>
             </DataGrid>
@@ -55,8 +54,8 @@
 
             <GroupBox Header="Summary" Grid.Column="1" Grid.Row="2" Margin="10,5,10,85" >
                 <StackPanel>
-                    <CheckBox Content="By Month" Name="filterByMonth" Checked="summaryByMonth_Checked" Unchecked="summaryByMonth_Unchecked"></CheckBox>
-                    <CheckBox Content="By Category" Name="filterByCategory" Checked="summaryByCategory_Checked" Unchecked="summaryByCategory_Unchecked"></CheckBox>
+                    <CheckBox Content="By Month" Name="summaryByMonth" Checked="summaryByMonth_Checked" Unchecked="summaryByMonth_Unchecked"></CheckBox>
+                    <CheckBox Content="By Category" Name="summaryByCategory" Checked="summaryByCategory_Checked" Unchecked="summaryByCategory_Unchecked"></CheckBox>
                 </StackPanel>
             </GroupBox>
             

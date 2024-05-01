@@ -162,6 +162,14 @@ namespace HomeCalendarWPF
 
         }
 
+        public void GetEventsByMonthAndCategory(DateTime? start, DateTime? end)
+        {
+            List<Dictionary<string, object>> calendarItems = model.GetCalendarDictionaryByCategoryAndMonth(start, end, false, 0);
+            List<Category> categories = GetCategoryList();
+            homeView.ShowUpcomingEventsByMonthAndCategory(calendarItems, categories);
+
+        }
+
         #endregion
 
         #region Create Events
