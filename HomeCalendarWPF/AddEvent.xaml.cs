@@ -57,11 +57,21 @@ namespace HomeCalendarWPF
 
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
+            int hour;
+            int minutes;
             string details = eventDetails.Text;
             string duration = eventDuration.Text;
-            int hour = (int)hourSelector.SelectedItem;
-            int minute = (int)minuteSelector.SelectedItem;
-            DateTime? selectedDate = new DateTime(DateTime.Now.Year,datePicker.SelectedDate.Value.Month,datePicker.SelectedDate.Value.Day, hour, minute,0);
+
+            if (hourSelector.SelectedItem is null)
+                hour = 0;
+            else
+                hour = (int)hourSelector.SelectedItem;
+            if (minuteSelector.SelectedItem is null)
+                minutes = 0;
+            else
+                minutes = (int)minuteSelector.SelectedItem;
+
+            DateTime? selectedDate = new DateTime(DateTime.Now.Year,datePicker.SelectedDate.Value.Month,datePicker.SelectedDate.Value.Day, hour, minutes,0);
             string comboBoxSelectedCategory = categoryComboBox.Text;
             _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, comboBoxSelectedCategory);
             

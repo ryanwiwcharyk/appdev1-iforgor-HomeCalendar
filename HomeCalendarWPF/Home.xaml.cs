@@ -237,10 +237,5 @@ namespace HomeCalendarWPF
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
         }
-
-        private void categoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
