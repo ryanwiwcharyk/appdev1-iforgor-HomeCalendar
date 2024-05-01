@@ -66,6 +66,18 @@ namespace HomeCalendarWPF
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
             UpcomingEvents.ItemsSource = upcomingEvents;
+            ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
+            foreach (DataGridColumn column in columns)
+            {
+                if ((string)column.Header == "Month" || (string)column.Header == "Total Busy Time")
+                {
+                    column.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    column.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         public void ShowNoUpcomingEvents(string message)
@@ -79,9 +91,14 @@ namespace HomeCalendarWPF
             ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
             foreach (DataGridColumn column in columns)
             {
-                column.Visibility = Visibility.Visible;
-                if (string.IsNullOrEmpty(column.ToString()))
-                    column.Visibility = Visibility.Collapsed;
+                if ((string)column.Header != "Category" && (string)column.Header != "Total Busy Time")
+                {
+                    column.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    column.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -91,9 +108,14 @@ namespace HomeCalendarWPF
             ObservableCollection<DataGridColumn> columns = UpcomingEvents.Columns;
             foreach (DataGridColumn column in columns)
             {
-                column.Visibility = Visibility.Visible;
-                if (string.IsNullOrEmpty(column.ToString()))
-                    column.Visibility = Visibility.Collapsed;
+                if ((string)column.Header != "Month" && (string)column.Header != "Total Busy Time")
+                {
+                    column.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    column.Visibility = Visibility.Visible;
+                }
             }
         }
         public void ShowUpcomingEventsByMonthAndCategory()
