@@ -293,6 +293,12 @@ namespace HomeCalendarWPF
 
             updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat);
         }
+        public void DeleteEvent(CalendarItem item)
+        {
+            model.events.Delete(item.EventID);
+            GetUpcomingEvents();
+            
+        }
 
         #endregion
 

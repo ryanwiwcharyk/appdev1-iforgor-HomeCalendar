@@ -77,7 +77,7 @@ namespace HomeCalendarWPF
             }
 
         }
-
+  
 
         // Interface implementation
 
@@ -304,7 +304,8 @@ namespace HomeCalendarWPF
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            _presenter.DeleteEvent(selected);
         }
     }
 }
