@@ -307,5 +307,13 @@ namespace HomeCalendarWPF
             CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
             _presenter.DeleteEvent(selected);
         }
+
+        private void DoubleClick_Edit(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            UpdateEventWindow window = new UpdateEventWindow(_presenter, selected);
+            _presenter.PopulateUpdateEventFields(selected);
+            window.Show();
+        }
     }
 }
