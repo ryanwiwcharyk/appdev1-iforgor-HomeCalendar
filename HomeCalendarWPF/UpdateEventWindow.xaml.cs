@@ -30,14 +30,14 @@ namespace HomeCalendarWPF
 
         #region Interface Implementation
 
-        public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, Category category)
+        public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, string categoryDescription)
         {
             eventDetails.Text = details;
             eventDuration.Text = duration.ToString("F2");
             datePicker.Text = startDate.ToString("yyyy/MM/dd");
             hourSelector.Text = hours.ToString();
             minuteSelector.Text = minutes.ToString();
-            categoryComboBox.Text = category.Description;
+            categoryComboBox.Text = categoryDescription;
         }
 
         public void AddCategoriesToDropdown(List<Category> categories)

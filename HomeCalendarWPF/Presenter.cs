@@ -10,7 +10,7 @@ namespace HomeCalendarWPF
 {
     public class Presenter
     {
-        private ICreateEventViewInterface createEventView;
+        private UpdateEventViewInterface createEventView;
         private CategoryView createCategoryView;
         private HomeInterface homeView;
         private MainViewInterface mainView;
@@ -33,7 +33,7 @@ namespace HomeCalendarWPF
 
         internal HomeInterface HomeInterface { get { return homeView; } }
 
-        internal ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
+        internal UpdateEventViewInterface createEventViewInterface { get { return createEventView; } }
 
         internal CategoryView CategoryView { get { return createCategoryView; } }
 
@@ -41,11 +41,6 @@ namespace HomeCalendarWPF
         #endregion
 
         #region Window Registration
-
-        public void RegisterWindow(ICreateEventViewInterface view)
-        {
-            createEventView = view;
-        }
 
         public void RegisterWindow(CategoryView view)
         {
@@ -60,6 +55,7 @@ namespace HomeCalendarWPF
         public void RegisterWindow(UpdateEventViewInterface view)
         {
             updateView = view;
+            createEventView = view;
         }
 
 
@@ -166,7 +162,6 @@ namespace HomeCalendarWPF
             createEventView.AddCategoriesToDropdown(categoryList);
         }
 
-
         public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, Category selectedCategory)
         {
             if (string.IsNullOrEmpty(details))
@@ -205,7 +200,16 @@ namespace HomeCalendarWPF
             }
         }
 
-
+        public void PopulateCreateEventFields()
+        {
+            string detailsPlaceholder = "Enter event details here...";
+            DateTime startTime = DateTime.Now;
+            double duration = 0;
+            int hour = 0;
+            int minute = 0;
+            string categoryPlaceholder = "Select a category";
+            createEventView.ShowPopulatedFields(detailsPlaceholder,duration,startTime,hour,minute,categoryPlaceholder);
+        }
         public void DeleteEvent(CalendarItem item)
         {
             model.events.Delete(item.EventID);
@@ -275,7 +279,7 @@ namespace HomeCalendarWPF
             int hour = eventToUpdate.StartDateTime.Hour;
             int minute = eventToUpdate.StartDateTime.Minute;
 
-            updateView.ShowPopulatedFields(details, duration, start, hour, minute, cat);
+            updateView.ShowPopulatedFields(details, duration, start, hour, minute, cat.Description);
         }
 
         #endregion
