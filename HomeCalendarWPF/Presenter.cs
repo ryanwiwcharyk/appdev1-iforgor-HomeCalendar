@@ -27,13 +27,6 @@ namespace HomeCalendarWPF
             return categories.List();
         }
 
-        private string FindCategoryNameById(int id)
-        {
-            List<Category> cats = GetCategoryList();
-            Category cat = cats.Find(x => x.Id == id);
-            return cat.Description;
-        }
-
         #region Properties
 
         internal MainViewInterface MainViewInterface { get { return mainView; } }
@@ -247,7 +240,7 @@ namespace HomeCalendarWPF
             {
                 updateView.ShowErrorPopup("Please provide a start time.");
             }
-            else if (string.IsNullOrEmpty(selectedCategory.Description))
+            else if (selectedCategory is null)
             {
                 updateView.ShowErrorPopup("Please pick a category.");
             }

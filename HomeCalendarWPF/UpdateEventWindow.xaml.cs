@@ -113,7 +113,7 @@ namespace HomeCalendarWPF
         private void BtnClick_AddCategory(object sender, RoutedEventArgs e)
         {
             AddCategory category = new AddCategory(_presenter);
-            category.Show();
+            category.ShowDialog();
 
         }
 

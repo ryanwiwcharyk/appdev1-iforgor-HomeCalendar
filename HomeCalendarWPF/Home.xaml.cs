@@ -1,23 +1,9 @@
 ﻿using Calendar;
 using HomeCalendarWPF.interfaces;
-using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HomeCalendarWPF
 {
@@ -77,24 +63,24 @@ namespace HomeCalendarWPF
             }
 
         }
-  
+
 
         // Interface implementation
 
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
-  
+
             var column = new DataGridTextColumn();
             column.Header = "Start Date";
             column.Binding = new System.Windows.Data.Binding("StartDateTime");
             column.Binding.StringFormat = "{0:yyyy/MM/dd}";
             var column2 = new DataGridTextColumn();
             column2.Header = "Start Time";
-            column2.Binding = new System.Windows.Data.Binding("StartDateTime");  
+            column2.Binding = new System.Windows.Data.Binding("StartDateTime");
             column2.Binding.StringFormat = "{0:HH:mm:ss}";
             var column3 = new DataGridTextColumn();
             column3.Header = "Category";
-            column3.Binding = new System.Windows.Data.Binding("Category"); 
+            column3.Binding = new System.Windows.Data.Binding("Category");
             var column4 = new DataGridTextColumn();
             column4.Header = "Description";
             column4.Binding = new System.Windows.Data.Binding("ShortDescription");
@@ -135,7 +121,7 @@ namespace HomeCalendarWPF
             var column2 = new DataGridTextColumn();
             column2.Header = "Total Busy Time";
             column2.Binding = new System.Windows.Data.Binding("TotalBusyTime");
-            column2.Binding.StringFormat = "{0:F2}"; 
+            column2.Binding.StringFormat = "{0:F2}";
             UpcomingEvents.Columns.Add(column);
             UpcomingEvents.Columns.Add(column2);
 
@@ -145,11 +131,11 @@ namespace HomeCalendarWPF
         {
 
             UpcomingEvents.ItemsSource = items;
-            UpcomingEvents.Columns.Clear();                      
-            var column = new DataGridTextColumn();    
+            UpcomingEvents.Columns.Clear();
+            var column = new DataGridTextColumn();
             column.Header = "Month";
-            column.Binding = new System.Windows.Data.Binding("Month");         
-            var column2 = new DataGridTextColumn(); 
+            column.Binding = new System.Windows.Data.Binding("Month");
+            var column2 = new DataGridTextColumn();
             column2.Header = "Total Busy Time";
             column2.Binding = new System.Windows.Data.Binding("TotalBusyTime");
             column2.Binding.StringFormat = "{0:F2}";
@@ -187,10 +173,7 @@ namespace HomeCalendarWPF
                 addedKeys.Add(category.Description);
             }
 
- 
             UpcomingEvents.ItemsSource = items;
-
-
         }
 
 
@@ -215,21 +198,14 @@ namespace HomeCalendarWPF
         {
             DateTime? startDate = startDatePicker.SelectedDate;
             DateTime? endDate = endDatePicker.SelectedDate;
-            //add varaible to get filter by category once implemented
-            
+
             if ((bool)summaryByMonth.IsChecked)
                 _presenter.GetEventsByMonthAndCategory(startDate, endDate);
-            else if ((bool)FilterCategory.IsChecked)
+            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
             {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDate, endDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsSortedByCategory(startDate, endDate);
-
+                Category? cat = (Category)categoryComboBox.SelectedItem;
+                int catId = cat.Id;
+                _presenter.GetEventsSortedByCategory(startDate, endDate, true, catId);
             }
             else
                 _presenter.GetEventsSortedByCategory(startDate, endDate);
@@ -239,16 +215,11 @@ namespace HomeCalendarWPF
         {
             if ((bool)summaryByMonth.IsChecked)
                 _presenter.GetEventsSortedByMonth(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            else if ((bool)FilterCategory.IsChecked)
+            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
             {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+                Category? cat = (Category)categoryComboBox.SelectedItem;
+                int catId = cat.Id;
+                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
             }
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
@@ -261,16 +232,11 @@ namespace HomeCalendarWPF
 
             if ((bool)summaryByCategory.IsChecked)
                 _presenter.GetEventsByMonthAndCategory(startDate, endDate);
-            else if ((bool)FilterCategory.IsChecked)
+            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
             {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsSortedByMonth(startDate, endDate);
+                Category? cat = (Category)categoryComboBox.SelectedItem;
+                int catId = cat.Id;
+                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
             }
             else
                 _presenter.GetEventsSortedByMonth(startDate, endDate);
@@ -280,16 +246,11 @@ namespace HomeCalendarWPF
         {
             if ((bool)summaryByCategory.IsChecked)
                 _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            else if ((bool)FilterCategory.IsChecked)
+            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
             {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
+                Category? cat = (Category)categoryComboBox.SelectedItem;
+                int catId = cat.Id;
+                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
             }
             else
                 _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
