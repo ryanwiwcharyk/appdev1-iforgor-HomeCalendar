@@ -35,8 +35,8 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <Button Background="#e0ffde" BorderThickness="0"  Content="Update event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" ></Button>
-            <Button Background="#ffdede"  BorderThickness="0" Content="Cancel event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center"></Button>
+            <Button Background="#e0ffde" BorderThickness="0"  Content="Update event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_UpdateEvent"></Button>
+            <Button Background="#ffdede"  BorderThickness="0" Content="Cancel event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_CancelEvent"></Button>
         </StackPanel>
 
     </StackPanel>
