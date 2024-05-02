@@ -282,7 +282,7 @@ namespace HomeCalendarWPF
             int hour = eventToUpdate.StartDateTime.Hour;
             int minute = eventToUpdate.StartDateTime.Minute;
 
-            updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat);
+            updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat.Description);
         }
 
         public void ViewSelector(bool summaryByMonthChecked, bool summaryByCategoryChecked, bool filterByCategoryChecked, Category? selectedCategory, DateTime? startDate, DateTime? endDate)
