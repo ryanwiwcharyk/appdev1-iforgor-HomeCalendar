@@ -1,11 +1,11 @@
-﻿<Window x:Class="HomeCalendarWPF.UpdateEvent"
+﻿<Window x:Class="HomeCalendarWPF.UpdateEventWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarWPF"
         mc:Ignorable="d"
-        Title="UpdateEvent" Height="450" Width="800">
+        Title="UpdateEventWindow" Height="450" Width="800">
     <StackPanel>
         <StackPanel.Background>
             <RadialGradientBrush>
@@ -35,7 +35,7 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal">
-            <Button Background="#e0ffde" BorderThickness="0"  Content="Create event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_CreateEvent"></Button>
+            <Button Background="#e0ffde" BorderThickness="0"  Content="Update event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_UpdateEvent"></Button>
             <Button Background="#ffdede"  BorderThickness="0" Content="Cancel event" Width="150" Margin="10" FontSize="20" HorizontalAlignment="Center" Click="BtnClick_CancelEvent"></Button>
         </StackPanel>
 

@@ -298,6 +298,8 @@ namespace HomeCalendarWPF
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
             CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            UpdateEventWindow update = new UpdateEventWindow(_presenter, selected);
+            update.ShowDialog();
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
