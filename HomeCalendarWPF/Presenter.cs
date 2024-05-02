@@ -1,21 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.Entity.Core.Mapping;
-using System.Data.SQLite;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Runtime.ConstrainedExecution;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Calendar;
+﻿using Calendar;
 using HomeCalendarWPF.interfaces;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("TestProject_Presenter")]
 
 
@@ -23,8 +10,6 @@ namespace HomeCalendarWPF
 {
     public class Presenter
     {
-        //private readonly ViewInterface view;
-
         private ICreateEventViewInterface createEventView;
         private CategoryView createCategoryView;
         private HomeInterface homeView;
@@ -84,7 +69,7 @@ namespace HomeCalendarWPF
             updateView = view;
         }
 
-        
+
         #endregion
 
         #region Welcome Page
@@ -112,7 +97,6 @@ namespace HomeCalendarWPF
         {
 
             List<CalendarItem> events = model.GetCalendarItems(null, null, false, 0);
-            //ObservableCollection<CalendarItem> events2 = new ObservableCollection<CalendarItem>(events);
             List<string> names = new List<string>();
             foreach (CalendarItem item in events)
             {
@@ -126,19 +110,18 @@ namespace HomeCalendarWPF
 
         public void PopulateCategoryDropdownInHomePage() //combo box category drop down
         {
-            Categories categories = model.categories;
-            List<Category> categoryList = categories.List();
+            List<Category> categoryList = GetCategoryList();
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
         public void ValidateFilterToggleByCategory(Category selectedCategory, DateTime? start, DateTime? end)
         {
-            if (selectedCategory!=null)
+            if (selectedCategory != null)
             {
                 List<CalendarItem> updatedList = model.GetCalendarItems(start, end, true, selectedCategory.Id);
                 homeView.ShowUpcomingEvents(updatedList);
             }
-                
+
         }
 
         public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate, bool filter = false, int catId = 0)
@@ -194,7 +177,7 @@ namespace HomeCalendarWPF
             updateView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, string selectedCategory)
+        public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, Category selectedCategory)
         {
             if (string.IsNullOrEmpty(details))
             {
@@ -212,21 +195,17 @@ namespace HomeCalendarWPF
             {
                 createEventView.ShowErrorPopup("Please provide a start time.");
             }
-            else if (string.IsNullOrEmpty(selectedCategory))
+            else if (string.IsNullOrEmpty(selectedCategory.Description))
             {
                 createEventView.ShowErrorPopup("Please pick a category.");
             }
             else
             {
-                List<Category> categories = model.categories.List();
-                Category category = categories.Find(x => x.Description == selectedCategory);
-
-                if (category != null && startTime != null)
+                if (selectedCategory != null && startTime != null)
                 {
-                    model.events.Add((DateTime)startTime, category.Id, validDurationAsDouble, details);
+                    model.events.Add((DateTime)startTime, selectedCategory.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("Event was successfully created.");
                     GetUpcomingEvents();
-
                 }
                 else
                 {
@@ -236,7 +215,7 @@ namespace HomeCalendarWPF
             }
         }
 
-        public void ValidateEventFormInputAndUpdate(int eventId, string details, string duration, DateTime? startTime, string selectedCategory)
+        public void ValidateEventFormInputAndUpdate(int eventId, string details, string duration, DateTime? startTime, Category selectedCategory)
         {
             if (string.IsNullOrEmpty(details))
             {
@@ -254,18 +233,16 @@ namespace HomeCalendarWPF
             {
                 updateView.ShowErrorPopup("Please provide a start time.");
             }
-            else if (string.IsNullOrEmpty(selectedCategory))
+            else if (string.IsNullOrEmpty(selectedCategory.Description))
             {
                 updateView.ShowErrorPopup("Please pick a category.");
             }
             else
             {
-                List<Category> categories = model.categories.List();
-                Category category = categories.Find(x => x.Description == selectedCategory);
 
-                if (category != null && startTime != null)
+                if (selectedCategory != null && startTime != null)
                 {
-                    model.events.UpdateProperties(eventId, (DateTime)startTime, category.Id, validDurationAsDouble, details);
+                    model.events.UpdateProperties(eventId, (DateTime)startTime, selectedCategory.Id, validDurationAsDouble, details);
                     updateView.ShowSuccessPopup("Event was successfully updated.");
                     GetUpcomingEvents();
 
@@ -291,13 +268,13 @@ namespace HomeCalendarWPF
             int hour = eventToUpdate.StartDateTime.Hour;
             int minute = eventToUpdate.StartDateTime.Minute;
 
-            updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat);
+            updateView.ShowPopulatedFields(details, duration, start, hour, minute, cat);
         }
         public void DeleteEvent(CalendarItem item)
         {
             model.events.Delete(item.EventID);
             GetUpcomingEvents();
-            
+
         }
 
         #endregion

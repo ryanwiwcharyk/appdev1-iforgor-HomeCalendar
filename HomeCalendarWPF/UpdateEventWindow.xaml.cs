@@ -107,8 +107,7 @@ namespace HomeCalendarWPF
 
             DateTime? selectedDate = new DateTime(DateTime.Now.Year, datePicker.SelectedDate.Value.Month, datePicker.SelectedDate.Value.Day, hour, minutes, 0);
             Category cat = categoryComboBox.SelectedItem as Category;
-            string comboBoxSelectedCategory = cat.Description;
-            _presenter.ValidateEventFormInputAndUpdate(EventId, details, duration, selectedDate, comboBoxSelectedCategory);
+            _presenter.ValidateEventFormInputAndUpdate(EventId, details, duration, selectedDate, cat);
         }
 
         private void BtnClick_AddCategory(object sender, RoutedEventArgs e)
