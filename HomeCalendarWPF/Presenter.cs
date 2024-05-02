@@ -114,6 +114,7 @@ namespace HomeCalendarWPF
             homeView.AddCategoriesToDropdown(categoryList);
         }
 
+        #region Filtering and Summaries
         public void ValidateFilterToggleByCategory(Category selectedCategory, DateTime? start, DateTime? end)
         {
             if (selectedCategory != null)
@@ -161,6 +162,7 @@ namespace HomeCalendarWPF
             homeView.ShowUpcomingEventsByMonthAndCategory(calendarItems, categories);
 
         }
+        #endregion
 
         #endregion
 
@@ -171,11 +173,6 @@ namespace HomeCalendarWPF
             createEventView.AddCategoriesToDropdown(categoryList);
         }
 
-        public void PopulateCategoryDropdownForUpdate()
-        {
-            List<Category> categoryList = GetCategoryList();
-            updateView.AddCategoriesToDropdown(categoryList);
-        }
 
         public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, Category selectedCategory)
         {
@@ -213,6 +210,23 @@ namespace HomeCalendarWPF
                 }
 
             }
+        }
+
+
+        public void DeleteEvent(CalendarItem item)
+        {
+            model.events.Delete(item.EventID);
+            GetUpcomingEvents();
+
+        }
+
+        #endregion
+
+        #region Update Events
+        public void PopulateCategoryDropdownForUpdate()
+        {
+            List<Category> categoryList = GetCategoryList();
+            updateView.AddCategoriesToDropdown(categoryList);
         }
 
         public void ValidateEventFormInputAndUpdate(int eventId, string details, string duration, DateTime? startTime, Category selectedCategory)
@@ -270,20 +284,10 @@ namespace HomeCalendarWPF
 
             updateView.ShowPopulatedFields(details, duration, start, hour, minute, cat);
         }
-        public void DeleteEvent(CalendarItem item)
-        {
-            model.events.Delete(item.EventID);
-            GetUpcomingEvents();
-
-        }
 
         #endregion
 
         #region Create Category
-
-        //populate the category Types combo box
-
-        //add category based on details + category type with validation
 
         public void PopulateCategoryTypesDropdown()
         {
