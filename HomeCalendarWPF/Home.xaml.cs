@@ -212,11 +212,9 @@ namespace HomeCalendarWPF
             UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
-        public void ShowNoUpcomingEvents(string message)
+        public void ShowNoUpcomingEvents()
         {
-            var column = new DataGridTextColumn();
-            column.Header = "There are no events to show.";
-            UpcomingEvents.Columns.Add(column);
+            UpcomingEvents.Columns.Clear();
         }
 
         public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> items)
@@ -284,7 +282,27 @@ namespace HomeCalendarWPF
             UpcomingEvents.ItemsSource = items;
         }
 
-        #endregion
 
+        private void Change_InFilters(object sender, RoutedEventArgs e)
+        {
+            DateTime? startDate = startDatePicker.SelectedDate;
+            DateTime? endDate = endDatePicker.SelectedDate;
+            _presenter.ViewSelector((bool)summaryByMonth.IsChecked, (bool)summaryByCategory.IsChecked, (bool)FilterCategory.IsChecked, (Category)categoryComboBox.SelectedItem, startDate, endDate);
+
+        }
+
+
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            UpdateEventWindow update = new UpdateEventWindow(_presenter, selected);
+            update.ShowDialog();
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            _presenter.DeleteEvent(selected);
+        }
     }
 }
