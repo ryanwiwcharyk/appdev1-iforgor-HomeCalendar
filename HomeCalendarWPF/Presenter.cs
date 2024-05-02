@@ -284,13 +284,7 @@ namespace HomeCalendarWPF
 
             updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat);
         }
-        public void DeleteEvent(CalendarItem item)
-        {
-            model.events.Delete(item.EventID);
-            GetUpcomingEvents();
-            
 
-        }
         public void ViewSelector(bool summaryByMonthChecked, bool summaryByCategoryChecked, bool filterByCategoryChecked, Category? selectedCategory, DateTime? startDate, DateTime? endDate)
         {
             if (filterByCategoryChecked)
