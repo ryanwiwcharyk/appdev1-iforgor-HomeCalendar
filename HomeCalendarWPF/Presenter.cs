@@ -167,7 +167,7 @@ namespace HomeCalendarWPF
 
         public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, Category selectedCategory)
         {
-            if (string.IsNullOrEmpty(details))
+            if (string.IsNullOrEmpty(details) || details == "Enter event details here...")
             {
                 createEventView.ShowErrorPopup("Please provide event details.");
             }
@@ -183,7 +183,7 @@ namespace HomeCalendarWPF
             {
                 createEventView.ShowErrorPopup("Please provide a start time.");
             }
-            else if (string.IsNullOrEmpty(selectedCategory.Description))
+            else if (selectedCategory is null)
             {
                 createEventView.ShowErrorPopup("Please pick a category.");
             }
