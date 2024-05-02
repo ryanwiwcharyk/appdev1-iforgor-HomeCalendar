@@ -82,21 +82,6 @@ namespace HomeCalendarWPF
 
         #region Home Page
 
-        public void GetUpcomingEvents()
-        {
-
-            List<CalendarItem> events = model.GetCalendarItems(null, null, false, 0);
-            List<string> names = new List<string>();
-            foreach (CalendarItem item in events)
-            {
-                names.Add($"{item.ShortDescription} - {item.StartDateTime}");
-            }
-            if (events.Count == 0)
-                homeView.ShowNoUpcomingEvents();
-            else
-                homeView.ShowUpcomingEvents(events);
-        }
-
         public void PopulateCategoryDropdownInHomePage() //combo box category drop down
         {
             List<Category> categoryList = GetCategoryList();
@@ -193,7 +178,7 @@ namespace HomeCalendarWPF
                 {
                     model.events.Add((DateTime)startTime, selectedCategory.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("Event was successfully created.");
-                    GetUpcomingEvents();
+                    GetEventsFilteredByDate(null, null);
                 }
                 else
                 {
@@ -216,7 +201,7 @@ namespace HomeCalendarWPF
         public void DeleteEvent(CalendarItem item)
         {
             model.events.Delete(item.EventID);
-            GetUpcomingEvents();
+            GetEventsFilteredByDate(null, null);
 
         }
 
@@ -258,7 +243,7 @@ namespace HomeCalendarWPF
                 {
                     model.events.UpdateProperties(eventId, (DateTime)startTime, selectedCategory.Id, validDurationAsDouble, details);
                     updateView.ShowSuccessPopup("Event was successfully updated.");
-                    GetUpcomingEvents();
+                    GetEventsFilteredByDate(null, null);
 
                 }
                 else
