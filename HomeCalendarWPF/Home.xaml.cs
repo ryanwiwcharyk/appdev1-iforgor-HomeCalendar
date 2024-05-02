@@ -118,11 +118,9 @@ namespace HomeCalendarWPF
             UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
-        public void ShowNoUpcomingEvents(string message)
+        public void ShowNoUpcomingEvents()
         {
-            var column = new DataGridTextColumn();
-            column.Header = "There are no events to show.";
-            UpcomingEvents.Columns.Add(column);
+            UpcomingEvents.Columns.Clear();
         }
 
         public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> items)
@@ -194,106 +192,14 @@ namespace HomeCalendarWPF
         }
 
 
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Category cat;
-            int catId;
-            if (categoryComboBox.SelectedItem is not null && (bool)FilterCategory.IsChecked)
-            {
-                cat = (Category)categoryComboBox.SelectedItem;
-                catId = cat.Id;
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-            }
-            else
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-
-
-        }
-
-
-        private void summaryByCategory_Checked(object sender, RoutedEventArgs e)
+        private void Change_InFilters(object sender, RoutedEventArgs e)
         {
             DateTime? startDate = startDatePicker.SelectedDate;
             DateTime? endDate = endDatePicker.SelectedDate;
-            //add varaible to get filter by category once implemented
-            
-            if ((bool)summaryByMonth.IsChecked)
-                _presenter.GetEventsByMonthAndCategory(startDate, endDate);
-            else if ((bool)FilterCategory.IsChecked)
-            {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDate, endDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsSortedByCategory(startDate, endDate);
+            _presenter.ViewSelector((bool)summaryByMonth.IsChecked, (bool)summaryByCategory.IsChecked, (bool)FilterCategory.IsChecked, (Category)categoryComboBox.SelectedItem, startDate, endDate);
 
-            }
-            else
-                _presenter.GetEventsSortedByCategory(startDate, endDate);
         }
 
-        private void summaryByCategory_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)summaryByMonth.IsChecked)
-                _presenter.GetEventsSortedByMonth(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            else if ((bool)FilterCategory.IsChecked)
-            {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            }
-            else
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-        }
-
-        private void summaryByMonth_Checked(object sender, RoutedEventArgs e)
-        {
-            DateTime? startDate = startDatePicker.SelectedDate;
-            DateTime? endDate = endDatePicker.SelectedDate;
-
-            if ((bool)summaryByCategory.IsChecked)
-                _presenter.GetEventsByMonthAndCategory(startDate, endDate);
-            else if ((bool)FilterCategory.IsChecked)
-            {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsSortedByMonth(startDate, endDate);
-            }
-            else
-                _presenter.GetEventsSortedByMonth(startDate, endDate);
-        }
-
-        private void summaryByMonth_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)summaryByCategory.IsChecked)
-                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            else if ((bool)FilterCategory.IsChecked)
-            {
-                if (categoryComboBox.SelectedItem is not null)
-                {
-                    Category? cat = (Category)categoryComboBox.SelectedItem;
-                    int catId = cat.Id;
-                    _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-                }
-                else
-                    _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            }
-            else
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-        }
 
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {

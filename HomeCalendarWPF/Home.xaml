@@ -14,7 +14,11 @@
         <StackPanel.Background>
             <ImageBrush ImageSource="images/wallpaper2.png"/>
         </StackPanel.Background>
-        <TextBlock Margin="10" Text="Welcome To Calendar" Foreground="#ecf6ff"  VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="35" FontStyle="Italic" FontWeight="DemiBold"></TextBlock>
+        <TextBlock Margin="10" Text="Welcome To Calendar" Foreground="#ecf6ff"  VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="35" FontStyle="Italic" FontWeight="DemiBold">
+                                    <TextBlock.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1.5" />
+                        </TextBlock.BitmapEffect>
+        </TextBlock>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="179*"/>
@@ -35,7 +39,10 @@
                         <MenuItem Header="Delete" Click="MenuItemDelete_Click"/>
                     </ContextMenu>
                 </DataGrid.Resources>
-                
+                <DataGrid.BitmapEffect>
+                    <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1.5" />
+                </DataGrid.BitmapEffect>
+
                 <DataGrid.ContextMenu>
                     <StaticResource ResourceKey="ItemContextMenu"/>
                 </DataGrid.ContextMenu>
@@ -45,29 +52,73 @@
 
             <GroupBox Header="Filter" Grid.Column="1" Grid.Row="0" Grid.RowSpan="1" Margin="10">
                 <StackPanel>
-                    <Label>Start Date</Label>
-                    <DatePicker Name="startDatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"></DatePicker>
-                    <Label>End Date</Label>
-                    <DatePicker Name="endDatePicker" SelectedDateChanged="DatePicker_SelectedDateChanged"></DatePicker>
-                    <CheckBox Name="FilterCategory" Content="Filter by Category?"  Checked="FilterCategory_Checked"  Unchecked="FilterCategory_Unchecked" ></CheckBox>
-                    <ComboBox Name="categoryComboBox" SelectionChanged="categoryComboBox_SelectionChange" ></ComboBox>
+                    <Label Foreground="White">Start Date
+                        <Label.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </Label.BitmapEffect>
+                    </Label>
+                    <DatePicker Name="startDatePicker" SelectedDateChanged="Change_InFilters">
+                        <DatePicker.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </DatePicker.BitmapEffect>
+                    </DatePicker>
+                    <Label Foreground="White">End Date
+                        <Label.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </Label.BitmapEffect>
+                    </Label>
+                    <DatePicker Name="endDatePicker" SelectedDateChanged="Change_InFilters">
+                        <DatePicker.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </DatePicker.BitmapEffect>
+                    </DatePicker>
+                    <CheckBox  Foreground="White" Name="FilterCategory" Content="Filter by Category?"  Checked="Change_InFilters"  Unchecked="Change_InFilters" >
+                        <CheckBox.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </CheckBox.BitmapEffect>
+                    </CheckBox>
+                    <ComboBox Name="categoryComboBox" SelectionChanged="Change_InFilters" >
+                        <ComboBox.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.2" ShadowDepth="1.5" />
+                        </ComboBox.BitmapEffect>
+                    </ComboBox>
                 </StackPanel>
                 
             </GroupBox>
 
             <GroupBox Header="Summary" Grid.Column="1" Grid.Row="2" Margin="10,5,10,85" >
                 <StackPanel>
-                    <CheckBox Content="By Month" Name="summaryByMonth" Checked="summaryByMonth_Checked" Unchecked="summaryByMonth_Unchecked"></CheckBox>
-                    <CheckBox Content="By Category" Name="summaryByCategory" Checked="summaryByCategory_Checked" Unchecked="summaryByCategory_Unchecked"></CheckBox>
+                    <CheckBox Content="By Month" Name="summaryByMonth" Checked="Change_InFilters" Unchecked="Change_InFilters" Foreground="White">
+                        <CheckBox.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </CheckBox.BitmapEffect>
+                    </CheckBox>
+                    <CheckBox Content="By Category" Name="summaryByCategory" Checked="Change_InFilters" Unchecked="Change_InFilters" Foreground="White">
+                        <CheckBox.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.1" ShadowDepth="1" />
+                        </CheckBox.BitmapEffect>
+                    </CheckBox>
                 </StackPanel>
             </GroupBox>
             
 
             <StackPanel Grid.Column="1" Grid.Row="2" Margin="10,85,10,-65" Orientation="Vertical">
 
-                <Button Background="#d2e1ee" BorderBrush="#d2e1ee"  Margin="10"  Width="150" Height="20" Content="Add Event" FontSize="16" x:Name="AddEventBtn" Click="AddEventBtn_Click"/>
-                <Button Background="#d2e1ee" BorderBrush="#d2e1ee"  Margin ="10" Width="150" Height="20" Content="Add Category" FontSize="16" x:Name="AddCategoryBtn" Click="AddCategoryBtn_Click"/>
-                <Button Background="#d2e1ee" BorderBrush="#d2e1ee"  Margin ="10" Width="150" Height="20" Content="Exit"  FontSize="16" x:Name="CLoseApplication" Click="BtnClick_CloseApplication"/>
+                <Button Background="#b8b8b8" Foreground="#131e59"   Margin="10"  Width="150" Height="20" Content="Add Event" FontSize="16" x:Name="AddEventBtn" Click="AddEventBtn_Click">
+                    <Button.BitmapEffect>
+                        <DropShadowBitmapEffect Color="Gray" Direction="-2"  Softness="0.2" ShadowDepth="1.5" />
+                    </Button.BitmapEffect>
+                </Button>
+                <Button Background="#b8b8b8" Foreground="#131e59" Margin ="10" Width="150" Height="20" Content="Add Category" FontSize="16" x:Name="AddCategoryBtn" Click="AddCategoryBtn_Click">
+                    <Button.BitmapEffect>
+                        <DropShadowBitmapEffect Color="Gray" Direction="1" Softness=".7" />
+                    </Button.BitmapEffect>
+                </Button>
+                <Button Background="#b8b8b8" Foreground="#131e59" Margin ="10" Width="150" Height="20" Content="Exit"  FontSize="16" x:Name="CLoseApplication" Click="BtnClick_CloseApplication">
+                     <Button.BitmapEffect>
+                        <DropShadowBitmapEffect Color="Gray" Direction="1" Softness=".7" />
+                    </Button.BitmapEffect>
+                </Button>
             </StackPanel>
 
         </Grid>

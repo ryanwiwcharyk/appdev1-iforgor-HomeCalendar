@@ -119,7 +119,7 @@ namespace HomeCalendarWPF
                 names.Add($"{item.ShortDescription} - {item.StartDateTime}");
             }
             if (events.Count == 0)
-                homeView.ShowNoUpcomingEvents("There are no upcoming events");
+                homeView.ShowNoUpcomingEvents();
             else
                 homeView.ShowUpcomingEvents(events);
         }
@@ -143,8 +143,11 @@ namespace HomeCalendarWPF
 
         public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate, bool filter = false, int catId = 0)
         {
-            List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, filter, catId);
-            homeView.ShowUpcomingEvents(ci);
+            List<CalendarItem> events = model.GetCalendarItems(startDate, endDate, filter, catId);
+            if (events.Count == 0)
+                homeView.ShowNoUpcomingEvents();
+            else
+                homeView.ShowUpcomingEvents(events);
         }
 
         public void GetEventsSortedByCategory(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
@@ -159,21 +162,21 @@ namespace HomeCalendarWPF
 
         }
 
-        public void GetEventsSortedByMonth(DateTime? start, DateTime? end)
+        public void GetEventsSortedByMonth(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
         {
             if (start is null)
                 start = DateTime.MinValue;
             if (end is null)
                 end = DateTime.MaxValue;
             //Change to accept a filter flag if it is selected
-            List<CalendarItemsByMonth> calendarItems = model.GetCalendarItemsByMonth(start, end, false, 0);
+            List<CalendarItemsByMonth> calendarItems = model.GetCalendarItemsByMonth(start, end, filter, catId);
             homeView.ShowUpcomingEventsByMonth(calendarItems);
 
         }
 
-        public void GetEventsByMonthAndCategory(DateTime? start, DateTime? end)
+        public void GetEventsByMonthAndCategory(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
         {
-            List<Dictionary<string, object>> calendarItems = model.GetCalendarDictionaryByCategoryAndMonth(start, end, false, 0);
+            List<Dictionary<string, object>> calendarItems = model.GetCalendarDictionaryByCategoryAndMonth(start, end, filter, catId);
             List<Category> categories = GetCategoryList();
             homeView.ShowUpcomingEventsByMonthAndCategory(calendarItems, categories);
 
@@ -298,6 +301,57 @@ namespace HomeCalendarWPF
             model.events.Delete(item.EventID);
             GetUpcomingEvents();
             
+
+        }
+        public void ViewSelector(bool summaryByMonthChecked, bool summaryByCategoryChecked, bool filterByCategoryChecked, Category? selectedCategory, DateTime? startDate, DateTime? endDate)
+        {
+            if (filterByCategoryChecked)
+            {
+                if  (selectedCategory != null)
+                {
+                    if (summaryByCategoryChecked && summaryByMonthChecked)
+                    {
+                        GetEventsByMonthAndCategory(startDate, endDate,true,selectedCategory.Id);
+                    }
+                    else if (summaryByMonthChecked)
+                    {
+                        GetEventsSortedByMonth(startDate, endDate, true, selectedCategory.Id);
+                    }
+                    else if (summaryByCategoryChecked)
+                    {
+                        GetEventsSortedByCategory(startDate, endDate, true, selectedCategory.Id);
+                    }
+                    else
+                    {
+                        GetEventsFilteredByDate(startDate, endDate, true, selectedCategory.Id);
+                    }
+                }
+                else
+                {
+                    homeView.ShowNoUpcomingEvents();
+                }
+
+            }
+            else
+            {
+                if (summaryByCategoryChecked && summaryByMonthChecked)
+                {
+                    GetEventsByMonthAndCategory(startDate, endDate);
+                }
+                else if (summaryByMonthChecked)
+                {
+                    GetEventsSortedByMonth(startDate, endDate);
+                }
+                else if (summaryByCategoryChecked)
+                {
+                    GetEventsSortedByCategory(startDate, endDate);
+                }
+                else
+                {
+                    GetEventsFilteredByDate(startDate, endDate);
+                }
+            }
+
         }
 
         #endregion
