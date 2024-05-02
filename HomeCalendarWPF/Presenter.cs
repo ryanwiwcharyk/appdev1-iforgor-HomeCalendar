@@ -83,6 +83,8 @@ namespace HomeCalendarWPF
         {
             updateView = view;
         }
+
+        
         #endregion
 
         #region Welcome Page
@@ -186,6 +188,12 @@ namespace HomeCalendarWPF
             createEventView.AddCategoriesToDropdown(categoryList);
         }
 
+        public void PopulateCategoryDropdownForUpdate()
+        {
+            List<Category> categoryList = GetCategoryList();
+            updateView.AddCategoriesToDropdown(categoryList);
+        }
+
         public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, string selectedCategory)
         {
             if (string.IsNullOrEmpty(details))
@@ -228,9 +236,62 @@ namespace HomeCalendarWPF
             }
         }
 
-        public void UpdateEvent(CalendarItem item)
+        public void ValidateEventFormInputAndUpdate(int eventId, string details, string duration, DateTime? startTime, string selectedCategory)
         {
-            
+            if (string.IsNullOrEmpty(details))
+            {
+                updateView.ShowErrorPopup("Please provide event details.");
+            }
+            else if (!double.TryParse(duration, out double validDurationAsDouble))
+            {
+                updateView.ShowErrorPopup("Please provide a valid duration.");
+            }
+            else if (validDurationAsDouble <= 0)
+            {
+                updateView.ShowErrorPopup("Please provide a positive duration.");
+            }
+            else if (!startTime.HasValue) //from https://stackoverflow.com/questions/41447490/how-do-i-get-value-from-datepickerwpf-in-c
+            {
+                updateView.ShowErrorPopup("Please provide a start time.");
+            }
+            else if (string.IsNullOrEmpty(selectedCategory))
+            {
+                updateView.ShowErrorPopup("Please pick a category.");
+            }
+            else
+            {
+                List<Category> categories = model.categories.List();
+                Category category = categories.Find(x => x.Description == selectedCategory);
+
+                if (category != null && startTime != null)
+                {
+                    model.events.UpdateProperties(eventId, (DateTime)startTime, category.Id, validDurationAsDouble, details);
+                    updateView.ShowSuccessPopup("Event was successfully updated.");
+                    GetUpcomingEvents();
+
+                }
+                else
+                {
+                    updateView.ShowErrorPopup("The selected category could not be found.");
+                }
+
+            }
+        }
+
+        public void PopulateUpdateEventFields(CalendarItem item)
+        {
+            List<Event> events = model.events.List();
+            List<Category> cats = model.categories.List();
+            Event eventToUpdate = events.Find(x => x.Id == item.EventID);
+            Category cat = cats.Find(x => x.Id == item.CategoryID);
+
+            string details = eventToUpdate.Details;
+            double duration = eventToUpdate.DurationInMinutes;
+            DateTime start = eventToUpdate.StartDateTime;
+            int hour = eventToUpdate.StartDateTime.Hour;
+            int minute = eventToUpdate.StartDateTime.Minute;
+
+            updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat);
         }
         public void DeleteEvent(CalendarItem item)
         {
@@ -301,6 +362,7 @@ namespace HomeCalendarWPF
                 if (createEventView != null)
                 {
                     PopulateCategoryDropdown();
+                    PopulateCategoryDropdownForUpdate();
                 }
             }
 
