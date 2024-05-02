@@ -33,6 +33,7 @@
                     <ContextMenu x:Key="ItemContextMenu">
                         <MenuItem Header="Edit" Click="MenuItemEdit_Click"/>
                         <MenuItem Header="Delete" Click="MenuItemDelete_Click"/>
+                        <MenuItem Header="Cancel" StaysOpenOnClick="False"></MenuItem>
                     </ContextMenu>
                 </DataGrid.Resources>
                 
