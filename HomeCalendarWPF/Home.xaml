@@ -32,11 +32,12 @@
             </Grid.RowDefinitions>
 
 
-            <DataGrid IsReadOnly="True"  CanUserAddRows="False" AutoGenerateColumns="False" Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents" >
+            <DataGrid IsReadOnly="True"  CanUserAddRows="False" AutoGenerateColumns="False" Grid.RowSpan="3" Grid.Column="0" Margin="10,0,10,-65" x:Name="UpcomingEvents" MouseDoubleClick="DoubleClick_Edit">
                 <DataGrid.Resources>
                     <ContextMenu x:Key="ItemContextMenu">
-                        <MenuItem Header="Edit" Click="MenuItemEdit_Click"/>
-                        <MenuItem Header="Delete" Click="MenuItemDelete_Click"/>
+                        <MenuItem Header="Edit" Click="MenuItemEdit_Click" Name="cmEdit"/>
+                        <MenuItem Header="Delete" Click="MenuItemDelete_Click" Name="cmDelete"/>
+                        <MenuItem Header="Cancel" StaysOpenOnClick="False"></MenuItem>
                     </ContextMenu>
                 </DataGrid.Resources>
                 <DataGrid.BitmapEffect>
