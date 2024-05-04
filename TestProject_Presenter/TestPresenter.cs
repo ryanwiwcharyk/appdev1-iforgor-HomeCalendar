@@ -15,6 +15,7 @@ namespace TestProject_Presenter
     using System.Windows;
     using Calendar;
     using HomeCalendarWPF.interfaces;
+    using static Calendar.Category;
 
     namespace TestProject_Presenter
     {
@@ -40,6 +41,19 @@ namespace TestProject_Presenter
             public bool calledShowRecentFiles = false;
             public bool calledShowUpcomingEvents = false;
             public int upcomingEventsCount = 0;
+            public bool calledAddCategoriesToDropdown = false;
+            public bool calledShowUpcomingEventsByCategory = false;
+            public bool calledShowUpcomingEventsByMonth = false;
+            public bool calledShowUpcomingEventsByMonthAndCategory = false;
+            public bool called = false;
+            
+
+
+
+            public void AddCategoriesToDropdown(List<Category> categories)
+            {
+                throw new NotImplementedException();
+            }
 
             public void ShowNoUpcomingEvents(string message)
             {
@@ -52,10 +66,26 @@ namespace TestProject_Presenter
                 calledShowRecentFiles = true;
             }
 
-            public void ShowUpcomingEvents(List<string> upcomingEvents)
+            public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
             {
                 calledShowUpcomingEvents = true;
                 upcomingEventsCount = upcomingEvents.Count();
+            }
+
+
+            public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> upcomingEventsByCategory)
+            {
+                calledShowUpcomingEventsByCategory = true;
+            }
+
+            public void ShowUpcomingEventsByMonth(List<CalendarItemsByMonth> upcomingEventsByMonth)
+            {
+                calledShowUpcomingEventsByMonth = true;
+            }
+
+            public void ShowUpcomingEventsByMonthAndCategory(List<Dictionary<string, object>> items, List<Category> categories)
+            {
+                calledShowUpcomingEventsByMonthAndCategory = true;
             }
         }
 
@@ -98,6 +128,36 @@ namespace TestProject_Presenter
             public void ShowErrorPopup(string message)
             {
                 calledShowErrorPopup = true;
+            }
+
+            public void ShowSuccessPopup(string message)
+            {
+                calledShowSuccessPopup = true;
+            }
+        }
+
+        public class TestUpdateView : UpdateEventViewInterface
+        {
+            public bool calledAddCategoriesToDropdown = false;
+            public bool calledShowErrorPopup = false;
+            public bool calledShowPopulatedFields = false;
+            public bool calledShowSuccessPopup = false;
+            public int categoryDropdownCount = 0;
+
+            public void AddCategoriesToDropdown(List<Category> cats)
+            {
+                calledAddCategoriesToDropdown = true;
+                categoryDropdownCount = cats.Count();
+            }
+
+            public void ShowErrorPopup(string message)
+            {
+                calledShowErrorPopup = true;
+            }
+
+            public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, Category category)
+            {
+                calledShowPopulatedFields = true;
             }
 
             public void ShowSuccessPopup(string message)
@@ -218,6 +278,8 @@ namespace TestProject_Presenter
                 Assert.True(testHomeView.calledShowUpcomingEvents);
 
             }
+
+
 
             // Testing Event window
             [StaFact]
@@ -490,6 +552,63 @@ namespace TestProject_Presenter
                 p.ValidateEventFormInputAndCreate(eventDetails, duration, startTime, cat);
 
                 Assert.True(testAddEventView.calledShowSuccessPopup);
+            }
+
+            //Testing Update window
+
+            [StaFact]
+            public void TestPopulateCategoryDropdownForUpdate()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestUpdateView testUpdateView = new TestUpdateView();
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                p.NewCalendar(path, name);
+                p.RegisterWindow(testUpdateView);
+
+                p.PopulateCategoryDropdownForUpdate();
+
+                Assert.True(testUpdateView.calledAddCategoriesToDropdown);
+            }
+
+            [StaFact]
+            public void TestValidateEventFormInputAndUpdate()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestUpdateView testUpdateView = new TestUpdateView();
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                int eventId = 2;
+                string details = "Walk";
+                string duration = "30";
+                DateTime? startTime = DateTime.Now;
+
+                int id = 3;
+                string description = "";
+                CategoryType type = CategoryType.Event;
+                Category selectedCat = new Category(id, description, type);
+
+                p.NewCalendar(path, name);
+                p.RegisterWindow(testUpdateView);
+
+                p.ValidateEventFormInputAndUpdate(eventId, details, duration, startTime, selectedCat);
+
+                Assert.True(testUpdateView.calledShowSuccessPopup);
+            }
+
+            [StaFact]
+            public void TestPopulateUpdateEventFields()
+            {
+                TestMainView view = new TestMainView();
+                Presenter p = new Presenter(view);
+                TestUpdateView testUpdateView = new TestUpdateView();
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+
+
+
             }
 
 
