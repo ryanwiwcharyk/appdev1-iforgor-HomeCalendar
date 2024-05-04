@@ -10,7 +10,7 @@ namespace HomeCalendarWPF
 {
     public class Presenter
     {
-        private ICreateEventViewInterface createEventView;
+        private UpdateEventViewInterface createEventView;
         private CategoryView createCategoryView;
         private HomeInterface homeView;
         private MainViewInterface mainView;
@@ -33,7 +33,7 @@ namespace HomeCalendarWPF
 
         internal HomeInterface HomeInterface { get { return homeView; } }
 
-        internal ICreateEventViewInterface createEventViewInterface { get { return createEventView; } }
+        internal UpdateEventViewInterface createEventViewInterface { get { return createEventView; } }
 
         internal CategoryView CategoryView { get { return createCategoryView; } }
 
@@ -41,11 +41,6 @@ namespace HomeCalendarWPF
         #endregion
 
         #region Window Registration
-
-        public void RegisterWindow(ICreateEventViewInterface view)
-        {
-            createEventView = view;
-        }
 
         public void RegisterWindow(CategoryView view)
         {
@@ -60,6 +55,7 @@ namespace HomeCalendarWPF
         public void RegisterWindow(UpdateEventViewInterface view)
         {
             updateView = view;
+            createEventView = view;
         }
 
 
@@ -86,21 +82,6 @@ namespace HomeCalendarWPF
 
         #region Home Page
 
-        public void GetUpcomingEvents()
-        {
-
-            List<CalendarItem> events = model.GetCalendarItems(null, null, false, 0);
-            List<string> names = new List<string>();
-            foreach (CalendarItem item in events)
-            {
-                names.Add($"{item.ShortDescription} - {item.StartDateTime}");
-            }
-            if (events.Count == 0)
-                homeView.ShowNoUpcomingEvents("There are no upcoming events");
-            else
-                homeView.ShowUpcomingEvents(events);
-        }
-
         public void PopulateCategoryDropdownInHomePage() //combo box category drop down
         {
             List<Category> categoryList = GetCategoryList();
@@ -120,8 +101,11 @@ namespace HomeCalendarWPF
 
         public void GetEventsFilteredByDate(DateTime? startDate, DateTime? endDate, bool filter = false, int catId = 0)
         {
-            List<CalendarItem> ci = model.GetCalendarItems(startDate, endDate, filter, catId);
-            homeView.ShowUpcomingEvents(ci);
+            List<CalendarItem> events = model.GetCalendarItems(startDate, endDate, filter, catId);
+            if (events.Count == 0)
+                homeView.ShowNoUpcomingEvents();
+            else
+                homeView.ShowUpcomingEvents(events);
         }
 
         public void GetEventsSortedByCategory(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
@@ -136,21 +120,21 @@ namespace HomeCalendarWPF
 
         }
 
-        public void GetEventsSortedByMonth(DateTime? start, DateTime? end)
+        public void GetEventsSortedByMonth(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
         {
             if (start is null)
                 start = DateTime.MinValue;
             if (end is null)
                 end = DateTime.MaxValue;
             //Change to accept a filter flag if it is selected
-            List<CalendarItemsByMonth> calendarItems = model.GetCalendarItemsByMonth(start, end, false, 0);
+            List<CalendarItemsByMonth> calendarItems = model.GetCalendarItemsByMonth(start, end, filter, catId);
             homeView.ShowUpcomingEventsByMonth(calendarItems);
 
         }
 
-        public void GetEventsByMonthAndCategory(DateTime? start, DateTime? end)
+        public void GetEventsByMonthAndCategory(DateTime? start, DateTime? end, bool filter = false, int catId = 0)
         {
-            List<Dictionary<string, object>> calendarItems = model.GetCalendarDictionaryByCategoryAndMonth(start, end, false, 0);
+            List<Dictionary<string, object>> calendarItems = model.GetCalendarDictionaryByCategoryAndMonth(start, end, filter, catId);
             List<Category> categories = GetCategoryList();
             homeView.ShowUpcomingEventsByMonthAndCategory(calendarItems, categories);
 
@@ -166,10 +150,9 @@ namespace HomeCalendarWPF
             createEventView.AddCategoriesToDropdown(categoryList);
         }
 
-
         public void ValidateEventFormInputAndCreate(string details, string duration, DateTime? startTime, Category selectedCategory)
         {
-            if (string.IsNullOrEmpty(details))
+            if (string.IsNullOrEmpty(details) || details == "Enter event details here...")
             {
                 createEventView.ShowErrorPopup("Please provide event details.");
             }
@@ -185,7 +168,7 @@ namespace HomeCalendarWPF
             {
                 createEventView.ShowErrorPopup("Please provide a start time.");
             }
-            else if (string.IsNullOrEmpty(selectedCategory.Description))
+            else if (selectedCategory is null)
             {
                 createEventView.ShowErrorPopup("Please pick a category.");
             }
@@ -195,7 +178,7 @@ namespace HomeCalendarWPF
                 {
                     model.events.Add((DateTime)startTime, selectedCategory.Id, validDurationAsDouble, details);
                     createEventView.ShowSuccessPopup("Event was successfully created.");
-                    GetUpcomingEvents();
+                    GetEventsFilteredByDate(null, null);
                 }
                 else
                 {
@@ -205,11 +188,20 @@ namespace HomeCalendarWPF
             }
         }
 
-
+        public void PopulateCreateEventFields()
+        {
+            string detailsPlaceholder = "Enter event details here...";
+            DateTime startTime = DateTime.Now;
+            double duration = 0;
+            int hour = 0;
+            int minute = 0;
+            string categoryPlaceholder = "Select a category";
+            createEventView.ShowPopulatedFields(detailsPlaceholder,duration,startTime,hour,minute,categoryPlaceholder);
+        }
         public void DeleteEvent(CalendarItem item)
         {
             model.events.Delete(item.EventID);
-            GetUpcomingEvents();
+            GetEventsFilteredByDate(null, null);
 
         }
 
@@ -251,7 +243,7 @@ namespace HomeCalendarWPF
                 {
                     model.events.UpdateProperties(eventId, (DateTime)startTime, selectedCategory.Id, validDurationAsDouble, details);
                     updateView.ShowSuccessPopup("Event was successfully updated.");
-                    GetUpcomingEvents();
+                    GetEventsFilteredByDate(null, null);
 
                 }
                 else
@@ -275,7 +267,58 @@ namespace HomeCalendarWPF
             int hour = eventToUpdate.StartDateTime.Hour;
             int minute = eventToUpdate.StartDateTime.Minute;
 
-            updateView.ShowPopulatedFields(details, duration, start, hour, minute, cat);
+            updateView.ShowPopulatedFields(details,duration,start,hour,minute,cat.Description);
+        }
+
+        public void ViewSelector(bool summaryByMonthChecked, bool summaryByCategoryChecked, bool filterByCategoryChecked, Category? selectedCategory, DateTime? startDate, DateTime? endDate)
+        {
+            if (filterByCategoryChecked)
+            {
+                if  (selectedCategory != null)
+                {
+                    if (summaryByCategoryChecked && summaryByMonthChecked)
+                    {
+                        GetEventsByMonthAndCategory(startDate, endDate,true,selectedCategory.Id);
+                    }
+                    else if (summaryByMonthChecked)
+                    {
+                        GetEventsSortedByMonth(startDate, endDate, true, selectedCategory.Id);
+                    }
+                    else if (summaryByCategoryChecked)
+                    {
+                        GetEventsSortedByCategory(startDate, endDate, true, selectedCategory.Id);
+                    }
+                    else
+                    {
+                        GetEventsFilteredByDate(startDate, endDate, true, selectedCategory.Id);
+                    }
+                }
+                else
+                {
+                    homeView.ShowNoUpcomingEvents();
+                }
+
+            }
+            else
+            {
+                if (summaryByCategoryChecked && summaryByMonthChecked)
+                {
+                    GetEventsByMonthAndCategory(startDate, endDate);
+                }
+                else if (summaryByMonthChecked)
+                {
+                    GetEventsSortedByMonth(startDate, endDate);
+                }
+                else if (summaryByCategoryChecked)
+                {
+                    GetEventsSortedByCategory(startDate, endDate);
+                }
+                else
+                {
+                    GetEventsFilteredByDate(startDate, endDate);
+                }
+            }
+
         }
 
         #endregion

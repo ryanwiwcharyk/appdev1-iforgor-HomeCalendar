@@ -17,8 +17,13 @@ namespace HomeCalendarWPF
         {
             InitializeComponent();
             _presenter = presenter;
+            InitializeWindow();
+        }
+
+        private void InitializeWindow()
+        {
             _presenter.RegisterWindow(this);
-            _presenter.GetUpcomingEvents();
+            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
             _presenter.PopulateCategoryDropdownInHomePage();
         }
 
@@ -40,33 +45,34 @@ namespace HomeCalendarWPF
             System.Windows.Application.Current.Shutdown();
         }
 
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            UpdateEventWindow update = new UpdateEventWindow(_presenter, selected);
+            update.ShowDialog();
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            _presenter.DeleteEvent(selected);
+        }
+
+        private void DoubleClick_Edit(object sender, RoutedEventArgs e)
+        {
+            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
+            UpdateEventWindow window = new UpdateEventWindow(_presenter, selected);
+            _presenter.PopulateUpdateEventFields(selected);
+            window.Show();
+        }
+
+        // Interface implementation
+
+        #region Interface Implementation
         public void AddCategoriesToDropdown(List<Category> categories)
         {
             categoryComboBox.ItemsSource = categories;
         }
-
-        private void FilterCategory_Checked(object sender, RoutedEventArgs e)
-        {
-            _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem, startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-
-        }
-        private void FilterCategory_Unchecked(object sender, RoutedEventArgs e)
-        {
-            _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-
-        }
-        private void categoryComboBox_SelectionChange(object sender, RoutedEventArgs e)
-        {
-            if ((bool)FilterCategory.IsChecked)
-            {
-                _presenter.ValidateFilterToggleByCategory((Category)categoryComboBox.SelectedItem, startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            }
-
-        }
-
-
-        // Interface implementation
-
         public void ShowUpcomingEvents(List<CalendarItem> upcomingEvents)
         {
 
@@ -104,11 +110,9 @@ namespace HomeCalendarWPF
             UpcomingEvents.ItemsSource = upcomingEvents;
         }
 
-        public void ShowNoUpcomingEvents(string message)
+        public void ShowNoUpcomingEvents()
         {
-            var column = new DataGridTextColumn();
-            column.Header = "There are no events to show.";
-            UpcomingEvents.Columns.Add(column);
+            UpcomingEvents.Columns.Clear();
         }
 
         public void ShowUpcomingEventsByCategory(List<CalendarItemsByCategory> items)
@@ -177,104 +181,14 @@ namespace HomeCalendarWPF
         }
 
 
-        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Category cat;
-            int catId;
-            if (categoryComboBox.SelectedItem is not null && (bool)FilterCategory.IsChecked)
-            {
-                cat = (Category)categoryComboBox.SelectedItem;
-                catId = cat.Id;
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-            }
-            else
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-
-
-        }
-
-
-        private void summaryByCategory_Checked(object sender, RoutedEventArgs e)
+        private void Change_InFilters(object sender, RoutedEventArgs e)
         {
             DateTime? startDate = startDatePicker.SelectedDate;
             DateTime? endDate = endDatePicker.SelectedDate;
+            _presenter.ViewSelector((bool)summaryByMonth.IsChecked, (bool)summaryByCategory.IsChecked, (bool)FilterCategory.IsChecked, (Category)categoryComboBox.SelectedItem, startDate, endDate);
 
-            if ((bool)summaryByMonth.IsChecked)
-                _presenter.GetEventsByMonthAndCategory(startDate, endDate);
-            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
-            {
-                Category? cat = (Category)categoryComboBox.SelectedItem;
-                int catId = cat.Id;
-                _presenter.GetEventsSortedByCategory(startDate, endDate, true, catId);
-            }
-            else
-                _presenter.GetEventsSortedByCategory(startDate, endDate);
         }
 
-        private void summaryByCategory_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)summaryByMonth.IsChecked)
-                _presenter.GetEventsSortedByMonth(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
-            {
-                Category? cat = (Category)categoryComboBox.SelectedItem;
-                int catId = cat.Id;
-                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-            }
-            else
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-        }
-
-        private void summaryByMonth_Checked(object sender, RoutedEventArgs e)
-        {
-            DateTime? startDate = startDatePicker.SelectedDate;
-            DateTime? endDate = endDatePicker.SelectedDate;
-
-            if ((bool)summaryByCategory.IsChecked)
-                _presenter.GetEventsByMonthAndCategory(startDate, endDate);
-            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
-            {
-                Category? cat = (Category)categoryComboBox.SelectedItem;
-                int catId = cat.Id;
-                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-            }
-            else
-                _presenter.GetEventsSortedByMonth(startDate, endDate);
-        }
-
-        private void summaryByMonth_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if ((bool)summaryByCategory.IsChecked)
-                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-            else if ((bool)FilterCategory.IsChecked && categoryComboBox.SelectedItem is not null)
-            {
-                Category? cat = (Category)categoryComboBox.SelectedItem;
-                int catId = cat.Id;
-                _presenter.GetEventsSortedByCategory(startDatePicker.SelectedDate, endDatePicker.SelectedDate, true, catId);
-            }
-            else
-                _presenter.GetEventsFilteredByDate(startDatePicker.SelectedDate, endDatePicker.SelectedDate);
-        }
-
-        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
-        {
-            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
-            UpdateEventWindow update = new UpdateEventWindow(_presenter, selected);
-            update.ShowDialog();
-        }
-
-        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
-        {
-            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
-            _presenter.DeleteEvent(selected);
-        }
-
-        private void DoubleClick_Edit(object sender, RoutedEventArgs e)
-        {
-            CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
-            UpdateEventWindow window = new UpdateEventWindow(_presenter, selected);
-            _presenter.PopulateUpdateEventFields(selected);
-            window.Show();
-        }
+        #endregion
     }
 }

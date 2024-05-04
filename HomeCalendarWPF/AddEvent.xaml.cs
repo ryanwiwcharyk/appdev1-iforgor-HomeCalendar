@@ -9,7 +9,7 @@ namespace HomeCalendarWPF
     /// <summary>
     /// Interaction logic for AddEvent.xaml
     /// </summary>
-    public partial class AddEvent : Window, ICreateEventViewInterface
+    public partial class AddEvent : Window, UpdateEventViewInterface
     {
         readonly Presenter _presenter;
         public AddEvent(Presenter presenter)
@@ -24,6 +24,7 @@ namespace HomeCalendarWPF
         {
             _presenter.RegisterWindow(this);
             _presenter.PopulateCategoryDropdown();
+            _presenter.PopulateCreateEventFields();
             PopulateHourDropdown();
             PopulateMinutesDropdown();
         }
@@ -89,6 +90,16 @@ namespace HomeCalendarWPF
         public void AddCategoriesToDropdown(List<Category> categories)
         {
             categoryComboBox.ItemsSource = categories;
+        }
+
+        public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, string categoryDescription)
+        {
+            eventDetails.Text = details;
+            eventDuration.Text = duration.ToString("F2");
+            datePicker.Text = startDate.ToString("yyyy/MM/dd");
+            hourSelector.Text = hours.ToString();
+            minuteSelector.Text = minutes.ToString();
+            categoryComboBox.Text = categoryDescription;
         }
     }
 }
