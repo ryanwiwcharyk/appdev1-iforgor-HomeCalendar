@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\wallpaper.webp" />
+    <None Remove="images\wallpaper2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
     <PackageReference Include="Xunit.StaFact" Version="1.1.11" />
   </ItemGroup>
@@ -17,6 +22,11 @@
     <Reference Include="HomeCalendar">
       <HintPath>..\HomeCalendar\dll\HomeCalendar.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\wallpaper.webp" />
+    <Resource Include="images\wallpaper2.png" />
   </ItemGroup>
 
 </Project>

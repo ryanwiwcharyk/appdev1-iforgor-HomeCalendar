@@ -1,44 +1,66 @@
 ﻿using Calendar;
+using HomeCalendarWPF.interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HomeCalendarWPF
 {
     /// <summary>
     /// Interaction logic for AddEvent.xaml
     /// </summary>
-    public partial class AddEvent : Window, ICreateEventViewInterface
+    public partial class AddEvent : Window, UpdateEventViewInterface
     {
         readonly Presenter _presenter;
         public AddEvent(Presenter presenter)
         {
             InitializeComponent();
             _presenter = presenter;
-            _presenter.RegisterWindow(this);
-            _presenter.PopulateCategoryDropdown();
+            InitializeWindow();
 
         }
+
+        private void InitializeWindow()
+        {
+            _presenter.RegisterWindow(this);
+            _presenter.PopulateCategoryDropdown();
+            _presenter.PopulateCreateEventFields();
+            PopulateHourDropdown();
+            PopulateMinutesDropdown();
+        }
+
+        private void PopulateHourDropdown()
+        {
+            const int HOURS_IN_DAY = 24;
+            List<int> hours = new List<int>();
+            for (int i = 1; i <= HOURS_IN_DAY; i++)
+            {
+                hours.Add(i);
+            }
+            hourSelector.ItemsSource = hours;
+        }
+
+        private void PopulateMinutesDropdown()
+        {
+            List<int> minutesByFifteen = new List<int>() { 0, 15, 30, 45 };
+            minuteSelector.ItemsSource = minutesByFifteen;
+        }
+
         private void BtnClick_CreateEvent(object sender, RoutedEventArgs e)
         {
+            int hour = 0;
+            int minutes = 0;
             string details = eventDetails.Text;
             string duration = eventDuration.Text;
-            DateTime? selectedDate = datePicker.SelectedDate;
-            string comboBoxSelectedCategory = categoryComboBox.Text;
-            _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, comboBoxSelectedCategory);
-            
 
+            if (hourSelector.SelectedItem is not null)
+                hour = (int)hourSelector.SelectedItem;
+            if (minuteSelector.SelectedItem is not null)
+                minutes = (int)minuteSelector.SelectedItem;
+
+            DateTime? selectedDate = new DateTime(DateTime.Now.Year, datePicker.SelectedDate.Value.Month, datePicker.SelectedDate.Value.Day, hour, minutes, 0);
+            Category cat = categoryComboBox.SelectedItem as Category;
+            _presenter.ValidateEventFormInputAndCreate(details, duration, selectedDate, cat);
         }
         private void BtnClick_CancelEvent(object sender, RoutedEventArgs e)
         {
@@ -51,23 +73,33 @@ namespace HomeCalendarWPF
         private void BtnClick_AddCategory(object sender, RoutedEventArgs e)
         {
             AddCategory category = new AddCategory(_presenter);
-            category.Show();
+            category.ShowDialog();
 
         }
         public void ShowErrorPopup(string message)
         {
-            MessageBox.Show( message, "Home Calendar");
+            MessageBox.Show(message, "Home Calendar", MessageBoxButton.OK, MessageBoxImage.Error);
 
         }
         public void ShowSuccessPopup(string message)
         {
-            MessageBox.Show(message, "Home Calendar");
+            MessageBox.Show(message, "Home Calendar", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
 
         }
         public void AddCategoriesToDropdown(List<Category> categories)
         {
             categoryComboBox.ItemsSource = categories;
+        }
+
+        public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, string categoryDescription)
+        {
+            eventDetails.Text = details;
+            eventDuration.Text = duration.ToString("F2");
+            datePicker.Text = startDate.ToString("yyyy/MM/dd");
+            hourSelector.Text = hours.ToString();
+            minuteSelector.Text = minutes.ToString();
+            categoryComboBox.Text = categoryDescription;
         }
     }
 }

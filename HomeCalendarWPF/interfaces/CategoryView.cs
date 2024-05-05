@@ -5,12 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeCalendarWPF
+namespace HomeCalendarWPF.interfaces
 {
-    public interface ICreateEventViewInterface
+    public interface CategoryView
     {
-        public void AddCategoriesToDropdown(List<Category> categories);
+        public void ShowWarning(string warning);
+
+        public void FillDropDown(List<Category.CategoryType> types);
+
         public void ShowSuccessPopup(string message);
-        public void ShowErrorPopup(string message);
+
+
+
+
     }
 }
