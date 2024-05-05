@@ -45,19 +45,24 @@ namespace TestProject_Presenter
             public bool calledShowUpcomingEventsByCategory = false;
             public bool calledShowUpcomingEventsByMonth = false;
             public bool calledShowUpcomingEventsByMonthAndCategory = false;
-            public bool called = false;
+            public bool calledShowNoUpccomingEvents = false;
             
 
 
 
             public void AddCategoriesToDropdown(List<Category> categories)
             {
-                throw new NotImplementedException();
+                calledAddCategoriesToDropdown = true;
             }
 
             public void ShowNoUpcomingEvents(string message)
             {
                 calledShowNoUpcomingEvents = true;
+            }
+
+            public void ShowNoUpcomingEvents()
+            {
+                calledShowNoUpccomingEvents = true;
             }
 
             public void ShowRecentFiles()
@@ -112,11 +117,12 @@ namespace TestProject_Presenter
             }
         }
 
-        public class TestAddEventView : ICreateEventViewInterface
+        public class TestAddEventView : UpdateEventViewInterface
         {
             public bool calledAddCategoriesToDropdown = false;
             public bool calledShowErrorPopup = false;
             public bool calledShowSuccessPopup = false;
+            public bool calledShowPopulatedFields = false;
             public int categoryDropdownCount = 0;
 
             public void AddCategoriesToDropdown(List<Category> categories)
@@ -128,6 +134,11 @@ namespace TestProject_Presenter
             public void ShowErrorPopup(string message)
             {
                 calledShowErrorPopup = true;
+            }
+
+            public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, string categoryDescription)
+            {
+                calledShowPopulatedFields = true;
             }
 
             public void ShowSuccessPopup(string message)
@@ -155,7 +166,7 @@ namespace TestProject_Presenter
                 calledShowErrorPopup = true;
             }
 
-            public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, Category category)
+            public void ShowPopulatedFields(string details, double duration, DateTime startDate, int hours, int minutes, string categoryDescription)
             {
                 calledShowPopulatedFields = true;
             }
