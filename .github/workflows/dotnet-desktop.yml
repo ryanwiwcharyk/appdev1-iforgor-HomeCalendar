@@ -61,8 +61,8 @@ jobs:
       Test_Project_Path: TestProject_Presenter/TestProject_Presenter.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       Wap_Project_Directory: WapHomeCalendar    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       Wap_Project_Path: WapHomeCalendar/WapHomeCalendar.wapproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-      Test_DLL1: TestProject_Calendar/bin/${{ matrix.targetPlatform }}/${{ matrix.configuration }}/net6.0-windows/TestProject_Calendar.dll
-      Test_DLL2: TestProject_Presenter/bin/${{ matrix.targetPlatform }}/${{ matrix.configuration }}/net6.0-windows/TestProject_Presenter.dll
+      Test_DLL1: TestProject_Calendar\bin\${{ matrix.targetPlatform }}\${{ matrix.configuration }}\net6.0-windows\TestProject_Calendar.dll
+      Test_DLL2: TestProject_Presenter\bin\${{ matrix.targetPlatform }}\${{ matrix.configuration }}\net6.0-windows\TestProject_Presenter.dll
 
     steps:
     - name: Checkout
@@ -84,7 +84,15 @@ jobs:
     # - name: Execute unit tests
     #  run: dotnet test
 
-    # Added - Setup vstest
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+        TargetPlatform: ${{ matrix.targetplatform }}
+        
+      # Added - Setup vstest
     - name: Setup vstest
       uses: darenm/Setup-VSTest@v1
 
@@ -95,14 +103,6 @@ jobs:
        # Added - Run unit tests
     - name: Execute unit tests for presenter
       run: vstest.console.exe $env:Test_DLL2
-
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
-        RuntimeIdentifier: win-${{ matrix.targetplatform }}
-        TargetPlatform: ${{ matrix.targetplatform }}
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
