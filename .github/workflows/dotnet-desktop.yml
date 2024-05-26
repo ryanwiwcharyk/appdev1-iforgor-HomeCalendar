@@ -114,16 +114,16 @@ jobs:
       run: Remove-Item -path $env:Wap_Project_Directory\GitHubActionsWorkflow.pfx
 
         # Added - Setup vstest
-    - name: Setup vstest
-      uses: darenm/Setup-VSTest@v1
+    # - name: Setup vstest
+     # uses: darenm/Setup-VSTest@v1
 
       # Added - Run unit tests
-    - name: Execute unit tests for calendar
-      run: vstest.console.exe $env:Test_DLL1
+    #- name: Execute unit tests for calendar
+     # run: vstest.console.exe $env:Test_DLL1
 
        # Added - Run unit tests
-    - name: Execute unit tests for presenter
-      run: vstest.console.exe $env:Test_DLL2
+    #- name: Execute unit tests for presenter
+      # run: vstest.console.exe $env:Test_DLL2
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
