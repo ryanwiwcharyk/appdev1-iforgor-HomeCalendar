@@ -92,8 +92,8 @@ jobs:
         RuntimeIdentifier: win-${{ matrix.targetplatform }}
         TargetPlatform: ${{ matrix.targetplatform }}
 
-    - name: Build solution
-      run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }} --no-restore
+    #- name: Build solution
+     # run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }} --no-restore
         
       # Added - Setup vstest
     - name: Setup vstest
