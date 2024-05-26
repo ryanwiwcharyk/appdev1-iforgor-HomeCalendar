@@ -47,7 +47,9 @@ namespace TestProject_Presenter
             public bool calledShowUpcomingEventsByMonth = false;
             public bool calledShowUpcomingEventsByMonthAndCategory = false;
             public bool calledHighlightRow = false;
-            
+            public int highlightedRowIndex = -1;
+
+
 
 
 
@@ -97,6 +99,7 @@ namespace TestProject_Presenter
             public void HighlightRow(int index, CalendarItem item)
             {
                 calledHighlightRow = true;
+                highlightedRowIndex = index;
             }
         }
 
@@ -736,6 +739,41 @@ namespace TestProject_Presenter
                 p.PopulateUpdateEventFields(newItem);
 
                 Assert.True(updateView.calledShowPopulatedFields);
+            }
+
+            //Search Test
+
+            [StaFact]
+            public void TestSearchFilteredEvents()
+            {
+                var view = new TestMainView();
+                var p = new Presenter(view);
+                var homeView = new TestHomeView();
+                var searchItems = new List<CalendarItem>
+                {
+                    new CalendarItem { ShortDescription = "Meeting", DurationInMinutes = 60 },
+                    new CalendarItem { ShortDescription = "Work", DurationInMinutes = 40 },
+                    new CalendarItem { ShortDescription = "Yapping", DurationInMinutes = 30 },
+
+                };
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                int id = 1;
+                string description = "Sleep";
+                CategoryType type = CategoryType.Event;
+                Category selectedCat = new Category(id, description, type);
+
+
+                p.NewCalendar(path, name);
+                p.RegisterWindow(homeView);
+
+                string searchResult = "Work";
+                int index = 1;
+
+                p.SearchFilteredEvents(searchResult, searchItems, index);
+
+                Assert.True(homeView.calledHighlightRow);
+                Assert.Equal(1, homeView.highlightedRowIndex);
             }
 
 
