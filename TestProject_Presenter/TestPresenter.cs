@@ -46,6 +46,7 @@ namespace TestProject_Presenter
             public bool calledShowUpcomingEventsByCategory = false;
             public bool calledShowUpcomingEventsByMonth = false;
             public bool calledShowUpcomingEventsByMonthAndCategory = false;
+            public bool calledHighlightRow = false;
             
 
 
@@ -91,6 +92,11 @@ namespace TestProject_Presenter
             public void ShowUpcomingEventsByMonthAndCategory(List<Dictionary<string, object>> items, List<Category> categories)
             {
                 calledShowUpcomingEventsByMonthAndCategory = true;
+            }
+
+            public void HighlightRow(int index, CalendarItem item)
+            {
+                calledHighlightRow = true;
             }
         }
 
