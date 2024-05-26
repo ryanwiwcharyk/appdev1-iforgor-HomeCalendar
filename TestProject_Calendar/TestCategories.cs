@@ -88,8 +88,9 @@ namespace CalendarCodeTests
             SQLiteConnection conn = Database.dbConnection;
             Categories categories = new Categories(conn, false);
 
+
             // Act
-            List<Category> list = categories.List();
+            List <Category> list = categories.List();
 
             // Assert
             Assert.Equal(numberOfCategoriesInFile, list.Count);
@@ -106,10 +107,11 @@ namespace CalendarCodeTests
             String folder = TestConstants.GetSolutionDir();
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
-            System.IO.File.Copy(goodDB, messyDB, true);
-            Database.existingDatabase(messyDB);
+            Database.existingDatabase(goodDB);
             SQLiteConnection conn = Database.dbConnection;
             Categories categories = new Categories(conn, false);
+
+
             string descr = "New Category";
             Category.CategoryType type = Category.CategoryType.Event;
 
@@ -119,8 +121,10 @@ namespace CalendarCodeTests
             int sizeOfList = categories.List().Count;
 
             // Assert
-            Assert.Equal(numberOfCategoriesInFile + 1, sizeOfList);
+            Assert.Equal(numberOfCategoriesInFile + 1 , sizeOfList);
             Assert.Equal(descr, categoriesList[sizeOfList - 1].Description);
+
+            categories.Delete(categoriesList[sizeOfList - 1].Id);
 
         }
 
