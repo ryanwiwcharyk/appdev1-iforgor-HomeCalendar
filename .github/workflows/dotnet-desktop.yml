@@ -74,7 +74,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 6.0.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -91,6 +91,9 @@ jobs:
         Configuration: ${{ matrix.configuration }}
         RuntimeIdentifier: win-${{ matrix.targetplatform }}
         TargetPlatform: ${{ matrix.targetplatform }}
+
+    - name: Build solution
+      run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }} --no-restore
         
       # Added - Setup vstest
     - name: Setup vstest
