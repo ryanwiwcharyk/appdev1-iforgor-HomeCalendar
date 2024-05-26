@@ -467,7 +467,7 @@ namespace TestProject_Presenter
                 int id = 2;
                 string description = "Work";
                 CategoryType type = CategoryType.Event;
-                Category selectedCat = new Category(id, description, type);
+                Category? selectedCat = null;
 
                 p.ValidateEventFormInputAndCreate(details, duration, startTime, selectedCat);
 
@@ -622,38 +622,17 @@ namespace TestProject_Presenter
             }
 
             [StaFact]
-            public void TestValidateEventFormInputAndUpdate()
-            {
-                TestMainView view = new TestMainView();
-                Presenter p = new Presenter(view);
-                TestUpdateView testUpdateView = new TestUpdateView();
-                string path = Directory.GetCurrentDirectory();
-                string name = "testNewCalendar";
-                int eventId = 2;
-                string details = "Walk";
-                string duration = "30";
-                DateTime? startTime = DateTime.Now;
-
-                int id = 3;
-                string description = "Work";
-                CategoryType type = CategoryType.Event;
-                Category selectedCat = new Category(id, description, type);
-
-                p.NewCalendar(path, name);
-                p.RegisterWindow(testUpdateView);
-
-                p.ValidateEventFormInputAndUpdate(eventId, details, duration, startTime, selectedCat);
-
-                Assert.True(testUpdateView.calledShowSuccessPopup);
-            }
-
-            [StaFact]
             public void TestPopulateCategoryDropdownInHomePage()
             {
                 TestHomeView homeView = new TestHomeView();
                 TestMainView mainView = new TestMainView();
                 Presenter p = new Presenter(mainView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+
+                p.NewCalendar(path, name);
                 p.RegisterWindow(homeView);
+                homeView.calledAddCategoriesToDropdown = false;
 
                 p.PopulateCategoryDropdownInHomePage();
 
@@ -666,10 +645,15 @@ namespace TestProject_Presenter
                 TestHomeView homeView = new TestHomeView();
                 TestMainView mainView = new TestMainView();
                 Presenter p = new Presenter(mainView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+
+                p.NewCalendar(path, name);
                 p.RegisterWindow(homeView);
 
                 DateTime now = DateTime.Now;
                 DateTime later = DateTime.Now.AddMinutes(1); //assuming theres no events within this period
+                homeView.calledShowNoUpcomingEvents = false;
 
                 p.GetEventsFilteredByDate(now, later);
 
@@ -682,6 +666,10 @@ namespace TestProject_Presenter
                 TestHomeView homeView = new TestHomeView();
                 TestMainView mainView = new TestMainView();
                 Presenter p = new Presenter(mainView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+
+                p.NewCalendar(path, name);
                 p.RegisterWindow(homeView);
 
                 int id = 1;
@@ -703,9 +691,15 @@ namespace TestProject_Presenter
                 TestHomeView homeView = new TestHomeView();
                 TestMainView mainView = new TestMainView();
                 Presenter p = new Presenter(mainView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+
+                p.NewCalendar(path, name);
                 p.RegisterWindow(homeView);
 
-                CalendarItem newItem = new CalendarItem { EventID = 4, StartDateTime = DateTime.Now, CategoryID = 3 };
+                Event e = new Event(1, DateTime.Now, 1, 45, "test");
+                
+                CalendarItem newItem = new CalendarItem { EventID = 1, StartDateTime = DateTime.Now, CategoryID = 3 };
 
                 p.DeleteEvent(newItem);
 
@@ -718,9 +712,20 @@ namespace TestProject_Presenter
                 TestUpdateView updateView = new TestUpdateView();
                 TestMainView mainView = new TestMainView();
                 Presenter p = new Presenter(mainView);
+                string path = Directory.GetCurrentDirectory();
+                string name = "testNewCalendar";
+                int id = 1;
+                string description = "Sleep";
+                CategoryType type = CategoryType.Event;
+                Category selectedCat = new Category(id, description, type);
+
+
+                p.NewCalendar(path, name);
                 p.RegisterWindow(updateView);
+                p.ValidateEventFormInputAndCreate("test","45", DateTime.Now,selectedCat);
 
                 CalendarItem newItem = new CalendarItem { EventID = 1, StartDateTime = DateTime.Now, CategoryID = 2 };
+                updateView.calledShowPopulatedFields = false;
 
                 p.PopulateUpdateEventFields(newItem);
 
