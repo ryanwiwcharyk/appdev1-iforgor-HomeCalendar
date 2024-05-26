@@ -81,8 +81,8 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     # Execute all unit tests in the solution
-    # - name: Execute unit tests
-    #  run: dotnet test
+    - name: Execute unit tests
+      run: dotnet test ${{ env.Test_Project_Path }}
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
@@ -91,12 +91,8 @@ jobs:
         Configuration: ${{ matrix.configuration }}
         RuntimeIdentifier: win-${{ matrix.targetplatform }}
         TargetPlatform: ${{ matrix.targetplatform }}
-
-    #- name: Build solution
-     # run: dotnet build ${{ env.Solution_Name }} --configuration ${{ matrix.configuration }} --no-restore
         
     
-
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
       run: |
@@ -120,9 +116,6 @@ jobs:
         # Added - Setup vstest
     - name: Setup vstest
       uses: darenm/Setup-VSTest@v1
-
-    - name: Build
-      run: dotnet build --configuration Release
 
       # Added - Run unit tests
     - name: Execute unit tests for calendar
