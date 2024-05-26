@@ -45,6 +45,16 @@ namespace HomeCalendarWPF
             System.Windows.Application.Current.Shutdown();
         }
 
+
+        private void BtnClick_Search(object sender, RoutedEventArgs e)
+        {
+            string searchedString = SearchBar.Text;
+            var items = UpcomingEvents.ItemsSource as List<CalendarItem>;
+            int selectedIndex = UpcomingEvents.SelectedIndex;
+            _presenter.SearchFilteredEvents(searchedString, items, selectedIndex);
+        }
+
+
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
             CalendarItem selected = UpcomingEvents.SelectedItem as CalendarItem;
@@ -188,7 +198,11 @@ namespace HomeCalendarWPF
             _presenter.ViewSelector((bool)summaryByMonth.IsChecked, (bool)summaryByCategory.IsChecked, (bool)FilterCategory.IsChecked, (Category)categoryComboBox.SelectedItem, startDate, endDate);
 
         }
-
+         public void HighlightRow(int index, CalendarItem item)
+        {
+            UpcomingEvents.SelectedIndex = index;
+            UpcomingEvents.ScrollIntoView(item);
+        }
         #endregion
     }
 }

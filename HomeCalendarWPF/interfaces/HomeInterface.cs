@@ -17,5 +17,7 @@ namespace HomeCalendarWPF.interfaces
         public void ShowUpcomingEventsByMonthAndCategory(List<Dictionary<string, object>> items, List<Category> categories);
         public void ShowNoUpcomingEvents();
         public void AddCategoriesToDropdown(List<Category> categories);
+
+        public void HighlightRow(int index, CalendarItem item);
     }
 }

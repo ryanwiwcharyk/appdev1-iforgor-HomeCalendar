@@ -3,6 +3,8 @@ using HomeCalendarWPF.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Windows;
+
 [assembly: InternalsVisibleTo("TestProject_Presenter")]
 
 
@@ -138,6 +140,35 @@ namespace HomeCalendarWPF
             List<Category> categories = GetCategoryList();
             homeView.ShowUpcomingEventsByMonthAndCategory(calendarItems, categories);
 
+
+        }
+
+        public void SearchFilteredEvents(string searchString, List<CalendarItem> items, int selectedIndex)
+        {
+            // Starting at the row after the current one
+            int startIndex = selectedIndex + 1;
+            bool found = false;
+
+            // Looking at all the items
+            for (int i = startIndex; i < items.Count + startIndex; i++)
+            {
+                // Wrapping around
+                int index = i % items.Count; 
+                var item = items[index];
+
+                // If the description contains the search string OR the duration contains the search string, highlight row
+                if (item.ShortDescription.ToLower().Contains(searchString.ToLower()) || item.DurationInMinutes.ToString().Contains(searchString))
+                {
+                    homeView.HighlightRow(index, item);
+                    found = true;
+                    break;
+                }
+            }
+            // If no matching row was found, play noise
+            if (!found)
+            {
+                System.Media.SystemSounds.Beep.Play();
+            }
         }
         #endregion
 
